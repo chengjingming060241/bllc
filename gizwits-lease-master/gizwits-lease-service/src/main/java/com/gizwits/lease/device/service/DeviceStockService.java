@@ -41,14 +41,17 @@ public interface DeviceStockService extends IService<DeviceStock> {
 
 
     /*库存管理设备扫码进度详情**/
-    DeviceForSpeedDetailDto detail2(String id);
+    DeviceForSpeedDetailDto sweepProgress(String id);
 
     /*库存详情**/
     DeviceForStockDetailDto stockDetails(String id);
 
 
-    /*库存详情**/
+    /*入库详情**/
     Page<DeviceForSpeedDetailDto> putDeviceDetails(Pageable<DeviceQueryDto> pageable);
+
+    /*出库详情**/
+    Page<DeviceForSpeedDetailDto> outDeviceDetails(Pageable<DeviceQueryDto> pageable);
 
     /**
      * 更新
@@ -74,11 +77,27 @@ public interface DeviceStockService extends IService<DeviceStock> {
     Page<DeviceShowDto> putListPage(Pageable<DeviceQueryDto> pageable);
 
 
+    /**
+     * 入库列表
+     */
+    Page<DeviceShowDto> outListPage(Pageable<DeviceQueryDto> pageable);
+
+
 
     /**
      * 批量删除设备
      */
-    String deleteDevice(List<String> snos);
+    String stockDelete(List<String> snos);
+
+    /**
+     * 入库记录批量删除设备
+     */
+    String putDelete(List<String> snos);
+
+    /**
+     * 入库记录批量删除设备
+     */
+    String outDelete(List<String> snos);
 
     DeviceStock getDeviceByMac(String mac);
 

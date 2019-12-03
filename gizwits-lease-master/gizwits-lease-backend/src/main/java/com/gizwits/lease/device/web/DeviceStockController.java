@@ -52,8 +52,6 @@ import java.util.stream.Stream;
 @RequestMapping("/device/deviceStock")
 public class DeviceStockController extends BaseController {
     protected Logger logger = LoggerFactory.getLogger("DEVICE_LOGGER");
-    @Autowired
-    private DeviceService deviceService;
 
     @Autowired
     private SysUserService sysUserService;
@@ -64,10 +62,17 @@ public class DeviceStockController extends BaseController {
     @Autowired
     private DeviceStockService deviceStockService;
 
-
+    @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
+    @ApiOperation(value = "添加", notes = "添加", consumes = "application/json")
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @DefaultVersion
+    public ResponseObject<String> add(@RequestBody @Valid RequestObject<DeviceAddDto> requestObject) {
+        DeviceAddDto deviceAddDto = requestObject.getData();
+        return success(deviceStockService.addDevice(deviceAddDto));
+    }
 
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
-    @ApiOperation(value = "设备列表", notes = "设备列表", consumes = "application/json")
+    @ApiOperation(value = "库存设备列表", notes = "设备列表", consumes = "application/json")
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @DefaultVersion(display = {"mac", "sno", "name", "product", "belongOperatorName", "launchArea", "serviceMode", "workStatusDesc", "onlineStatus", "activateStatusDesc"})
     public ResponseObject<Page<DeviceShowDto>> list(@RequestBody @Valid RequestObject<Pageable<DeviceQueryDto>> requestObject) {
@@ -88,10 +93,17 @@ public class DeviceStockController extends BaseController {
         if (Objects.isNull(pageable.getQuery().getSweepCodeStatus())){
             pageable.getQuery().setSweepCodeStatus(DeviceSweepCodeStatus.PENDING_CODE.getCode());
         }
-
         //防止前台查询已删除的数据
         pageable.getQuery().setIsDeleted(DeleteStatus.NOT_DELETED.getCode());
         return success(deviceStockService.listPage(pageable));
+    }
+
+    @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
+    @ApiOperation(value = "设备扫码进度详情", consumes = "application/json")
+    @PostMapping("/detailSweepProgress")
+    @DefaultVersion
+    public ResponseObject<DeviceForSpeedDetailDto> sweepProgress(@RequestBody RequestObject<String> requestObject) {
+        return success(deviceStockService.sweepProgress(requestObject.getData()));
     }
 
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
@@ -111,12 +123,10 @@ public class DeviceStockController extends BaseController {
         } else {
             pageable.getQuery().setAccessableOwnerIds(sysUserService.resolveSysUserAllSubAdminIds(sysUserService.getCurrentUserOwner()));
         }
-
-        //状态默认为“待扫码”
+        //状态默认为“待出库”
         if (Objects.isNull(pageable.getQuery().getSweepCodeStatus())){
             pageable.getQuery().setSweepCodeStatus(DeviceSweepCodeStatus.To_Be_But_Bf_Stock.getCode());
         }
-
         //防止前台查询已删除的数据
         pageable.getQuery().setIsDeleted(DeleteStatus.NOT_DELETED.getCode());
         return success(deviceStockService.StockListPage(pageable));
@@ -148,6 +158,13 @@ public class DeviceStockController extends BaseController {
     }
 
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
+    @ApiOperation(value = "库存、设备列表删除", notes = "删除", consumes = "application/json")
+    @PostMapping("/stockDelete")
+    public ResponseObject<String> stockDelete(@RequestBody @Valid RequestObject<List<String>> requestObject) {
+        return success(deviceStockService.stockDelete(requestObject.getData()));
+    }
+
+    @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
     @ApiOperation(value = "入库记录列表", notes = "设备列表", consumes = "application/json")
     @RequestMapping(value = "/putDeviceList", method = RequestMethod.POST)
     public ResponseObject<Page<DeviceShowDto>> putDeviceList(@RequestBody @Valid RequestObject<Pageable<DeviceQueryDto>> requestObject) {
@@ -166,7 +183,7 @@ public class DeviceStockController extends BaseController {
         }
 
         //防止前台查询已删除的数据
-        pageable.getQuery().setIsDeleted(DeleteStatus.NOT_DELETED.getCode());
+        pageable.getQuery().setIsDeletedPut(DeleteStatus.NOT_DELETED.getCode());
         return success(deviceStockService.putListPage(pageable));
     }
 
@@ -189,9 +206,17 @@ public class DeviceStockController extends BaseController {
         }
 
         //防止前台查询已删除的数据
-        pageable.getQuery().setIsDeleted(DeleteStatus.NOT_DELETED.getCode());
+        pageable.getQuery().setIsDeletedPut(DeleteStatus.NOT_DELETED.getCode());
         return success(deviceStockService.putDeviceDetails(pageable));
     }
+
+    @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
+    @ApiOperation(value = "入库记录列表删除", notes = "删除", consumes = "application/json")
+    @PostMapping("/putDelete")
+    public ResponseObject<String> putDelete(@RequestBody @Valid RequestObject<List<String>> requestObject) {
+        return success(deviceStockService.putDelete(requestObject.getData()));
+    }
+
 
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
     @ApiOperation(value = "出库记录列表", notes = "设备列表", consumes = "application/json")
@@ -212,34 +237,41 @@ public class DeviceStockController extends BaseController {
         }
 
         //防止前台查询已删除的数据
-        pageable.getQuery().setIsDeleted(DeleteStatus.NOT_DELETED.getCode());
-        return success(deviceStockService.listPage(pageable));
+        pageable.getQuery().setIsDeletedOut(DeleteStatus.NOT_DELETED.getCode());
+        return success(deviceStockService.outListPage(pageable));
     }
 
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
-    @ApiOperation(value = "添加", notes = "添加", consumes = "application/json")
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    @DefaultVersion
-    public ResponseObject<String> add(@RequestBody @Valid RequestObject<DeviceAddDto> requestObject) {
-        DeviceAddDto deviceAddDto = requestObject.getData();
-        return success(deviceStockService.addDevice(deviceAddDto));
+    @ApiOperation(value = "出库记录详情", consumes = "application/json")
+    @PostMapping("/outDeviceDetails")
+    public ResponseObject<Page<DeviceForSpeedDetailDto>> outDeviceDetails(@RequestBody @Valid RequestObject<Pageable<DeviceQueryDto>> requestObject) {
+        Pageable<DeviceQueryDto> pageable = requestObject.getData();
+        if (Objects.isNull(pageable.getQuery())) {
+            pageable.setQuery(new DeviceQueryDto());
+        }
+        Integer creatorId = pageable.getQuery().getOperatorAccountId();
+        if (Objects.isNull(creatorId)) {
+            creatorId = pageable.getQuery().getCreatorId();
+        }
+        if (Objects.nonNull(creatorId)) {
+            pageable.getQuery().setAccessableOwnerIds(sysUserService.resolveSysUserAllSubAdminIds(sysUserService.selectById(creatorId)));
+        } else {
+            pageable.getQuery().setAccessableOwnerIds(sysUserService.resolveSysUserAllSubAdminIds(sysUserService.getCurrentUserOwner()));
+        }
+
+        //防止前台查询已删除的数据
+        pageable.getQuery().setIsDeletedOut(DeleteStatus.NOT_DELETED.getCode());
+        return success(deviceStockService.outDeviceDetails(pageable));
     }
 
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
-    @ApiOperation(value = "库存管理设备扫码进度详情", consumes = "application/json")
-    @PostMapping("/detailSweepProgress")
-    @DefaultVersion
-    public ResponseObject<DeviceForSpeedDetailDto> sweepProgress(@RequestBody RequestObject<String> requestObject) {
-        return success(deviceStockService.detail2(requestObject.getData()));
+    @ApiOperation(value = "出库记录列表删除", notes = "删除", consumes = "application/json")
+    @PostMapping("/outDelete")
+    public ResponseObject<String> outDelete(@RequestBody @Valid RequestObject<List<String>> requestObject) {
+        return success(deviceStockService.outDelete(requestObject.getData()));
     }
 
 
-    @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
-    @ApiOperation(value = "删除", notes = "删除", consumes = "application/json")
-    @PostMapping("/delete")
-    public ResponseObject<String> delete(@RequestBody @Valid RequestObject<List<String>> requestObject) {
 
-        return success(deviceStockService.deleteDevice(requestObject.getData()));
-    }
 
 }

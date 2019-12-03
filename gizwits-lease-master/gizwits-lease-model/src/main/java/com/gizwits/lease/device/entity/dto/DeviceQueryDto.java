@@ -82,6 +82,14 @@ public class DeviceQueryDto{
     @Query(field = "is_deleted")
     private Integer isDeleted = DeleteStatus.NOT_DELETED.getCode();
 
+    @JsonIgnore
+    @Query(field = "is_deleted_put")
+    private Integer isDeletedPut = DeleteStatus.NOT_DELETED.getCode();
+
+    @JsonIgnore
+    @Query(field = "is_deleted_out")
+    private Integer isDeletedOut = DeleteStatus.NOT_DELETED.getCode();
+
 
     @JsonIgnore
     @Query(field = "sno", operator = Query.Operator.in)
@@ -125,6 +133,22 @@ public class DeviceQueryDto{
     /**当前用户设备是否分配投放点 1未分配 2已分配*/
     private Integer type;
 
+
+    public Integer getIsDeletedPut() {
+        return isDeletedPut;
+    }
+
+    public void setIsDeletedPut(Integer isDeletedPut) {
+        this.isDeletedPut = isDeletedPut;
+    }
+
+    public Integer getIsDeletedOut() {
+        return isDeletedOut;
+    }
+
+    public void setIsDeletedOut(Integer isDeletedOut) {
+        this.isDeletedOut = isDeletedOut;
+    }
 
     public String getSupplierName() {
         return supplierName;

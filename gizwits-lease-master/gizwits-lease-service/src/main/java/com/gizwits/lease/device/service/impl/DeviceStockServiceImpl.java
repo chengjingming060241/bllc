@@ -141,6 +141,7 @@ public class DeviceStockServiceImpl extends ServiceImpl<DeviceStockDao, DeviceSt
                         device.setsN1(detailsDto.getsN1());
                     }
                     device.setControlType(deviceAddDto.getControlType());
+                    device.setIsDeleted(DeleteStatus.NOT_DELETED.getCode());
                     devices.add(device);
                 }
             }
@@ -242,6 +243,7 @@ public class DeviceStockServiceImpl extends ServiceImpl<DeviceStockDao, DeviceSt
                 devicePut.setRemarks(deviceAddDto.getRemarks());
                 devicePut.setSupplierName(deviceAddDto.getSupplierName());  //供应商
                 devicePut.setBatch(deviceAddDto.getBatch());  //批次
+                device.setIsDeletedPut(DeleteStatus.NOT_DELETED.getCode());
                 insertOrUpdate(devicePut);
             }
 
@@ -272,7 +274,7 @@ public class DeviceStockServiceImpl extends ServiceImpl<DeviceStockDao, DeviceSt
 
 
     @Override
-    public DeviceForSpeedDetailDto detail2(String id) {
+    public DeviceForSpeedDetailDto sweepProgress(String id) {
         DeviceStock device = selectById(id);
         if (Objects.isNull(device)) {
             LeaseException.throwSystemException(LeaseExceEnums.ENTITY_NOT_EXISTS);
@@ -301,9 +303,31 @@ public class DeviceStockServiceImpl extends ServiceImpl<DeviceStockDao, DeviceSt
 
         //修改时间
         if (pageable.getQuery().getUpTimeStart()!=null && pageable.getQuery().getUpTimeEnd()!=null){
-            wrapper.between("batch",pageable.getQuery().getUpTimeStart(),pageable.getQuery().getUpTimeEnd());
+            wrapper.between("entry_time",pageable.getQuery().getUpTimeStart(),pageable.getQuery().getUpTimeEnd());
         }
-        wrapper.orderBy("batch", false);  //根据更新时间排序
+        wrapper.orderBy("entry_time", false);  //根据入库时间排序
+
+        Page<DeviceStock> page1 = selectPage(page,
+                QueryResolverUtils.parse(pageable.getQuery(), wrapper));
+        List<DeviceStock> devices = page1.getRecords();
+        Page<DeviceForSpeedDetailDto> result = new Page<>();
+        BeanUtils.copyProperties(page1, result);
+        List<DeviceForSpeedDetailDto> list = getputDeviceDetails(devices);
+        result.setRecords(list);
+        return result;
+    }
+
+
+    @Override
+    public Page<DeviceForSpeedDetailDto> outDeviceDetails(Pageable<DeviceQueryDto> pageable) {
+        Page<DeviceStock> page = new Page<>();
+        BeanUtils.copyProperties(pageable, page);
+        Wrapper<DeviceStock> wrapper = new EntityWrapper<>();
+        //修改时间
+        if (pageable.getQuery().getUpTimeStart()!=null && pageable.getQuery().getUpTimeEnd()!=null){
+            wrapper.between("shift_out_time",pageable.getQuery().getUpTimeStart(),pageable.getQuery().getUpTimeEnd());
+        }
+        wrapper.orderBy("shift_out_time", false);  //根据出库时间排序
 
         Page<DeviceStock> page1 = selectPage(page,
                 QueryResolverUtils.parse(pageable.getQuery(), wrapper));
@@ -403,7 +427,7 @@ public class DeviceStockServiceImpl extends ServiceImpl<DeviceStockDao, DeviceSt
         if (pageable.getQuery().getUpTimeStart()!=null && pageable.getQuery().getUpTimeEnd()!=null){
             wrapper.between("entry_time",pageable.getQuery().getUpTimeStart(),pageable.getQuery().getUpTimeEnd());
         }
-        wrapper.orderBy("entry_time", false);  //根据更新时间排序
+        wrapper.orderBy("entry_time", false);  //根据入库时间排序
         wrapper.groupBy("batch");
 
         Page<DeviceStock> page1 = selectPage(page,
@@ -412,6 +436,29 @@ public class DeviceStockServiceImpl extends ServiceImpl<DeviceStockDao, DeviceSt
         Page<DeviceShowDto> result = new Page<>();
         BeanUtils.copyProperties(page1, result);
         List<DeviceShowDto> list = getPutDeviceShowDtos(devices);
+        result.setRecords(list);
+        return result;
+    }
+
+    @Override
+    public Page<DeviceShowDto> outListPage(Pageable<DeviceQueryDto> pageable) {
+
+        Page<DeviceStock> page = new Page<>();
+        BeanUtils.copyProperties(pageable, page);
+        Wrapper<DeviceStock> wrapper = new EntityWrapper<>();
+        //修改时间
+        if (pageable.getQuery().getUpTimeStart()!=null && pageable.getQuery().getUpTimeEnd()!=null){
+            wrapper.between("shift_out_time",pageable.getQuery().getUpTimeStart(),pageable.getQuery().getUpTimeEnd());
+        }
+        wrapper.orderBy("shift_out_time", false);  //根据出库时间排序
+        wrapper.groupBy("out_batch");
+
+        Page<DeviceStock> page1 = selectPage(page,
+                QueryResolverUtils.parse(pageable.getQuery(), wrapper));
+        List<DeviceStock> devices = page1.getRecords();
+        Page<DeviceShowDto> result = new Page<>();
+        BeanUtils.copyProperties(page1, result);
+        List<DeviceShowDto> list = getOutDeviceShowDtos(devices);
         result.setRecords(list);
         return result;
     }
@@ -456,27 +503,33 @@ public class DeviceStockServiceImpl extends ServiceImpl<DeviceStockDao, DeviceSt
         return list;
     }
 
+    /**出库列表 */
+    private List<DeviceShowDto> getOutDeviceShowDtos(List<DeviceStock> devices) {
+        List<DeviceShowDto> list = new ArrayList<>(devices.size());
+        for (DeviceStock device : devices) {
+            DeviceShowDto showDto = new DeviceShowDto();
+            showDto.setCategoryType(productCategoryService.selectById(device.getProductCategoryId()).getCategoryType());   //型号
+            showDto.setLaunchArea(device.getLaunchAreaName());
+            showDto.setDeviceCount(selectCount(new EntityWrapper<DeviceStock>()
+                    .eq("out_batch",device.getOutBatch()).eq("is_deleted", DeleteStatus.NOT_DELETED.getCode())));
+            showDto.setSupplierName(device.getSupplierName());
+            showDto.setOperatorName(device.getOperatorName());
+            showDto.setEntryTime(device.getEntryTime());
+            list.add(showDto);
+        }
+        return list;
+    }
+
     /**库存详情*/
     private List<DeviceForSpeedDetailDto> getputDeviceDetails(List<DeviceStock> devices) {
         List<DeviceForSpeedDetailDto> list = new ArrayList<>(devices.size());
         for (DeviceStock device : devices) {
             DeviceForSpeedDetailDto showDto = new  DeviceForSpeedDetailDto(device);
             showDto.setCategoryType(productCategoryService.selectById(device.getProductCategoryId()).getCategoryType());   //型号
-
             list.add(showDto);
         }
         return list;
     }
-
-    private List<DeviceShowDto> getDeviceShowDtos2(List<DeviceStock> devices) {
-        List<DeviceShowDto> list = new ArrayList<>(devices.size());
-        for (DeviceStock device : devices) {
-            DeviceShowDto showDto = getDeviceShowDto(device);
-            list.add(showDto);
-        }
-        return list;
-    }
-
 
     private DeviceShowDto getDeviceShowDto(DeviceStock device) {
         DeviceShowDto deviceShowDto = new DeviceShowDto();
@@ -496,18 +549,46 @@ public class DeviceStockServiceImpl extends ServiceImpl<DeviceStockDao, DeviceSt
 
 
     @Override
-    public String deleteDevice(List<String> snos) {
-
+    public String stockDelete(List<String> snos) {
         boolean fails = false;
         List<DeviceStock> devices = selectList(new EntityWrapper<DeviceStock>().in("sno", snos).eq("is_deleted", DeleteStatus.NOT_DELETED.getCode()));
         for (DeviceStock device : devices) {
-
-                device.setUtime(new Date());
-                device.setIsDeleted(DeleteStatus.DELETED.getCode());
+            device.setUtime(new Date());
+            device.setIsDeleted(DeleteStatus.DELETED.getCode());
             fails = updateById(device);
-
         }
+        if (fails){
+            return "删除成功";
+        }else {
+            return "删除失败";
+        }
+    }
 
+    @Override
+    public String putDelete(List<String> snos) {
+        boolean fails = false;
+        List<DeviceStock> devices = selectList(new EntityWrapper<DeviceStock>().in("sno", snos).eq("is_deleted", DeleteStatus.NOT_DELETED.getCode()));
+        for (DeviceStock device : devices) {
+            device.setUtime(new Date());
+            device.setIsDeletedPut(DeleteStatus.DELETED.getCode());
+            fails = updateById(device);
+        }
+        if (fails){
+            return "删除成功";
+        }else {
+            return "删除失败";
+        }
+    }
+
+    @Override
+    public String outDelete(List<String> snos) {
+        boolean fails = false;
+        List<DeviceStock> devices = selectList(new EntityWrapper<DeviceStock>().in("sno", snos).eq("is_deleted", DeleteStatus.NOT_DELETED.getCode()));
+        for (DeviceStock device : devices) {
+            device.setUtime(new Date());
+            device.setIsDeletedOut(DeleteStatus.DELETED.getCode());
+            fails = updateById(device);
+        }
         if (fails){
             return "删除成功";
         }else {

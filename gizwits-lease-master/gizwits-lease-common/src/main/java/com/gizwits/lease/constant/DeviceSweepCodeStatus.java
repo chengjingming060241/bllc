@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public enum DeviceSweepCodeStatus {
     PENDING_CODE(0,"待扫码"),
     WAIT_TO_ENTRY(1, "待入库"),
-    To_Be_But_Bf_Stock(2,"待出库"),
+    To_Be_But_Bf_Stock(2,"已出库"),
     Out_of_stock(3,"已出库");
     Integer code;
     String name;
