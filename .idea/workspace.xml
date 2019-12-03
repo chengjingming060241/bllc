@@ -1,0 +1,1175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="4bd7cf19-4c78-4bcd-b9d7-ec6cb673da0c" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-backend/src/main/java/com/gizwits/lease/device/web/DeviceStockController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-dao/src/main/java/com/gizwits/lease/device/dao/DeviceStockDao.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DeviceStockAddDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/device/service/DeviceStockService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/device/service/impl/DeviceStockServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-backend/src/main/java/com/gizwits/lease/device/web/DeviceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-backend/src/main/java/com/gizwits/lease/device/web/DeviceController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-common/src/main/java/com/gizwits/lease/constant/DeviceSweepCodeStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-common/src/main/java/com/gizwits/lease/constant/DeviceSweepCodeStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/Device.java" beforeDir="false" afterPath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/Device.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/DeviceStock.java" beforeDir="false" afterPath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/DeviceStock.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DeviceAddDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DeviceAddDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DeviceForSpeedDetailDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DeviceForSpeedDetailDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DeviceForStockDetailDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DeviceForStockDetailDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DeviceQueryDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DeviceQueryDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/device/service/DeviceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/device/service/DeviceService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/device/service/impl/DeviceAssignServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/device/service/impl/DeviceAssignServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/device/service/impl/DeviceServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/device/service/impl/DeviceServiceImpl.java" afterDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-app/target/" />
+    <ignored path="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-backend/target/" />
+    <ignored path="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-common/target/" />
+    <ignored path="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-dao/target/" />
+    <ignored path="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-job/target/" />
+    <ignored path="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/target/" />
+    <ignored path="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-netty/target/" />
+    <ignored path="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/target/" />
+    <ignored path="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-wechat/target/" />
+    <ignored path="$PROJECT_DIR$/gizwits-lease-master/target/" />
+    <ignored path="$PROJECT_DIR$/gizwits-boot-master/target/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="1793921827">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="12" />
+          <entry key="project.open.time.10" value="1" />
+          <entry key="project.open.time.11" value="1" />
+          <entry key="project.open.time.2" value="1" />
+          <entry key="project.open.time.4" value="1" />
+          <entry key="project.open.time.7" value="1" />
+          <entry key="project.open.time.8" value="3" />
+          <entry key="project.open.time.9" value="5" />
+          <entry key="project.opened" value="13" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="Dockerfile" value="1" />
+          <entry key="Dockerfile_app" value="1" />
+          <entry key="Dockerfile_backend" value="1" />
+          <entry key="MD" value="5" />
+          <entry key="class" value="36" />
+          <entry key="gitignore" value="2" />
+          <entry key="iml" value="2" />
+          <entry key="java" value="1049" />
+          <entry key="log" value="3" />
+          <entry key="md" value="2" />
+          <entry key="pom" value="5" />
+          <entry key="properties" value="2" />
+          <entry key="sh" value="3" />
+          <entry key="sql" value="12" />
+          <entry key="xml" value="17" />
+          <entry key="yml" value="11" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="CLASS" value="36" />
+          <entry key="IDEA_MODULE" value="2" />
+          <entry key="JAVA" value="1049" />
+          <entry key="Markdown" value="7" />
+          <entry key="PLAIN_TEXT" value="11" />
+          <entry key="Properties" value="2" />
+          <entry key="SQL" value="12" />
+          <entry key="XML" value="22" />
+          <entry key="YAML" value="11" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="MD" value="1" />
+          <entry key="java" value="6801" />
+          <entry key="txt" value="8" />
+          <entry key="xml" value="12" />
+          <entry key="yml" value="72" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="JAVA" value="6801" />
+          <entry key="Markdown" value="1" />
+          <entry key="PLAIN_TEXT" value="8" />
+          <entry key="XML" value="12" />
+          <entry key="YAML" value="72" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-backend/src/main/java/com/gizwits/lease/device/web/DeviceController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="698">
+              <caret line="87" column="40" lean-forward="true" selection-start-line="87" selection-start-column="40" selection-end-line="87" selection-end-column="40" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/Device.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="9595">
+              <caret line="703" selection-start-line="703" selection-end-line="703" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/device/service/DeviceService.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="418">
+              <caret line="194" selection-start-line="194" selection-end-line="194" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-backend/src/main/java/com/gizwits/lease/device/web/DeviceStockController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="527">
+              <caret line="165" column="48" selection-start-line="165" selection-start-column="48" selection-end-line="165" selection-end-column="48" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/device/service/impl/DeviceServiceImpl.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="342">
+              <caret line="1324" column="17" selection-start-line="1324" selection-start-column="17" selection-end-line="1324" selection-end-column="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>按天收费</find>
+      <find>addDevice</find>
+      <find>厂商</find>
+      <find>remarks</find>
+      <find>isNull</find>
+      <find>findByMacAndProductKey</find>
+      <find>device.setGizDid</find>
+      <find>邮箱</find>
+      <find>邮箱验证</find>
+      <find>getSystemNameAndLogo</find>
+      <find>SweepCodeStatus</find>
+      <find>launchArea</find>
+      <find>sweepCodeStatus</find>
+      <find>mac</find>
+      <find>成功</find>
+      <find>更新</find>
+      <find>供应商</find>
+      <find>entryTime</find>
+      <find>is_deleted</find>
+      <find>仓库</find>
+      <find>launch_area_id</find>
+      <find>经办人</find>
+      <find>batch</find>
+      <find>批次</find>
+      <find>入库</find>
+      <find>出库</find>
+      <find>stockUpdate</find>
+      <find>detail2</find>
+      <find>库存详情</find>
+      <find>judgeProductIsExist</find>
+    </findStrings>
+    <dirStrings>
+      <dir>G:\workingSoftware\IdeaProjects\bllc\gizwits-boot-master</dir>
+    </dirStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/product/dto/ProductForListDto.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/product/dto/ProductForUpdateDto.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/product/dto/ProductCategoryForQueryDto.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/product/dto/ProductCategoryForDetailDto.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/product/dto/ProductCategoryForListDto.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/product/dto/ProductCategoryForUpdateDto.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/product/service/impl/ProductServiceImpl.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-backend/src/main/java/com/gizwits/lease/device/web/DeviceLaunchAreaController.java" />
+        <option value="$PROJECT_DIR$/gizwits-boot-master/pom.xml" />
+        <option value="$PROJECT_DIR$/gizwits-boot-master/src/main/java/com/gizwits/boot/sys/entity/SysLaunchArea.java" />
+        <option value="$PROJECT_DIR$/gizwits-boot-master/src/main/java/com/gizwits/boot/sys/dao/SysLaunchAreaDao.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/device/service/impl/DeviceLaunchAreaServiceImpl.java" />
+        <option value="$PROJECT_DIR$/gizwits-boot-master/src/main/java/com/gizwits/boot/sys/service/impl/SysLaunchAreaServiceImpl.java" />
+        <option value="$PROJECT_DIR$/gizwits-boot-master/src/main/java/com/gizwits/boot/sys/service/SysLaunchAreaService.java" />
+        <option value="$PROJECT_DIR$/gizwits-boot-master/src/main/java/com/gizwits/boot/dto/SysLaunchForPullDto.java" />
+        <option value="$PROJECT_DIR$/gizwits-boot-master/src/main/java/com/gizwits/boot/dto/SysUserForAddPageDto.java" />
+        <option value="$PROJECT_DIR$/gizwits-boot-master/src/main/java/com/gizwits/boot/sys/web/SysUserController.java" />
+        <option value="$PROJECT_DIR$/gizwits-boot-master/src/main/java/com/gizwits/boot/dto/SysUserForAddDto.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-backend/src/main/java/com/gizwits/lease/product/web/ProductController.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/product/service/ProductCategoryService.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/product/service/impl/ProductCategoryServiceImpl.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/product/dto/ProductGategoryForPullDto.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-backend/src/main/java/com/gizwits/lease/product/web/ProductCategoryController.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DeviceAddDetailsDto.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-common/src/main/java/com/gizwits/lease/constant/DeviceStatus.java" />
+        <option value="$PROJECT_DIR$/gizwits-boot-master/src/main/java/com/gizwits/boot/sys/entity/SysUser.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/product/dto/ProductCategoryForAddDto.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/product/entity/ProductCategory.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DeviceForUpdateDto.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DeviceForAssignDto.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/device/service/DeviceAssignService.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-common/src/main/java/com/gizwits/lease/exceptions/LeaseExceEnums.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DevicePutShowDto.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DeviceShowDto.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/DeviceStorageRecord.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-dao/src/main/java/com/gizwits/lease/device/dao/DeviceStockDao.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DeviceForSpeedDetailDto.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DeviceForStockDetailDto.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DeviceAddDto.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DeviceStockAddDto.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-backend/src/main/java/com/gizwits/lease/device/web/DeviceController.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/device/service/DeviceService.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/device/service/impl/DeviceServiceImpl.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/DeviceStock.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DeviceQueryDto.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/device/service/impl/DeviceAssignServiceImpl.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-common/src/main/java/com/gizwits/lease/constant/DeviceSweepCodeStatus.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-backend/src/main/java/com/gizwits/lease/device/web/DeviceStockController.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/device/service/DeviceStockService.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/device/service/impl/DeviceStockServiceImpl.java" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/Device.java" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="localRepository" value="C:\Users\ASUS\.m2\taikongcang" />
+        <option name="mavenHome" value="$APPLICATION_HOME_DIR$/plugins/maven/lib/maven3" />
+        <option name="userSettingsFile" value="G:\workingSoftware\apache-maven-3.6.0-bin\apache-maven-3.6.0\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
+    <option name="enabledProfiles">
+      <list>
+        <option value="release" />
+      </list>
+    </option>
+  </component>
+  <component name="MavenProjectNavigator">
+    <treeState>
+      <expand>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="Profiles" type="6783ec58:MavenProjectsStructure$ProfilesNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="gizwits-lease-app" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="gizwits-lease-app" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Lifecycle" type="58874e2:MavenProjectsStructure$LifecycleNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="gizwits-lease-backend" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="gizwits-lease-backend" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Lifecycle" type="58874e2:MavenProjectsStructure$LifecycleNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="gizwits-lease-common" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="gizwits-lease-common" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Lifecycle" type="58874e2:MavenProjectsStructure$LifecycleNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="gizwits-lease-dao" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="gizwits-lease-dao" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Lifecycle" type="58874e2:MavenProjectsStructure$LifecycleNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="gizwits-lease-job" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="gizwits-lease-job" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Lifecycle" type="58874e2:MavenProjectsStructure$LifecycleNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="gizwits-lease-model" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="gizwits-lease-model" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Lifecycle" type="58874e2:MavenProjectsStructure$LifecycleNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="gizwits-lease-netty" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="gizwits-lease-netty" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Lifecycle" type="58874e2:MavenProjectsStructure$LifecycleNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="gizwits-lease-service" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="gizwits-lease-service" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Lifecycle" type="58874e2:MavenProjectsStructure$LifecycleNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="gizwits-lease-wechat" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="gizwits-lease-wechat" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Lifecycle" type="58874e2:MavenProjectsStructure$LifecycleNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="gizwits-lease-wechat" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Plugins" type="7aea1407:MavenProjectsStructure$PluginsNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="gizwits-lease-wechat" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Dependencies" type="f4be9f2a:MavenProjectsStructure$DependenciesNode" />
+        </path>
+      </expand>
+      <select />
+    </treeState>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="727" />
+    <option name="height" value="1047" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="bllc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bllc" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="bllc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bllc" type="462c0819:PsiDirectoryNode" />
+              <item name="gizwits-lease-master" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="bllc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bllc" type="462c0819:PsiDirectoryNode" />
+              <item name="gizwits-lease-master" type="462c0819:PsiDirectoryNode" />
+              <item name="gizwits-lease-backend" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="bllc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bllc" type="462c0819:PsiDirectoryNode" />
+              <item name="gizwits-lease-master" type="462c0819:PsiDirectoryNode" />
+              <item name="gizwits-lease-backend" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="bllc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bllc" type="462c0819:PsiDirectoryNode" />
+              <item name="gizwits-lease-master" type="462c0819:PsiDirectoryNode" />
+              <item name="gizwits-lease-backend" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="bllc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bllc" type="462c0819:PsiDirectoryNode" />
+              <item name="gizwits-lease-master" type="462c0819:PsiDirectoryNode" />
+              <item name="gizwits-lease-backend" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="bllc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bllc" type="462c0819:PsiDirectoryNode" />
+              <item name="gizwits-lease-master" type="462c0819:PsiDirectoryNode" />
+              <item name="gizwits-lease-backend" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="lease" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="bllc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bllc" type="462c0819:PsiDirectoryNode" />
+              <item name="gizwits-lease-master" type="462c0819:PsiDirectoryNode" />
+              <item name="gizwits-lease-backend" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="lease" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RequestMappingsPanelOrder0" value="0" />
+    <property name="RequestMappingsPanelOrder1" value="1" />
+    <property name="RequestMappingsPanelOrder2" value="2" />
+    <property name="RequestMappingsPanelWidth0" value="75" />
+    <property name="RequestMappingsPanelWidth1" value="75" />
+    <property name="RequestMappingsPanelWidth2" value="75" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1575368911212" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/gizwits-boot-master/pom.xml" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.21289228" />
+    <property name="settings.editor.selected.configurable" value="MavenSettings" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.gizwits.lease.device.entity.dto" />
+      <recent name="com.gizwits.lease.device.web" />
+      <recent name="com.gizwits.lease.device.service.impl" />
+      <recent name="com.gizwits.lease.device.service" />
+      <recent name="com.gizwits.lease.device.dao" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Spring Boot.Application">
+    <configuration name="MailApi" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.gizwits.boot.api.MailApi" />
+      <module name="gizwits-boot" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.gizwits.boot.api.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="agentTests.testEndOrders" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="gizwits-lease-backend" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.gizwits.lease.test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.gizwits.lease.test" />
+      <option name="MAIN_CLASS_NAME" value="com.gizwits.lease.test.agentTests" />
+      <option name="METHOD_NAME" value="testEndOrders" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="gizwits-lease-backend" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.gizwits.lease.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.gizwits.lease.Application" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="UPDATE_ACTION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Spring Boot.Application" />
+      <item itemvalue="JUnit.agentTests.testEndOrders" />
+      <item itemvalue="Application.MailApi" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Spring Boot.Application" />
+        <item itemvalue="Application.MailApi" />
+        <item itemvalue="JUnit.agentTests.testEndOrders" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4bd7cf19-4c78-4bcd-b9d7-ec6cb673da0c" name="Default Changelist" comment="" />
+      <created>1573697144602</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1573697144602</updated>
+      <workItem from="1573697147623" duration="24098000" />
+      <workItem from="1573793453770" duration="16641000" />
+      <workItem from="1574056163199" duration="13237000" />
+      <workItem from="1574126282861" duration="24809000" />
+      <workItem from="1574226375847" duration="12364000" />
+      <workItem from="1574301233752" duration="614000" />
+      <workItem from="1574845442168" duration="6210000" />
+      <workItem from="1574853147688" duration="758000" />
+      <workItem from="1574903571403" duration="23560000" />
+      <workItem from="1574991280056" duration="19784000" />
+      <workItem from="1575250665574" duration="21923000" />
+      <workItem from="1575341309155" duration="3071000" />
+      <workItem from="1575345058163" duration="17924000" />
+    </task>
+    <task id="LOCAL-00001" summary="库存表更新">
+      <created>1575356338274</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1575356338274</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TestHistory">
+    <history-entry file="agentTests_testEndOrders - 2019.11.15 at 16h 52m 26s.xml">
+      <configuration name="agentTests.testEndOrders" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="agentTests_testEndOrders - 2019.11.15 at 16h 53m 36s.xml">
+      <configuration name="agentTests.testEndOrders" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="agentTests_testEndOrders - 2019.11.15 at 16h 56m 51s.xml">
+      <configuration name="agentTests.testEndOrders" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="agentTests_testEndOrders - 2019.11.15 at 16h 59m 32s.xml">
+      <configuration name="agentTests.testEndOrders" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="agentTests_testEndOrders - 2019.11.15 at 17h 41m 50s.xml">
+      <configuration name="agentTests.testEndOrders" configurationId="JUnit" />
+    </history-entry>
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="184993000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-7" y="0" width="727" height="1047" extended-state="0" />
+    <layout>
+      <window_info content_ui="combo" id="Project" order="0" weight="0.063432835" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Designer" order="2" />
+      <window_info id="Image Layers" order="3" />
+      <window_info id="UI Designer" order="4" />
+      <window_info id="Favorites" order="5" side_tool="true" />
+      <window_info id="Capture Tool" order="6" />
+      <window_info id="Web" order="7" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32936078" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.029252438" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.32394367" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Spring" order="7" />
+      <window_info anchor="bottom" id="Terminal" order="8" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.060671724" />
+      <window_info anchor="bottom" id="Java Enterprise" order="11" />
+      <window_info anchor="bottom" id="Database Changes" order="12" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="13" show_stripe_button="false" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="right" id="Capture Analysis" order="4" />
+      <window_info anchor="right" id="Maven Projects" order="5" weight="0.32889125" />
+      <window_info anchor="right" id="Database" order="6" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
+      <window_info anchor="right" id="Theme Preview" order="8" />
+      <window_info active="true" anchor="right" id="Bean Validation" order="9" visible="true" weight="0.62668663" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="库存表更新" />
+    <option name="LAST_COMMIT_MESSAGE" value="库存表更新" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/product/entity/ProductCategory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="646">
+          <caret line="67" column="32" lean-forward="true" selection-start-line="67" selection-start-column="32" selection-end-line="67" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/product/service/impl/ProductDeviceChangeServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="418">
+          <caret line="29" column="16" selection-start-line="29" selection-start-column="16" selection-end-line="29" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/product/service/ProductDeviceChangeService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="12" column="9" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/user/service/impl/UserWeixinServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="370" column="58" selection-start-line="370" selection-start-column="58" selection-end-line="370" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-boot-master/src/main/java/com/gizwits/boot/base/ResponseObject.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-common/src/main/java/com/gizwits/lease/enums/ProductOperateType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="295">
+          <caret line="25" column="4" selection-start-line="25" selection-start-column="4" selection-end-line="25" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-common/src/main/java/com/gizwits/lease/exceptions/ExcelException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-common/src/main/java/com/gizwits/lease/enums/DataType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="12" column="12" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-common/src/main/java/com/gizwits/lease/enums/DeviceActiveStatusType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-common/src/main/java/com/gizwits/lease/enums/DeviceExPortFailType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="7" column="12" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.m2/taikongcang/com/baomidou/mybatis-plus/2.0.8/mybatis-plus-2.0.8.jar!/com/baomidou/mybatisplus/service/impl/ServiceImpl.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="298">
+          <caret line="217" column="19" selection-start-line="217" selection-start-column="19" selection-end-line="217" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DeviceForUpdateDto.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="23" column="23" selection-start-line="23" selection-start-column="12" selection-end-line="23" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/common/perm/SysUserRoleTypeHelperResolver.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="295">
+          <caret line="44" column="33" selection-start-line="44" selection-start-column="33" selection-end-line="44" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../Java/jdk1.8.0_191/src.zip!/java/util/Map.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="295">
+          <caret line="211" column="6" selection-start-line="211" selection-start-column="6" selection-end-line="211" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/common/perm/DefaultCommonRoleResolverManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="456">
+          <caret line="33" column="38" selection-start-line="33" selection-start-column="38" selection-end-line="33" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/common/perm/ManagerCommonRoleResolver.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="456">
+          <caret line="38" column="20" selection-start-line="38" selection-start-column="20" selection-end-line="38" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/common/perm/AbstractCommonRoleResolver.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="116">
+          <caret line="364" column="17" selection-start-line="364" selection-start-column="17" selection-end-line="364" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/common/perm/CommonRoleResolver.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="23" column="5" selection-start-line="23" selection-start-column="5" selection-end-line="23" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.m2/taikongcang/com/google/code/gson/gson/2.3/gson-2.3.jar!/com/google/gson/JsonArray.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="13" column="19" selection-start-line="13" selection-start-column="19" selection-end-line="13" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-common/src/main/java/com/gizwits/lease/exceptions/LeaseException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="8" column="23" selection-start-line="8" selection-start-column="23" selection-end-line="8" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-common/src/main/java/com/gizwits/lease/exceptions/LeaseExceEnums.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="513">
+          <caret line="75" column="33" selection-start-line="75" selection-start-column="4" selection-end-line="75" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DevicePutShowDto.java" />
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/product/service/ProductCategoryService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="680">
+          <caret line="50" column="20" selection-start-line="50" selection-start-column="20" selection-end-line="50" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.m2/taikongcang/com/baomidou/mybatis-plus/2.0.8/mybatis-plus-2.0.8.jar!/com/baomidou/mybatisplus/plugins/Page.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="429">
+          <caret line="33" column="16" selection-start-line="33" selection-start-column="16" selection-end-line="33" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/product/service/impl/ProductCategoryServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="537">
+          <caret line="227" column="127" selection-start-line="227" selection-start-column="74" selection-end-line="227" selection-end-column="127" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DeviceShowDto.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="457">
+          <caret line="86" column="34" selection-start-line="86" selection-start-column="34" selection-end-line="86" selection-end-column="34" />
+          <folding>
+            <element signature="e#1853#1854#0" expanded="true" />
+            <element signature="e#1903#1904#0" expanded="true" />
+            <element signature="e#1945#1946#0" expanded="true" />
+            <element signature="e#1764#1765#0" expanded="true" />
+            <element signature="e#1795#1796#0" expanded="true" />
+            <element signature="e#1843#1844#0" expanded="true" />
+            <element signature="e#1883#1884#0" expanded="true" />
+            <element signature="e#1920#1921#0" expanded="true" />
+            <element signature="e#1955#1956#0" expanded="true" />
+            <element signature="e#2009#2010#0" expanded="true" />
+            <element signature="e#2057#2058#0" expanded="true" />
+            <element signature="e#2219#2220#0" expanded="true" />
+            <element signature="e#2267#2268#0" expanded="true" />
+            <element signature="e#2749#2750#0" expanded="true" />
+            <element signature="e#2797#2798#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-boot-master/src/main/java/com/gizwits/boot/sys/entity/SysUser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="380">
+          <caret line="36" column="34" lean-forward="true" selection-start-line="36" selection-start-column="34" selection-end-line="36" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-dao/src/main/java/com/gizwits/lease/device/dao/DeviceStockDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="23" column="1" lean-forward="true" selection-start-line="23" selection-start-column="1" selection-end-line="23" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/DeviceAlarm.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="19" selection-start-line="19" selection-end-line="19" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-boot-master/src/main/java/com/gizwits/boot/utils/QueryResolverUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="21" column="19" selection-start-line="21" selection-start-column="19" selection-end-line="21" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/DeviceLaunchArea.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="20" column="13" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DeviceForStockDetailDto.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="456">
+          <caret line="64" column="47" lean-forward="true" selection-start-line="64" selection-start-column="7" selection-end-line="64" selection-end-column="47" />
+          <folding>
+            <element signature="e#1426#1427#0" expanded="true" />
+            <element signature="e#1480#1481#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DeviceForSpeedDetailDto.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="361">
+          <caret line="66" column="11" selection-start-line="66" selection-start-column="11" selection-end-line="66" selection-end-column="11" />
+          <folding>
+            <element signature="e#1466#1467#0" expanded="true" />
+            <element signature="e#1520#1521#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DeviceAddDetailsDto.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DeviceForAssignDto.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="22" column="27" selection-start-line="22" selection-start-column="27" selection-end-line="22" selection-end-column="27" />
+          <folding>
+            <element signature="e#1738#1739#0" expanded="true" />
+            <element signature="e#1769#1770#0" expanded="true" />
+            <element signature="e#1817#1818#0" expanded="true" />
+            <element signature="e#1857#1858#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DeviceAddDto.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+          <folding>
+            <element signature="e#1115#1116#0" expanded="true" />
+            <element signature="e#1158#1159#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-boot-master/src/main/java/com/gizwits/boot/enums/SysUserType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="11" column="4" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DeviceStockAddDto.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="12" column="30" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-boot-master/src/main/java/com/gizwits/boot/enums/DeleteStatus.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="10" column="4" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/device/service/DeviceAssignService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="475">
+          <caret line="30" column="17" selection-start-line="30" selection-start-column="17" selection-end-line="30" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/DeviceStock.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="153" column="20" selection-start-line="153" selection-start-column="20" selection-end-line="153" selection-end-column="20" />
+          <folding>
+            <element signature="e#3569#3570#0" expanded="true" />
+            <element signature="e#3617#3618#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-common/src/main/java/com/gizwits/lease/constant/DeviceSweepCodeStatus.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="15" column="4" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/device/service/impl/DeviceAssignServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="536">
+          <caret line="113" column="51" lean-forward="true" selection-start-line="113" selection-start-column="51" selection-end-line="113" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/dto/DeviceQueryDto.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1444">
+          <caret line="136" column="38" selection-start-line="136" selection-start-column="38" selection-end-line="136" selection-end-column="38" />
+          <folding>
+            <element signature="e#3416#3417#0" expanded="true" />
+            <element signature="e#3473#3474#0" expanded="true" />
+            <element signature="e#3521#3522#0" expanded="true" />
+            <element signature="e#3561#3562#0" expanded="true" />
+            <element signature="e#3596#3597#0" expanded="true" />
+            <element signature="e#3653#3654#0" expanded="true" />
+            <element signature="e#3701#3702#0" expanded="true" />
+            <element signature="e#3122#3123#0" expanded="true" />
+            <element signature="e#3157#3158#0" expanded="true" />
+            <element signature="e#3213#3214#0" expanded="true" />
+            <element signature="e#3261#3262#0" expanded="true" />
+            <element signature="e#3299#3300#0" expanded="true" />
+            <element signature="e#3332#3333#0" expanded="true" />
+            <element signature="e#3385#3386#0" expanded="true" />
+            <element signature="e#3429#3430#0" expanded="true" />
+            <element signature="e#3461#3462#0" expanded="true" />
+            <element signature="e#3489#3490#0" expanded="true" />
+            <element signature="e#3531#3532#0" expanded="true" />
+            <element signature="e#3565#3566#0" expanded="true" />
+            <element signature="e#3709#3710#0" expanded="true" />
+            <element signature="e#3763#3764#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/device/service/impl/DeviceStockServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="441">
+          <caret line="542" column="44" lean-forward="true" selection-start-line="542" selection-start-column="44" selection-end-line="542" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/device/service/DeviceStockService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="78" selection-start-line="78" selection-end-line="78" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-backend/src/main/java/com/gizwits/lease/device/web/DeviceStockController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="527">
+          <caret line="165" column="48" selection-start-line="165" selection-start-column="48" selection-end-line="165" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-backend/src/main/java/com/gizwits/lease/device/web/DeviceController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="698">
+          <caret line="87" column="40" lean-forward="true" selection-start-line="87" selection-start-column="40" selection-end-line="87" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/device/service/DeviceService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="418">
+          <caret line="194" selection-start-line="194" selection-end-line="194" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/src/main/java/com/gizwits/lease/device/service/impl/DeviceServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="1324" column="17" selection-start-line="1324" selection-start-column="17" selection-end-line="1324" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/src/main/java/com/gizwits/lease/device/entity/Device.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="9595">
+          <caret line="703" selection-start-line="703" selection-end-line="703" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <last-edited>gizwits-lease-app:war</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.21289228" />
+                <option value="0.5" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>Spring (gizwits-boot)|Spring</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.21289228" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.21289228" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.21289228" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>gizwits-boot</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.21289228" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>Maven: antlr:antlr:2.7.7</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.21289228" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>

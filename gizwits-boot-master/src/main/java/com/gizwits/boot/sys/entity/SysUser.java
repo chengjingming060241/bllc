@@ -34,7 +34,7 @@ public class SysUser extends Model<SysUser> {
     /**
      * 工号
      */
-    @TableId(value = "job_number")
+    @TableField(value = "job_number")
     @NotNull
     private Integer jobNumber;
 

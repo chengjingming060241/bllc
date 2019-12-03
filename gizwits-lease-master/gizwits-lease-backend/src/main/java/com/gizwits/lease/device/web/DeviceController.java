@@ -65,7 +65,7 @@ public class DeviceController extends BaseController {
     private DeviceToProductServiceModeService deviceToProductServiceModeService;
 
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
-    @ApiOperation(value = "库存管理设备列表", notes = "设备列表", consumes = "application/json")
+    @ApiOperation(value = "设备列表", notes = "设备列表", consumes = "application/json")
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @DefaultVersion(display = {"mac", "sno", "name", "product", "belongOperatorName", "launchArea", "serviceMode", "workStatusDesc", "onlineStatus", "activateStatusDesc"})
     public ResponseObject<Page<DeviceShowDto>> list(@RequestBody @Valid RequestObject<Pageable<DeviceQueryDto>> requestObject) {
