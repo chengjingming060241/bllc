@@ -8,6 +8,38 @@ public class StatAlarmWidgetVo {
     private Integer warnRecord;
     private Double alarmPercent;
 
+    private Integer totalCount;
+
+    private Integer faultCount; //故障
+
+    private Double faultPercent;
+
+    public Integer getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(Integer totalCount) {
+        this.totalCount = totalCount;
+    }
+
+    public Double getFaultPercent() {
+        return faultPercent;
+    }
+
+    public void setFaultPercent(Double faultPercent) {
+        this.faultPercent = faultPercent;
+    }
+
+    public Integer getFaultCount() {
+        return faultCount;
+    }
+
+    public void setFaultCount(Integer faultCount) {
+        this.faultCount = faultCount;
+    }
+    public StatAlarmWidgetVo() {
+
+    }
     public StatAlarmWidgetVo(Integer warnCount, Integer warnRecord, Double alarmPercent) {
         this.warnCount = warnCount;
         this.warnRecord = warnRecord;

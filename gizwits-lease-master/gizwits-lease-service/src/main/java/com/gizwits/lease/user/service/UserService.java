@@ -7,6 +7,7 @@ import com.gizwits.boot.dto.JwtAuthenticationDto;
 import com.gizwits.boot.dto.Pageable;
 import com.gizwits.boot.dto.SysUserForgetPasswordDto;
 import com.gizwits.boot.sys.entity.SysUserExt;
+import com.gizwits.lease.stat.vo.StatUserWidgetVo;
 import com.gizwits.lease.user.dto.*;
 import com.gizwits.lease.user.dto.UserForDetailDto;
 import com.gizwits.lease.user.dto.UserForInfoDto;
@@ -233,5 +234,10 @@ public interface UserService extends IService<User> {
 
     void messageCodeForBindWx(String mobile);
 
-
+    //=================START=====================//
+    /**
+     * 用户看板，统计app用户总数，昨日新增app用户数
+     */
+    StatUserWidgetVo getUserWidget();
+//=================END=====================//
 }

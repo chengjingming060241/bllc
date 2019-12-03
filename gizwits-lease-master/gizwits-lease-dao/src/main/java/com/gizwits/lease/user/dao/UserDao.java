@@ -2,6 +2,7 @@ package com.gizwits.lease.user.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.gizwits.lease.stat.vo.StatUserWidgetVo;
 import com.gizwits.lease.user.dto.QueryForUserListDTO;
 import com.gizwits.lease.user.dto.UserForQueryDto;
 import com.gizwits.lease.user.entity.User;
@@ -95,4 +96,9 @@ public interface UserDao extends BaseMapper<User> {
      * @return
      */
     Date findMaxEndTimeByOpenid(@Param("userId") String userId);
+
+
+    //=====================//
+    StatUserWidgetVo getUserWidget(@Param("date") Date date);
+    //========================//
 }

@@ -1,6 +1,7 @@
 # maven #
 target
 logs
+/data/
 
 # eclipse #
 .settings

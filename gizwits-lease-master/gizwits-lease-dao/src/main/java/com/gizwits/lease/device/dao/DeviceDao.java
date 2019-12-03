@@ -3,6 +3,8 @@ package com.gizwits.lease.device.dao;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.gizwits.lease.device.entity.Device;
 
+import com.gizwits.lease.stat.vo.StatAlarmWidgetVo;
+import com.gizwits.lease.stat.vo.StatDeviceWidgetVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -99,4 +101,10 @@ public interface DeviceDao extends BaseMapper<Device> {
     int updateActivateStatus(@Param("sno") String sno, @Param("time") Date time);
 
     List<Map<String,Number>> findProvinceAndCount(@Param("sysUserId") Integer sysUserId, @Param("productId") Integer productId);
+
+    //==================START=============================//
+    StatDeviceWidgetVo selectTotalDeviceCount(@Param("productId") Integer productId, @Param("date") Date date);
+
+    StatAlarmWidgetVo getAlarmAndFaultWidget(@Param("productId") Integer productId);
+    //==================END=============================//
 }

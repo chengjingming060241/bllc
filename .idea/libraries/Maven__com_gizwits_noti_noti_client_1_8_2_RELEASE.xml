@@ -1,13 +1,13 @@
 <component name="libraryTable">
   <library name="Maven: com.gizwits.noti:noti-client:1.8.2-RELEASE">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.m2/taikongcang/com/gizwits/noti/noti-client/1.8.2-RELEASE/noti-client-1.8.2-RELEASE.jar!/" />
+      <root url="jar://$USER_HOME$/.m2/repository/com/gizwits/noti/noti-client/1.8.2-RELEASE/noti-client-1.8.2-RELEASE.jar!/" />
     </CLASSES>
     <JAVADOC>
-      <root url="jar://$USER_HOME$/.m2/taikongcang/com/gizwits/noti/noti-client/1.8.2-RELEASE/noti-client-1.8.2-RELEASE-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.m2/repository/com/gizwits/noti/noti-client/1.8.2-RELEASE/noti-client-1.8.2-RELEASE-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$USER_HOME$/.m2/taikongcang/com/gizwits/noti/noti-client/1.8.2-RELEASE/noti-client-1.8.2-RELEASE-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.m2/repository/com/gizwits/noti/noti-client/1.8.2-RELEASE/noti-client-1.8.2-RELEASE-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
