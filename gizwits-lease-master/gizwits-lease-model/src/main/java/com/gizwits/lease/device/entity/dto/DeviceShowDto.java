@@ -18,13 +18,8 @@ public class DeviceShowDto implements Serializable{
     private String iMEI;
     private String name;
     private String product;
-
     @ApiModelProperty("仓库")
     private String launchArea;
-
-    @ApiModelProperty("经销商")
-    private String agentName;
-
     private String serviceMode;
     private Date   lastOnLineTime;
     private String status;
@@ -34,9 +29,6 @@ public class DeviceShowDto implements Serializable{
     @ApiModelProperty("入库批次")
     private String batch;
 
-    @ApiModelProperty("出库批次")
-    private String outBatch;
-
     @ApiModelProperty("供应商")
     private String supplierName;
 
@@ -45,9 +37,6 @@ public class DeviceShowDto implements Serializable{
 
     @ApiModelProperty("入库时间")
     private Date entryTime;
-
-    @ApiModelProperty("出库时间")
-    private Date shiftOutTime;
 
     @ApiModelProperty(" 产品型号")
     private String categoryType;
@@ -83,30 +72,6 @@ public class DeviceShowDto implements Serializable{
     private String activateStatusDesc;
 
     private Boolean lock;
-
-    public String getAgentName() {
-        return agentName;
-    }
-
-    public void setAgentName(String agentName) {
-        this.agentName = agentName;
-    }
-
-    public String getOutBatch() {
-        return outBatch;
-    }
-
-    public void setOutBatch(String outBatch) {
-        this.outBatch = outBatch;
-    }
-
-    public Date getShiftOutTime() {
-        return shiftOutTime;
-    }
-
-    public void setShiftOutTime(Date shiftOutTime) {
-        this.shiftOutTime = shiftOutTime;
-    }
 
     public Integer getDeviceCount() {
         return deviceCount;
