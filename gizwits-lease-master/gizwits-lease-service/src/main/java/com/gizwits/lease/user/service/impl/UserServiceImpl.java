@@ -240,7 +240,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
     /**
      * 获取支付宝信息
      *
-     * @param userinfoShareResponse
+     * @param
      * @return
      */
     public User addUserByAlipay(AlipayUserUserinfoShareResponse userinfoShareResponse, SysUserExt sysUserExt) {

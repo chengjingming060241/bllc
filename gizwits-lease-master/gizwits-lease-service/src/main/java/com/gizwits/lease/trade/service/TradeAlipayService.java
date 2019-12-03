@@ -1,6 +1,6 @@
 package com.gizwits.lease.trade.service;
 
-import com.alipay.api.response.AlipayTradeCreateResponse;
+
 import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.baomidou.mybatisplus.service.IService;
 import com.gizwits.boot.sys.entity.SysUserExt;
@@ -70,12 +70,12 @@ public interface TradeAlipayService extends IService<TradeAlipay> {
     void transfer(String orderNo, String subject, Double amount, String account, String realName, Integer sysUserId);
     /**
      * 支付宝退款
-     * @param tradeNo
+     * @param
      * @return
      */
     AlipayTradeRefundResponse refund(OrderBase orderBase,String tradeNo);
 
     void refund(OrderBase orderBase, TradeBase tradeBase);
-
+//
     AlipayTradeRefundResponse baseRefund(String tradeNo, String outTradeNo, Double refundMoney, String refundMsg, SysUserExt sysUserExt);
 }

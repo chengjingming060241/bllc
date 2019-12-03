@@ -82,12 +82,6 @@ public class Device extends Model<Device> {
     private Integer faultStatus;
 
     /**
-     * 扫码状态
-     */
-    @TableField("sweep_code_status")
-    private Integer sweepCodeStatus;
-
-    /**
      * 设备状态,0:入库 1:出库 2:服务中 3:暂停服务 4:已返厂 5:已报废
      * 0.待扫码、1.可入库
      */
@@ -117,27 +111,6 @@ public class Device extends Model<Device> {
     private String operatorName;
 
     /**
-     * 入库员的系统账号
-     */
-    @TableField("warehousing_id")
-    private Integer WarehousingId;
-    /**
-     * 入库员
-     */
-    @TableField("warehousing_name")
-    private String WarehousingName;
-
-    /**
-     * 出库员的系统账号
-     */
-    @TableField("out_of_stock_id")
-    private Integer outOfStockId;
-    /**
-     * 出库员
-     */
-    @TableField("out_of_stock_name")
-    private String outOfStockName;
-    /**
      * 仓库ID
      */
     @TableField("launch_area_id")
@@ -163,18 +136,6 @@ public class Device extends Model<Device> {
      */
     @TableField("product_category_id")
     private Integer productCategoryId;
-
-    /**
-     * 入库批次
-     */
-    @TableField("batch")
-    private String batch;
-
-    /**
-     * 出库批次
-     */
-    @TableField("out_batch")
-    private String outBatch;
 
     /**
      * 收费模式ID
@@ -258,23 +219,6 @@ public class Device extends Model<Device> {
     @TableField("group_id")
     private Integer groupId;
 
-    /*
-     * 入库时间
-     */
-    @TableField("entry_time")
-    private Date entryTime;
-
-    /*
-     * 扫码时间
-     */
-    @TableField("sweep_code_time")
-    private Date sweepCodeTime;
-
-    /**
-     * 出库时间
-     */
-    @TableField("shift_out_time")
-    private Date shiftOutTime;
 
     public String getOwnerName() {
         return ownerName;
@@ -373,67 +317,6 @@ public class Device extends Model<Device> {
     @TableField("control_type")
     private Boolean controlType;
 
-    /**
-     * 供应商
-     */
-    @TableField("supplier_name")
-    private String supplierName;
-
-    public Integer getOutOfStockId() {
-        return outOfStockId;
-    }
-
-    public void setOutOfStockId(Integer outOfStockId) {
-        this.outOfStockId = outOfStockId;
-    }
-
-    public String getOutOfStockName() {
-        return outOfStockName;
-    }
-
-    public void setOutOfStockName(String outOfStockName) {
-        this.outOfStockName = outOfStockName;
-    }
-
-    public String getOutBatch() {
-        return outBatch;
-    }
-
-    public void setOutBatch(String outBatch) {
-        this.outBatch = outBatch;
-    }
-
-    public Integer getSweepCodeStatus() {
-        return sweepCodeStatus;
-    }
-
-    public void setSweepCodeStatus(Integer sweepCodeStatus) {
-        this.sweepCodeStatus = sweepCodeStatus;
-    }
-
-    public Date getSweepCodeTime() {
-        return sweepCodeTime;
-    }
-
-    public void setSweepCodeTime(Date sweepCodeTime) {
-        this.sweepCodeTime = sweepCodeTime;
-    }
-
-    public Integer getWarehousingId() {
-        return WarehousingId;
-    }
-
-    public void setWarehousingId(Integer warehousingId) {
-        WarehousingId = warehousingId;
-    }
-
-    public String getWarehousingName() {
-        return WarehousingName;
-    }
-
-    public void setWarehousingName(String warehousingName) {
-        WarehousingName = warehousingName;
-    }
 
     public Integer getProductCategoryId() {
         return productCategoryId;
@@ -441,22 +324,6 @@ public class Device extends Model<Device> {
 
     public void setProductCategoryId(Integer productCategoryId) {
         this.productCategoryId = productCategoryId;
-    }
-
-    public String getBatch() {
-        return batch;
-    }
-
-    public void setBatch(String batch) {
-        this.batch = batch;
-    }
-
-    public String getSupplierName() {
-        return supplierName;
-    }
-
-    public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
     }
 
     public Boolean getControlType() {
@@ -828,23 +695,6 @@ public class Device extends Model<Device> {
 
     public void setGroupId(Integer groupId) {
         this.groupId = groupId;
-    }
-
-    public Date getEntryTime() {
-        return entryTime;
-    }
-
-    public void setEntryTime(Date entryTime) {
-        this.entryTime = entryTime;
-    }
-
-    public Date getShiftOutTime() {
-        return shiftOutTime;
-    }
-
-    public void setShiftOutTime(Date shiftOutTime) {
-        this.shiftOutTime = shiftOutTime;
-
     }
 
     public Integer getActivateStatus() { return activateStatus; }

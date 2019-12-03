@@ -4,25 +4,16 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
-
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.github.wxpay.sdk.WXPayUtil;
 import com.gizwits.boot.sys.entity.SysUserExt;
 import com.gizwits.boot.utils.*;
 import com.gizwits.lease.benefit.entity.ShareBenefitSheet;
-import com.gizwits.lease.config.CommonSystemConfig;
 import com.gizwits.lease.constant.*;
 import com.gizwits.lease.event.ShareBenefitPayRecordEvent;
 import com.gizwits.lease.exceptions.LeaseExceEnums;
 import com.gizwits.lease.exceptions.LeaseException;
-import com.gizwits.lease.order.entity.OrderBase;
-import com.gizwits.lease.trade.entity.TradeBase;
-import com.gizwits.lease.trade.entity.TradeWeixin;
-import com.gizwits.lease.trade.service.TradeBaseService;
 import com.gizwits.lease.util.WxUtil;
 import com.gizwits.lease.utils.http.HttpClient;
-
-import com.gizwits.lease.wallet.entity.UserWallet;
 import com.gizwits.lease.wallet.entity.UserWalletChargeOrder;
 import com.gizwits.lease.wallet.service.UserWalletChargeOrderService;
 import com.gizwits.lease.winxin.service.WeixinPayService;
@@ -31,8 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-
-
 import org.springframework.stereotype.Service;
 
 @Service

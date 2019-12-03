@@ -1,11 +1,10 @@
 package com.gizwits.lease.user.service;
 
-import com.alipay.api.response.AlipayUserUserinfoShareResponse;
+
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
 import com.gizwits.boot.dto.JwtAuthenticationDto;
 import com.gizwits.boot.dto.Pageable;
-import com.gizwits.boot.dto.SysUserForgetPasswordDto;
 import com.gizwits.boot.sys.entity.SysUserExt;
 import com.gizwits.lease.stat.vo.StatUserWidgetVo;
 import com.gizwits.lease.user.dto.*;
@@ -46,7 +45,7 @@ public interface UserService extends IService<User> {
      * @param userinfoShareResponse
      * @return
      */
-    User addUserByAlipay(AlipayUserUserinfoShareResponse userinfoShareResponse, SysUserExt sysUserExt);
+//    User addUserByAlipay(AlipayUserUserinfoShareResponse userinfoShareResponse, SysUserExt sysUserExt);
 
     /**
      * 根据微信用户openid获取微信主体信息,返回对象的openid,为用户的unionid

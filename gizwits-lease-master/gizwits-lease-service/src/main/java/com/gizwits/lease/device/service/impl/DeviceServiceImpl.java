@@ -584,7 +584,6 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceDao, Device> implements
                     device.setUtime(now);
                     device.setCtime(now);
                     device.setOrigin(DeviceOriginType.INPUT.getCode());
-                    device.setSweepCodeStatus(DeviceSweepCodeStatus.PENDING_CODE.getCode());
                     device.setSysUserId(sysUser.getId());
                     device.setOwnerId(sysUser.getId());
                     device.setOwnerName(sysUser.getRealName());
@@ -627,10 +626,10 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceDao, Device> implements
                       deviceSn1.setiMEI(detailsDto.getiMEI());
                       deviceSn1.setsN2(detailsDto.getsN2());
                       deviceSn1.setUtime(now);
-                      deviceSn1.setSweepCodeTime(now);
+
                       deviceSn1.setOperatorId(sysUser.getJobNumber());
                       deviceSn1.setOperatorName(sysUser.getRealName());
-                      deviceSn1.setSweepCodeStatus(DeviceSweepCodeStatus.WAIT_TO_ENTRY.getCode());
+
                       insertOrUpdate(deviceSn1);
                   }
               }else{
@@ -640,10 +639,10 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceDao, Device> implements
                   }else {
                       devices.setsN2(detailsDto.getsN2());
                       devices.setUtime(now);
-                      devices.setSweepCodeTime(now);
+
                       devices.setOperatorId(sysUser.getJobNumber());
-                      devices.setOperatorName(sysUser.getRealName());
-                      devices.setSweepCodeStatus(DeviceSweepCodeStatus.WAIT_TO_ENTRY.getCode());
+
+
                       insertOrUpdate(devices);
                   }
               }
@@ -682,18 +681,6 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceDao, Device> implements
                     continue;
                 }
                 devicePut.setUtime(now);
-                devicePut.setWarehousingName(sysUser.getRealName());//经办人
-                devicePut.setWarehousingId(sysUser.getJobNumber());
-                devicePut.setProductCategoryId(productCategory.getId()); //产品ID
-                devicePut.setSweepCodeStatus(DeviceSweepCodeStatus.To_Be_But_Bf_Stock.getCode());
-                devicePut.setLaunchAreaId(deviceAddDto.getDeviceLaunchAreaId());  //仓库id
-                devicePut.setLaunchAreaName(deviceAddDto.getDeivceLaunchAreaName()); //仓库名称
-                devicePut.setProductId(product.getId());   //品类ID
-                devicePut.setProductName(product.getName());  //品类名称
-                devicePut.setEntryTime(now);  //入库时间
-                devicePut.setRemarks(deviceAddDto.getRemarks());
-                devicePut.setSupplierName(deviceAddDto.getSupplierName());  //供应商
-                devicePut.setBatch(deviceAddDto.getBatch());  //批次
                 insertOrUpdate(devicePut);
             }
 
@@ -1377,48 +1364,6 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceDao, Device> implements
         for (Device device : devices) {
             DeviceShowDto showDto = getDeviceShowDto(device);
             showDto.setWorkStatusDesc(getDeviceWorkStatus(device));
-            list.add(showDto);
-        }
-        return list;
-    }
-
-    /**库存列表*/
-    private List<DeviceShowDto> getStockDeviceShowDtos(List<Device> devices) {
-        List<DeviceShowDto> list = new ArrayList<>(devices.size());
-        for (Device device : devices) {
-            DeviceShowDto showDto = getDeviceShowDto(device);
-            showDto.setSweepCodeStatus(DeviceSweepCodeStatus.getName(device.getSweepCodeStatus()));
-            showDto.setCategoryType(productCategoryService.selectById(device.getProductCategoryId()).getCategoryType());   //型号
-            showDto.setLaunchArea(device.getLaunchAreaName());
-            list.add(showDto);
-        }
-        return list;
-    }
-
-    /**入库列表 */
-    private List<DeviceShowDto> getPutDeviceShowDtos(List<Device> devices) {
-        List<DeviceShowDto> list = new ArrayList<>(devices.size());
-        for (Device device : devices) {
-            DeviceShowDto showDto = new DeviceShowDto();
-            showDto.setCategoryType(productCategoryService.selectById(device.getProductCategoryId()).getCategoryType());   //型号
-            showDto.setLaunchArea(device.getLaunchAreaName());
-            showDto.setDeviceCount(selectCount(new EntityWrapper<Device>()
-                    .eq("batch",device.getBatch()).eq("is_deleted", DeleteStatus.NOT_DELETED.getCode())));
-            showDto.setSupplierName(device.getSupplierName());
-            showDto.setOperatorName(device.getOperatorName());
-            showDto.setEntryTime(device.getEntryTime());
-            list.add(showDto);
-        }
-        return list;
-    }
-
-    /**库存详情*/
-    private List<DeviceForSpeedDetailDto> getputDeviceDetails(List<Device> devices) {
-        List<DeviceForSpeedDetailDto> list = new ArrayList<>(devices.size());
-        for (Device device : devices) {
-            DeviceForSpeedDetailDto showDto = new  DeviceForSpeedDetailDto(device);
-            showDto.setCategoryType(productCategoryService.selectById(device.getProductCategoryId()).getCategoryType());   //型号
-
             list.add(showDto);
         }
         return list;
