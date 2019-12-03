@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gizwits.lease.benefit.dao.ShareProfitSummaryDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.gizwits.lease.benefit.entity.ShareProfitSummary">
+		<id column="id" property="id" />
+		<result column="batch_id" property="batchId" />
+		<result column="sys_user_id" property="sysUserId" />
+		<result column="order_count" property="orderCount" />
+		<result column="order_money" property="orderMoney" />
+		<result column="share_money" property="shareMoney" />
+		<result column="status" property="status" />
+		<result column="ctime" property="ctime" />
+		<result column="utime" property="utime" />
+	</resultMap>
+
+	<select id="countOrderForSummary" resultType="com.gizwits.lease.benefit.dao.ShareProfitSummaryOrderDto">
+		SELECT COUNT(order_no) AS orderCount,
+		SUM(amount) AS orderMoney
+		FROM order_base
+		WHERE order_no IN (
+		SELECT DISTINCT order_no FROM order_share_profit
+		WHERE share_profit_bill_no IN (
+		SELECT bill_no FROM share_profit_summary_detail
+		WHERE summary_id = #{id}
+		)
+		)
+	</select>
+
+	<select id="sumShareMoney" resultType="java.math.BigDecimal">
+		SELECT SUM(share_money) FROM share_profit_bill
+		WHERE bill_no IN (
+		SELECT bill_no FROM share_profit_summary_detail
+		WHERE summary_id = #{id}
+		)
+	</select>
+
+</mapper>

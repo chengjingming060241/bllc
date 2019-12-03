@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gizwits.lease.card.dao.CardConsumeRecordDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.gizwits.lease.card.entity.CardConsumeRecord">
+		<id column="id" property="id" />
+		<result column="user_id" property="userId" />
+		<result column="card_id" property="cardId" />
+		<result column="consume_count" property="consumeCount" />
+	</resultMap>
+
+	<update id="saveUserConsumeCardRecord">
+		UPDATE card_consume_record SET consume_count = consume_count + 1
+		WHERE user_id = #{userId} AND card_id = #{cardId}
+		<if test="limit != null">
+			AND consume_count <![CDATA[ < ]]> #{limit}
+		</if>
+	</update>
+
+	<update id="rollbackCardConsumption">
+		UPDATE card_consume_record SET consume_count = consume_count - 1
+		WHERE user_id = #{userId} AND card_id = #{cardId} AND consume_count > 0
+	</update>
+
+</mapper>

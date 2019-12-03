@@ -1,0 +1,315 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>1.4.2.RELEASE</version>
+  </parent>
+
+
+  <groupId>com.gizwits</groupId>
+  <artifactId>gizwits-boot</artifactId>
+  <version>1.3_ym</version>
+  <packaging>jar</packaging>
+
+  <name>gizwits-boot</name>
+  <description>gizwits web server development framework. </description>
+  <url>http://maven.apache.org</url>
+
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>rongmc</name>
+      <email>rongmingcai@163.com</email>
+    </developer>
+  </developers>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <aspectjweaver.version>1.8.9</aspectjweaver.version>
+    <slf4j.version>1.7.21</slf4j.version>
+    <mybatis-plus.version>1.4.8</mybatis-plus.version>
+
+    <!-- kisso -->
+    <kisso.version>3.6.11</kisso.version>
+    <fastjson.version>1.2.17</fastjson.version>
+
+    <!-- provided -->
+    <servlet-api.version>2.5</servlet-api.version>
+    <velocity.version>1.7</velocity.version>
+    <velocity-tools.version>2.0</velocity-tools.version>
+    <mail.version>1.4.7</mail.version>
+    <quartz.version>2.2.2</quartz.version>
+    <pinyin4j.version>2.5.1</pinyin4j.version>
+    <sigar.version>1.6.4</sigar.version>
+    <im4java.version>1.4.0</im4java.version>
+    <scribejava-core.version>2.5.3</scribejava-core.version>
+    <logback-classic.version>1.1.7</logback-classic.version>
+    <mybatisplus-spring-boot-starter.version>1.0.1</mybatisplus-spring-boot-starter.version>
+    <httpclient.version>4.5.3</httpclient.version>
+  </properties>
+
+  <repositories>
+    <repository>
+      <id>central</id>
+      <name>Maven Repository Switchboard</name>
+      <layout>default</layout>
+      <url>http://repo1.maven.org/maven2</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-mail</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-rest</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-redis</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-tomcat</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-jdbc</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-aop</artifactId>
+    </dependency>
+
+    <!--<dependency>-->
+      <!--<groupId>org.springframework.boot</groupId>-->
+      <!--<artifactId>spring-boot-starter-security</artifactId>-->
+    <!--</dependency>-->
+
+    <!-- https://mvnrepository.com/artifact/io.github.jianzhichun/swagger2-spring-boot-starter -->
+    <dependency>
+      <groupId>io.github.jianzhichun</groupId>
+      <artifactId>swagger2-spring-boot-starter</artifactId>
+      <version>0.1.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>5.1.40</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/com.alibaba/druid -->
+    <dependency>
+      <groupId>com.alibaba</groupId>
+      <artifactId>druid</artifactId>
+      <version>1.0.31</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.baomidou</groupId>
+      <artifactId>mybatisplus-spring-boot-starter</artifactId>
+      <version>${mybatisplus-spring-boot-starter.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.alibaba</groupId>
+      <artifactId>fastjson</artifactId>
+      <version>${fastjson.version}</version>
+    </dependency>
+
+    <!-- velocity begin -->
+    <dependency>
+      <groupId>org.apache.velocity</groupId>
+      <artifactId>velocity-tools</artifactId>
+      <version>${velocity-tools.version}</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>dom4j</artifactId>
+          <groupId>dom4j</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>struts-core</artifactId>
+          <groupId>org.apache.struts</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>struts-tiles</artifactId>
+          <groupId>org.apache.struts</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>struts-taglib</artifactId>
+          <groupId>org.apache.struts</groupId>
+        </exclusion>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.velocity</groupId>
+      <artifactId>velocity</artifactId>
+      <version>${velocity.version}</version>
+    </dependency>
+    <!-- velocity end -->
+
+    <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.1.0</version>
+    </dependency>
+
+    <!-- json数据 -->
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.2.2</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.9</version>
+    </dependency>
+
+    <!-- XML 工具包 -->
+    <dependency>
+      <groupId>com.thoughtworks.xstream</groupId>
+      <artifactId>xstream</artifactId>
+      <version>1.4.10</version>
+    </dependency>
+
+    <dependency>
+      <groupId>dom4j</groupId>
+      <artifactId>dom4j</artifactId>
+      <version>1.6.1</version>
+    </dependency>
+
+    <!--<dependency>-->
+      <!--<groupId>com.yunpian</groupId>-->
+      <!--<artifactId>sdk-java</artifactId>-->
+      <!--<version>v1</version>-->
+    <!--</dependency>-->
+
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt</artifactId>
+      <version>0.7.0</version>
+    </dependency>
+
+    <!-- http client -->
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
+      <version>${httpclient.version}</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>commons-codec</artifactId>
+          <groupId>commons-codec</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.5</version>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-beanutils</groupId>
+      <artifactId>commons-beanutils</artifactId>
+      <version>1.9.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-mail</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-thymeleaf</artifactId>
+    </dependency>
+  </dependencies>
+
+  <profiles>
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <!-- 生成*-sources.jar文件 -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>2.1.2</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+            </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  
+  <distributionManagement>
+    <repository>
+      <id>archiva.internal</id>
+      <name>Internal Release Repository</name>
+      <url>https://archiva.gizwits.com/repository/internal/</url>
+    </repository>
+  </distributionManagement>
+
+</project>

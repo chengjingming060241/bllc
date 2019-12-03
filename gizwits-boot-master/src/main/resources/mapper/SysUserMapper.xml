@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gizwits.boot.sys.dao.SysUserDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.gizwits.boot.sys.entity.SysUser">
+		<id column="id" property="id" />
+		<result column="ctime" property="ctime" />
+		<result column="utime" property="utime" />
+		<result column="username" property="username" />
+		<result column="password" property="password" />
+		<result column="salt" property="salt" />
+		<result column="nick_name" property="nickName" />
+		<result column="real_name" property="realName" />
+		<result column="gender" property="gender" />
+		<result column="avatar" property="avatar" />
+		<result column="birthday" property="birthday" />
+		<result column="mobile" property="mobile" />
+		<result column="address" property="address" />
+		<result column="remark" property="remark" />
+		<result column="sys_user_id" property="sysUserId" />
+		<result column="sys_user_name" property="sysUserName" />
+		<result column="is_enable" property="isEnable" />
+		<result column="tree_path" property="treePath" />
+		<result column="code" property="code" />
+
+		<result column="sys_name" property="sysName" />
+		<result column="sys_logo" property="sysLogo" />
+		<result column="is_deleted" property="isDeleted"/>
+
+		<result column="is_admin" property="isAdmin" />
+		<result column="parent_admin_id" property="parentAdminId" />
+
+	</resultMap>
+
+	<select id="getSystemNameAndLogo" resultType="java.util.Map">
+		select sys_name as sysName, sys_logo as sysLogo
+		from sys_user
+		where sys_name is not null
+		and id in
+		<foreach collection="parentIds" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+		order by id desc
+		limit 1
+	</select>
+
+</mapper>

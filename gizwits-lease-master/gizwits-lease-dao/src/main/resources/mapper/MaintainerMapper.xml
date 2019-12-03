@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gizwits.lease.maintainer.dao.MaintainerDao">
+
+	<sql id="infoField">
+		u.id as id, u.username as username, u.nick_name as nickname, u.mobile as mobile,
+		u.sys_user_id as ownerId, owner.nick_name as ownerName, u.ctime as ctime, u.utime as utime
+	</sql>
+
+	<select id="list" resultType="com.gizwits.lease.maintainer.dto.MaintainerInfoDto">
+		select <include refid="infoField"/>
+		from sys_user u
+		left join sys_user owner on u.sys_user_id = owner.id
+		left join sys_user_to_role r on u.id = r.sys_user_id
+		<where>
+			and u.is_enable = 1 and r.role_id = #{maintainerRoleId}
+			<if test="ownerIds != null and ownerIds.size() > 0">
+				and u.sys_user_id in
+				<foreach collection="ownerIds" item="item" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="nickname != null and nickname != ''">
+				and u.nick_name like concat('%',#{nickname},'%')
+			</if>
+			<if test="mobile != null and mobile != ''">
+				and u.mobile like concat('%',#{mobile},'%')
+			</if>
+			<if test="ownerName != null and ownerName != ''">
+				and owner.nick_name like concat('%',#{ownerName},'%')
+			</if>
+			<if test="startTime != null">
+				and u.utime >= #{startTime}
+			</if>
+			<if test="endTime != null">
+				and u.utime <![CDATA[<=]]> #{endTime}
+			</if>
+		</where>
+	</select>
+
+	<select id="detail" resultType="com.gizwits.lease.maintainer.dto.MaintainerInfoDto">
+		select <include refid="infoField"/>
+		from sys_user u
+		left join sys_user owner on u.sys_user_id = owner.id
+		where u.id = #{id}
+	</select>
+
+</mapper>

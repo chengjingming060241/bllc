@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gizwits.boot.sys.dao.SysRoleDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.gizwits.boot.sys.entity.SysRole">
+		<id column="id" property="id" />
+		<result column="ctime" property="ctime" />
+		<result column="utime" property="utime" />
+		<result column="role_name" property="roleName" />
+		<result column="remark" property="remark" />
+		<result column="sys_user_id" property="sysUserId" />
+		<result column="sys_user_name" property="sysUserName" />
+		<result column="is_share_data" property="isShareData" />
+		<result column="share_benefit_type" property="shareBenefitType" />
+		<result column="is_share_service_mode" property="isShareServiceMode"/>
+		<result column="is_add_more_service_mode" property="isAddMoreServiceMode"/>
+		<result column="is_deleted" property="isDeleted"/>
+	</resultMap>
+
+</mapper>

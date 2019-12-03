@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gizwits.lease.benefit.dao.ShareProfitSummaryDetailDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.gizwits.lease.benefit.entity.ShareProfitSummaryDetail">
+		<id column="summary_id" property="summaryId" />
+		<result column="bill_no" property="billNo" />
+	</resultMap>
+
+</mapper>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gizwits.lease.card.dao.CardDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.gizwits.lease.card.entity.Card">
+		<id column="card_id" property="cardId" />
+		<result column="title" property="title" />
+		<result column="card_type" property="cardType" />
+		<result column="status" property="status" />
+		<result column="date_type" property="dateType" />
+		<result column="date_begin_timestamp" property="dateBeginTimestamp" />
+		<result column="date_end_timestamp" property="dateEndTimestamp" />
+		<result column="date_fixed_term" property="dateFixedTerm" />
+		<result column="date_fixed_begin_term" property="dateFixedBeginTerm" />
+		<result column="quantity" property="quantity" />
+		<result column="least_cost" property="leastCost" />
+		<result column="reduce_cost" property="reduceCost" />
+		<result column="discount" property="discount" />
+		<result column="sys_user_id" property="sysUserId" />
+		<result column="dispatch_web" property="dispatchWeb" />
+		<result column="dispatch_app" property="dispatchApp" />
+		<result column="cover" property="cover" />
+		<result column="sequence" property="sequence" />
+		<result column="product_id" property="productId" />
+		<result column="operator_ids" property="operatorIds" />
+		<result column="ctime" property="ctime" />
+		<result column="utime" property="utime" />
+		<result column="sync_time" property="syncTime" />
+		<result column="receive_limit" property="receiveLimit" />
+	</resultMap>
+
+	<update id="removeProductLimit">
+		UPDATE card SET product_id = NULL WHERE card_id = #{cardId}
+	</update>
+
+	<update id="removeOperatorLimit">
+		UPDATE card SET operator_ids = NULL WHERE card_id = #{cardId}
+	</update>
+
+	<select id="selectDispatchedCardList" resultMap="BaseResultMap">
+		SELECT * FROM card
+		<where>
+			<choose>
+				<when test="channel == 1">
+					dispatch_web = 1
+				</when>
+				<when test="channel == 2">
+					dispatch_app = 1
+				</when>
+				<otherwise>
+					(dispatch_web = 1 AND dispatch_app = 1)
+				</otherwise>
+			</choose>
+			<if test="sysUserId != null">
+				AND sys_user_id = #{sysUserId}
+			</if>
+		</where>
+		ORDER BY sequence, utime DESC
+	</select>
+
+</mapper>

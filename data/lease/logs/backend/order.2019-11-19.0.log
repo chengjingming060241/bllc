@@ -1,0 +1,44 @@
+2019-11-19 10:30:00.433 [http-nio-8090-exec-8] WARN  ORDER_LOGGER - 请查看statDeviceOrderWidget中是否有最近一天:2019-11-19 10:30:00，产品id:null和当前用户:596的设备数据
+2019-11-19 10:33:31.807 [http-nio-8090-exec-3] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=10 ,pages=0 ,current=1 }
+2019-11-19 10:33:31.964 [http-nio-8090-exec-6] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=99999 ,pages=0 ,current=1 }
+2019-11-19 12:02:57.453 [http-nio-8090-exec-10] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=10 ,pages=0 ,current=1 }
+2019-11-19 12:02:57.493 [http-nio-8090-exec-2] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=99999 ,pages=0 ,current=1 }
+2019-11-19 12:03:06.911 [http-nio-8090-exec-8] WARN  ORDER_LOGGER - 请查看statDeviceOrderWidget中是否有最近一天:2019-11-19 12:03:06，产品id:null和当前用户:596的设备数据
+2019-11-19 12:03:09.451 [http-nio-8090-exec-1] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=10 ,pages=0 ,current=1 }
+2019-11-19 12:03:09.742 [http-nio-8090-exec-3] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=99999 ,pages=0 ,current=1 }
+2019-11-19 12:08:01.213 [http-nio-8090-exec-8] WARN  ORDER_LOGGER - 请查看statDeviceOrderWidget中是否有最近一天:2019-11-19 12:08:01，产品id:null和当前用户:596的设备数据
+2019-11-19 12:08:02.902 [http-nio-8090-exec-5] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=99999 ,pages=0 ,current=1 }
+2019-11-19 12:08:02.902 [http-nio-8090-exec-3] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=10 ,pages=0 ,current=1 }
+2019-11-19 14:07:31.494 [http-nio-8090-exec-6] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=10 ,pages=0 ,current=1 }
+2019-11-19 14:07:32.594 [http-nio-8090-exec-1] WARN  ORDER_LOGGER - 请查看statDeviceOrderWidget中是否有最近一天:2019-11-19 14:07:32，产品id:null和当前用户:596的设备数据
+2019-11-19 14:07:33.170 [http-nio-8090-exec-6] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=10 ,pages=0 ,current=1 }
+2019-11-19 14:07:33.475 [http-nio-8090-exec-7] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=99999 ,pages=0 ,current=1 }
+2019-11-19 14:10:59.206 [http-nio-8090-exec-1] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=10 ,pages=0 ,current=1 }
+2019-11-19 14:10:59.609 [http-nio-8090-exec-6] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=99999 ,pages=0 ,current=1 }
+2019-11-19 14:15:55.500 [http-nio-8090-exec-2] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=10 ,pages=0 ,current=1 }
+2019-11-19 14:20:15.771 [http-nio-8090-exec-4] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=10 ,pages=0 ,current=1 }
+2019-11-19 14:20:15.807 [http-nio-8090-exec-8] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=99999 ,pages=0 ,current=1 }
+2019-11-19 14:20:35.518 [http-nio-8090-exec-7] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=10 ,pages=0 ,current=1 }
+2019-11-19 14:20:48.412 [http-nio-8090-exec-10] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=99999 ,pages=0 ,current=1 }
+2019-11-19 14:31:35.688 [http-nio-8090-exec-1] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=10 ,pages=0 ,current=1 }
+2019-11-19 14:31:43.403 [http-nio-8090-exec-4] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=99999 ,pages=0 ,current=1 }
+2019-11-19 14:31:53.167 [http-nio-8090-exec-2] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=10 ,pages=0 ,current=1 }
+2019-11-19 14:32:39.878 [http-nio-8090-exec-7] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=10 ,pages=0 ,current=1 }
+2019-11-19 14:32:43.697 [http-nio-8090-exec-5] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=1000 ,pages=0 ,current=1 }
+2019-11-19 14:32:54.994 [http-nio-8090-exec-8] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=10 ,pages=0 ,current=1 }
+2019-11-19 14:32:54.995 [http-nio-8090-exec-3] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=99999 ,pages=0 ,current=1 }
+2019-11-19 14:34:34.140 [http-nio-8090-exec-7] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=10 ,pages=0 ,current=1 }
+2019-11-19 14:34:34.439 [http-nio-8090-exec-4] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=99999 ,pages=0 ,current=1 }
+2019-11-19 14:35:27.727 [http-nio-8090-exec-7] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=10 ,pages=0 ,current=1 }
+2019-11-19 14:35:39.677 [http-nio-8090-exec-5] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=99999 ,pages=0 ,current=1 }
+2019-11-19 14:43:14.406 [http-nio-8090-exec-5] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=10 ,pages=0 ,current=1 }
+2019-11-19 14:43:15.468 [http-nio-8090-exec-1] WARN  ORDER_LOGGER - 请查看statDeviceOrderWidget中是否有最近一天:2019-11-19 14:43:15，产品id:null和当前用户:596的设备数据
+2019-11-19 14:43:16.639 [http-nio-8090-exec-5] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=10 ,pages=0 ,current=1 }
+2019-11-19 14:43:16.935 [http-nio-8090-exec-8] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=99999 ,pages=0 ,current=1 }
+2019-11-19 14:44:52.229 [http-nio-8090-exec-3] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=10 ,pages=0 ,current=1 }
+2019-11-19 14:44:52.281 [http-nio-8090-exec-5] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=99999 ,pages=0 ,current=1 }
+2019-11-19 14:45:01.104 [http-nio-8090-exec-1] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=10 ,pages=0 ,current=1 }
+2019-11-19 14:45:01.442 [http-nio-8090-exec-2] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=99999 ,pages=0 ,current=1 }
+2019-11-19 16:30:02.558 [http-nio-8090-exec-10] WARN  ORDER_LOGGER - 请查看statDeviceOrderWidget中是否有最近一天:2019-11-19 16:30:02，产品id:null和当前用户:596的设备数据
+2019-11-19 16:31:50.076 [http-nio-8090-exec-7] INFO  ORDER_LOGGER - sys_user_id596,查询条件：收费模式名称：Pagination { total=0 ,size=10 ,pages=0 ,current=1 }
+2019-11-19 16:31:52.308 [http-nio-8090-exec-9] INFO  ORDER_LOGGER -   添加收费模式所需数据

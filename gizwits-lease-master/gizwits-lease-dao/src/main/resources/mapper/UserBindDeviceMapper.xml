@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gizwits.lease.device.dao.UserBindDeviceDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.gizwits.lease.device.entity.UserBindDevice">
+		<id column="id" property="id" />
+		<result column="ctime" property="ctime" />
+		<result column="utime" property="utime" />
+		<result column="sno" property="sno" />
+		<result column="mac" property="mac" />
+		<result column="account_num" property="accountNum" />
+		<result column="user_id" property="userId" />
+		<result column="is_deleted" property="isDeleted" />
+		<result column="is_manage" property="isManage" />
+		<result column="mobile" property="mobile" />
+	</resultMap>
+
+</mapper>

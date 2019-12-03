@@ -1,0 +1,5 @@
+FROM openjdk:8-alpine3.7
+MAINTAINER qhlai@gizwits.com
+COPY usr/bin/application /usr/bin/application
+EXPOSE 8080
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/usr/bin/application/gizwits-lease-netty-0.0.1-SNAPSHOT.jar"]

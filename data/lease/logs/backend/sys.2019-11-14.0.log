@@ -1,0 +1,15 @@
+2019-11-14 10:47:02.941 [main] INFO  com.gizwits.boot.config.InterceptorConfig - 授权的url是:/app/wxPay/order,/app/wxPay/wxPayNotify,/app/wx/weixin,/app/wx/init,/app/message/advertisementDisplay/detail,/sys/sysUser/messageAuthenticationCode,/sys/sysUser/forgetPassword,/user/messageCode,/China/chinaArea/**
+2019-11-14 10:47:09.820 [main] INFO  com.gizwits.boot.listener.ApplicationListenerReady -            Gizwits Boot Application Start Successfully !               
+2019-11-14 10:47:09.966 [main] INFO  com.gizwits.boot.listener.ApplicationListenerReady -            Gizwits Boot Application Start Successfully !               
+2019-11-14 13:55:08.551 [main] INFO  com.gizwits.boot.config.InterceptorConfig - 授权的url是:/app/wxPay/order,/app/wxPay/wxPayNotify,/app/wx/weixin,/app/wx/init,/app/message/advertisementDisplay/detail,/sys/sysUser/messageAuthenticationCode,/sys/sysUser/forgetPassword,/user/messageCode,/China/chinaArea/**
+2019-11-14 13:55:14.762 [main] INFO  com.gizwits.boot.listener.ApplicationListenerReady -            Gizwits Boot Application Start Successfully !               
+2019-11-14 13:55:14.896 [main] INFO  com.gizwits.boot.listener.ApplicationListenerReady -            Gizwits Boot Application Start Successfully !               
+2019-11-14 14:27:45.676 [main] INFO  com.gizwits.boot.config.InterceptorConfig - 授权的url是:/app/wxPay/order,/app/wxPay/wxPayNotify,/app/wx/weixin,/app/wx/init,/app/message/advertisementDisplay/detail,/sys/sysUser/messageAuthenticationCode,/sys/sysUser/forgetPassword,/user/messageCode,/China/chinaArea/**
+2019-11-14 14:27:51.856 [main] INFO  com.gizwits.boot.listener.ApplicationListenerReady -            Gizwits Boot Application Start Successfully !               
+2019-11-14 14:27:51.989 [main] INFO  com.gizwits.boot.listener.ApplicationListenerReady -            Gizwits Boot Application Start Successfully !               
+2019-11-14 14:35:37.219 [main] INFO  com.gizwits.boot.config.InterceptorConfig - 授权的url是:/app/wxPay/order,/app/wxPay/wxPayNotify,/app/wx/weixin,/app/wx/init,/app/message/advertisementDisplay/detail,/sys/sysUser/messageAuthenticationCode,/sys/sysUser/forgetPassword,/user/messageCode,/China/chinaArea/**
+2019-11-14 14:35:43.508 [main] INFO  com.gizwits.boot.listener.ApplicationListenerReady -            Gizwits Boot Application Start Successfully !               
+2019-11-14 14:35:43.641 [main] INFO  com.gizwits.boot.listener.ApplicationListenerReady -            Gizwits Boot Application Start Successfully !               
+2019-11-14 17:35:58.858 [main] INFO  com.gizwits.boot.config.InterceptorConfig - 授权的url是:/app/wxPay/order,/app/wxPay/wxPayNotify,/app/wx/weixin,/app/wx/init,/app/message/advertisementDisplay/detail,/sys/sysUser/messageAuthenticationCode,/sys/sysUser/forgetPassword,/user/messageCode,/China/chinaArea/**
+2019-11-14 17:36:04.310 [main] INFO  com.gizwits.boot.listener.ApplicationListenerReady -            Gizwits Boot Application Start Successfully !               
+2019-11-14 17:36:04.474 [main] INFO  com.gizwits.boot.listener.ApplicationListenerReady -            Gizwits Boot Application Start Successfully !               

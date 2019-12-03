@@ -1,0 +1,12 @@
+2019-11-19 10:30:00.802 [http-nio-8090-exec-10] WARN  SQL_LOGGER - 请确定statDeviceLocation中是否有日期为:2019-11-18 10:30:00,当前用户为:596，的stat_device_location设备分布数据
+2019-11-19 10:30:00.854 [http-nio-8090-exec-1] WARN  SQL_LOGGER - 请确定statDeviceLocation中是否有日期为:2019-11-18 10:30:00,当前用户为:596，的stat_device_location设备分布数据
+2019-11-19 12:03:07.174 [http-nio-8090-exec-10] WARN  SQL_LOGGER - 请确定statDeviceLocation中是否有日期为:2019-11-18 12:03:07,当前用户为:596，的stat_device_location设备分布数据
+2019-11-19 12:03:07.174 [http-nio-8090-exec-9] WARN  SQL_LOGGER - 请确定statDeviceLocation中是否有日期为:2019-11-18 12:03:07,当前用户为:596，的stat_device_location设备分布数据
+2019-11-19 12:08:01.543 [http-nio-8090-exec-10] WARN  SQL_LOGGER - 请确定statDeviceLocation中是否有日期为:2019-11-18 12:08:01,当前用户为:596，的stat_device_location设备分布数据
+2019-11-19 12:08:01.591 [http-nio-8090-exec-1] WARN  SQL_LOGGER - 请确定statDeviceLocation中是否有日期为:2019-11-18 12:08:01,当前用户为:596，的stat_device_location设备分布数据
+2019-11-19 14:07:32.604 [http-nio-8090-exec-4] WARN  SQL_LOGGER - 请确定statDeviceLocation中是否有日期为:2019-11-18 14:07:32,当前用户为:596，的stat_device_location设备分布数据
+2019-11-19 14:07:32.604 [http-nio-8090-exec-3] WARN  SQL_LOGGER - 请确定statDeviceLocation中是否有日期为:2019-11-18 14:07:32,当前用户为:596，的stat_device_location设备分布数据
+2019-11-19 14:43:15.488 [http-nio-8090-exec-2] WARN  SQL_LOGGER - 请确定statDeviceLocation中是否有日期为:2019-11-18 14:43:15,当前用户为:596，的stat_device_location设备分布数据
+2019-11-19 14:43:15.492 [http-nio-8090-exec-4] WARN  SQL_LOGGER - 请确定statDeviceLocation中是否有日期为:2019-11-18 14:43:15,当前用户为:596，的stat_device_location设备分布数据
+2019-11-19 16:30:02.714 [http-nio-8090-exec-8] WARN  SQL_LOGGER - 请确定statDeviceLocation中是否有日期为:2019-11-18 16:30:02,当前用户为:596，的stat_device_location设备分布数据
+2019-11-19 16:30:02.930 [http-nio-8090-exec-6] WARN  SQL_LOGGER - 请确定statDeviceLocation中是否有日期为:2019-11-18 16:30:02,当前用户为:596，的stat_device_location设备分布数据

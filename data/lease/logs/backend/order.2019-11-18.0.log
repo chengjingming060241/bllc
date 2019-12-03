@@ -1,0 +1,2 @@
+2019-11-18 15:33:13.933 [http-nio-8090-exec-8] WARN  ORDER_LOGGER - 请查看statDeviceOrderWidget中是否有最近一天:2019-11-18 15:33:13，产品id:null和当前用户:596的设备数据
+2019-11-18 18:19:29.360 [http-nio-8090-exec-10] WARN  ORDER_LOGGER - 请查看statDeviceOrderWidget中是否有最近一天:2019-11-18 18:19:29，产品id:null和当前用户:596的设备数据

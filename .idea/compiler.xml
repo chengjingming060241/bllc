@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="gizwits-boot" />
+        <module name="gizwits-lease-app" />
+        <module name="gizwits-lease-backend" />
+        <module name="gizwits-lease-common" />
+        <module name="gizwits-lease-dao" />
+        <module name="gizwits-lease-job" />
+        <module name="gizwits-lease-model" />
+        <module name="gizwits-lease-netty" />
+        <module name="gizwits-lease-service" />
+        <module name="gizwits-lease-wechat" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="gizwits-boot" target="1.8" />
+      <module name="gizwits-lease" target="1.8" />
+      <module name="gizwits-lease-app" target="1.8" />
+      <module name="gizwits-lease-backend" target="1.8" />
+      <module name="gizwits-lease-common" target="1.8" />
+      <module name="gizwits-lease-dao" target="1.8" />
+      <module name="gizwits-lease-job" target="1.8" />
+      <module name="gizwits-lease-model" target="1.8" />
+      <module name="gizwits-lease-netty" target="1.8" />
+      <module name="gizwits-lease-service" target="1.8" />
+      <module name="gizwits-lease-wechat" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-encoding utf-8" />
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="gizwits-boot" options="" />
+      <module name="gizwits-lease" options="" />
+      <module name="gizwits-lease-app" options="" />
+      <module name="gizwits-lease-backend" options="" />
+      <module name="gizwits-lease-common" options="" />
+      <module name="gizwits-lease-dao" options="" />
+      <module name="gizwits-lease-job" options="" />
+      <module name="gizwits-lease-model" options="" />
+      <module name="gizwits-lease-netty" options="" />
+      <module name="gizwits-lease-service" options="" />
+      <module name="gizwits-lease-wechat" options="" />
+    </option>
+  </component>
+</project>

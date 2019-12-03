@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gizwits.lease.stat.dao.StatFaultAlertTypeDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gizwits.lease.stat.entity.StatFaultAlertType">
+        <id column="id" property="id"/>
+        <result column="ctime" property="ctime"/>
+        <result column="product_id" property="productId"/>
+        <result column="sys_user_id" property="sysUserId"/>
+        <result column="show_name" property="showName"/>
+        <result column="identity_name" property="identityName"/>
+        <result column="remark" property="remark"/>
+        <result column="sno" property="sno"/>
+        <result column="count" property="count"/>
+    </resultMap>
+
+    <select id="getDataForStat" resultMap="BaseResultMap">
+        select pdp.identity_name as identity_name, pdp.remark as remark, count(da.id) as count
+        from device d
+        inner join product_data_point pdp on d.product_id = pdp.product_id and pdp.read_write_type = 'alert' or pdp.read_write_type = 'fault'
+        left join device_alarm da on da.sno = d.sno and da.attr = pdp.identity_name
+        <where>
+            and d.is_deleted = 0
+            <if test="dto.productId !=null and dto.productId != 0">
+                AND d.product_id = #{dto.productId}
+            </if>
+            <if test="null != ids and ids.size> 0">
+                AND d.owner_id IN
+                <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        group by pdp.identity_name
+    </select>
+
+    <update id="updateByCtimeAndSysUserIdAndSno">
+		UPDATE stat_fault_alert_type
+		SET `count` = #{count}
+	  	WHERE sys_user_id = #{sysUserId}
+	  	AND DATE_FORMAT(ctime,'%Y-%m-%d') = DATE_FORMAT(#{date},'%Y-%m-%d')
+	  	AND sno = #{sno}
+	  	AND identity_name = #{identity_name}
+	</update>
+</mapper>

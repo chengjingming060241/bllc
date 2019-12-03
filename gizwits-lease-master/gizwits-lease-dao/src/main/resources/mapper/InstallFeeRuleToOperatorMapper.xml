@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gizwits.lease.install.dao.InstallFeeRuleToOperatorDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.gizwits.lease.install.entity.InstallFeeRuleToOperator">
+		<id column="id" property="id" />
+		<result column="rule_id" property="ruleId" />
+		<result column="operator_id" property="operatorId" />
+		<result column="sys_account_id" property="sysAccountId" />
+		<result column="sys_user_id" property="sysUserId" />
+		<result column="ctime" property="ctime" />
+		<result column="utime" property="utime" />
+		<result column="del" property="del" />
+	</resultMap>
+
+</mapper>

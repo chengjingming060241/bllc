@@ -1,0 +1,18 @@
+spring:
+  profiles:
+    active: dev
+
+#==========swagger2接口信息配置=======
+swagger:
+    title: 微信API文档
+    description: API Document
+    version: 1.0.0
+    termsOfServiceUrl:
+    contact:
+         name: AEP Product Deparment
+         url: http://www.gizwits.com
+         email: hlzhao@gizwits.com
+    license: 版权归机智云所有
+    licenseUrl: http://www.gizwits.com
+    pathsRegex: ^.*(?<!error)$
+    basepackage: com.gizwits

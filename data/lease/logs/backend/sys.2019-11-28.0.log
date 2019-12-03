@@ -1,0 +1,3 @@
+2019-11-28 15:58:29.945 [main] INFO  com.gizwits.boot.config.InterceptorConfig - 授权的url是:/app/wxPay/order,/app/wxPay/wxPayNotify,/app/wx/weixin,/app/wx/init,/app/message/advertisementDisplay/detail,/sys/sysUser/messageAuthenticationCode,/sys/sysUser/forgetPassword,/user/messageCode,/China/chinaArea/**
+2019-11-28 15:58:37.910 [main] INFO  com.gizwits.boot.listener.ApplicationListenerReady -            Gizwits Boot Application Start Successfully !               
+2019-11-28 15:58:38.180 [main] INFO  com.gizwits.boot.listener.ApplicationListenerReady -            Gizwits Boot Application Start Successfully !               

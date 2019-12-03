@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gizwits.lease.install.dao.InstallFeeOrderDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.gizwits.lease.install.entity.InstallFeeOrder">
+		<id column="order_no" property="orderNo" />
+		<result column="sno" property="sno" />
+		<result column="mac" property="mac" />
+		<result column="rule_id" property="ruleId" />
+		<result column="product_id" property="productId" />
+		<result column="fee" property="fee" />
+		<result column="status" property="status" />
+		<result column="pay_type" property="payType" />
+		<result column="pay_time" property="payTime" />
+		<result column="user_id" property="userId" />
+		<result column="sys_user_id" property="sysUserId" />
+		<result column="ctime" property="ctime" />
+		<result column="utime" property="utime" />
+		<result column="del" property="del" />
+	</resultMap>
+
+	<select id="list" resultType="com.gizwits.lease.install.dto.InstallFeeOrderListDto">
+		select ifo.order_no, ifo.sno, ifo.mac, ifo.product_id, ifo.user_id, ifo.fee,
+		ifo.ctime, ifo.utime, ifo.status, ifo.pay_type, ifo.pay_time,
+		d.name as deviceName, p.name as productName, u.nickname as userName,
+		ifr.id as ruleId, ifr.name as ruleName
+		from install_fee_order ifo
+		left join install_fee_rule ifr on ifo.rule_id = ifr.id
+		left join device d on ifo.sno = d.sno
+		left join product p on ifo.product_id = p.id
+		left join user u on ifo.user_id = u.id
+		where ifo.del = 0 and ifo.status = 2
+		<if test="orderNo!=null and orderNo!=''">
+			and ifo.order_no like concat('%',#{orderNo},'%')
+		</if>
+		<if test="sno!=null and sno!=''">
+			and ifo.sno like concat('%',#{sno},'%')
+		</if>
+		<if test="mac!=null and mac!=''">
+			and ifo.mac like concat('%',#{mac},'%')
+		</if>
+		<if test="deviceName!=null and deviceName!=''">
+			and d.name like concat('%',#{deviceName},'%')
+		</if>
+		<if test="productName!=null and productName!=''">
+			and p.name like concat('%',#{productName},'%')
+		</if>
+		<if test="userName!=null and userName!=''">
+			and u.nickname like concat('%',#{userName},'%')
+		</if>
+		<if test="userMobile!=null and userMobile!=''">
+			and u.mobile like concat('%',#{userMobile},'%')
+		</if>
+		<if test="userId!=null and userId!=''">
+			and ifo.user_id = #{userId}
+		</if>
+		<if test="sysUserIds!=null and sysUserIds.size()>0">
+			and ifo.sys_user_id in
+			<foreach collection="sysUserIds" item="sysUserId" open="(" separator="," close=")">
+				#{sysUserId}
+			</foreach>
+		</if>
+		order by ifo.ctime desc
+	</select>
+</mapper>

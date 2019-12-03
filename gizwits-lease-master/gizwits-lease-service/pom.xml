@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.gizwits</groupId>
+    <artifactId>gizwits-lease</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <groupId>com.gizwits</groupId>
+  <artifactId>gizwits-lease-service</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <name>gizwits-lease-service</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>com.gizwits</groupId>
+      <artifactId>gizwits-lease-dao</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.gizwits</groupId>
+      <artifactId>gizwits-lease-common</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.alipay</groupId>
+      <artifactId>alipay</artifactId>
+      <version>0.1</version>
+    </dependency>
+    <!--图形验证码-->
+    <dependency>
+      <groupId>com.github.penggle</groupId>
+      <artifactId>kaptcha</artifactId>
+      <version>2.3.2</version>
+    </dependency>
+    <dependency>
+      <groupId>cn.jpush.api</groupId>
+      <artifactId>jpush-client</artifactId>
+      <version>3.3.3</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <version>1.4.3.RELEASE</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.wxpay</groupId>
+      <artifactId>wxpay-sdk</artifactId>
+      <version>0.0.3</version>
+    </dependency>
+  </dependencies>
+
+
+
+  <plugin>
+    <!--处理资源文件插件，默认的资源文件在src/main/resources目录下,可以实现filter-->
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-resources-plugin</artifactId>
+    <configuration>
+      <encoding>UTF-8</encoding>
+      <!-- 过滤不需要转码的后缀为pem、pfx的证书文件 -->
+      <nonFilteredFileExtensions>
+        <nonFilteredFileExtension>pem</nonFilteredFileExtension>
+        <nonFilteredFileExtension>pfx</nonFilteredFileExtension>
+        <nonFilteredFileExtension>p12</nonFilteredFileExtension>
+      </nonFilteredFileExtensions>
+      <delimiters>
+        <!--这里干掉了对@符号的解析，这个是该插件的一个问题-->
+        <delimiter>${*}</delimiter>
+      </delimiters>
+    </configuration>
+  </plugin>
+</project>

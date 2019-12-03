@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gizwits.boot.sys.dao.SysUserExtDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.gizwits.boot.sys.entity.SysUserExt">
+		<id column="sys_user_id" property="sysUserId" />
+		<result column="ctime" property="ctime" />
+		<result column="utime" property="utime" />
+		<result column="wx_appid" property="wxAppid" />
+		<result column="wx_mch_id" property="wxParenterId" />
+		<result column="wx_key" property="wxAppSecret" />
+		<result column="wx_secret" property="wxPartnerSecret" />
+		<result column="wx_id" property="wxId" />
+		<result column="wx_token" property="wxToken" />
+		<result column="wx_pay_body" property="wxPayBody" />
+		<result column="wx_subscribe_msg" property="wxSubscribeMsg" />
+		<result column="wx_template_id" property="wxTemplateId" />
+		<result column="qrcode_host" property="qrcodeHost" />
+		<result column="wx_mini_qrcode" property="wxMiniQrcode" />
+		<result column="wx_cert_path" property="wxCertPath" />
+		<result column="wx_open_id" property="wxOpenId" />
+		<result column="receiver_open_id" property="receiverOpenId" />
+		<result column="receiver_wx_name" property="receiverWxName" />
+		<result column="wx_frontend_path" property="wxFrontendPath" />
+		<result column="wx_app_cert_path" property="wxAppCertPath" />
+		<result column="wx_pay_app_id" property="wxPayAppId" />
+		<result column="wx_pay_app_secret" property="wxPayAppSecret" />
+
+		<result column="alipay_appid" property="alipayAppid" />
+		<result column="alipay_redirect_url" property="alipayRedirectUrl" />
+		<result column="alipay_public_key" property="alipayPublicKey" />
+		<result column="alipay_private_key" property="alipayPrivateKey" />
+		<result column="alipay_notify_url" property="alipayNotifyUrl" />
+		<result column="alipay_return_url" property="alipayReturnUrl" />
+		<result column="alipay_self_public_key" property="alipaySelfPublicKey" />
+		<result column="alipay_partner" property="alipayPartner"/>
+		<result column="alipay_account" property="alipayAccount"/>
+		<result column="alipay_account_name" property="alipayAccountName"/>
+		<result column="is_deleted" property="isDeleted"/>
+
+	</resultMap>
+
+</mapper>

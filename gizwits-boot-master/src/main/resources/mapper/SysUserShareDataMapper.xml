@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gizwits.boot.sys.dao.SysUserShareDataDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.gizwits.boot.sys.entity.SysUserShareData">
+		<id column="id" property="id" />
+		<result column="sys_user_id" property="sysUserId" />
+		<result column="share_data" property="shareData" />
+		<result column="ctime" property="ctime" />
+	</resultMap>
+
+	<insert id="shareData">
+		INSERT INTO sys_user_share_data (sys_user_id, share_data, ctime) VALUES (#{sysUserId}, #{shareData}, #{ctime})
+		ON DUPLICATE KEY UPDATE share_data = #{shareData}
+	</insert>
+
+	<delete id="unshareData">
+		DELETE FROM sys_user_share_data WHERE sys_user_id = #{sysUserId} AND share_data = #{shareData}
+	</delete>
+    
+</mapper>

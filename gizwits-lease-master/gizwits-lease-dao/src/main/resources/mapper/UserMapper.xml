@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gizwits.lease.user.dao.UserDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gizwits.lease.user.entity.User">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="ctime" property="ctime"/>
+        <result column="utime" property="utime"/>
+        <result column="nickname" property="nickname"/>
+        <result column="openid" property="openid"/>
+        <result column="tencent_unionid" property="tencentUnionid"/>
+        <result column="tencent_nickname" property="tencentNickname"/>
+        <result column="wx_nickname" property="wxNickname"/>
+        <result column="alipay_unionid" property="alipayUnionid"/>
+        <result column="sina_unionid" property="sinaUnionid"/>
+        <result column="baidu_unionid" property="baiduUnionid"/>
+        <result column="third_party" property="thirdParty"/>
+        <result column="password" property="password"/>
+        <result column="mobile" property="mobile"/>
+        <result column="email" property="email"/>
+        <result column="gender" property="gender"/>
+        <result column="avatar" property="avatar"/>
+        <result column="birthday" property="birthday"/>
+        <result column="province" property="province"/>
+        <result column="city" property="city"/>
+        <result column="address" property="address"/>
+        <result column="remark" property="remark"/>
+        <result column="sys_user_id" property="sysUserId"/>
+        <result column="status" property="status"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+    <sql id="cloumns">
+        `id`,`username`,`ctime`,`utime`,`nickname`, `openid`, `alipay_unionid`, `sina_unionid`, `baidu_unionid`,`third_party`,`password`,`mobile`,`email`,`gender`,`avatar`,`birthday`,`province`,`city`,`address`,`remark`,`sys_user_id`,`status`,`move_in_black_time`,`move_out_black_time`,`authorization_time`,`sys_user_id`
+    </sql>
+
+    <sql id="cloumns_list">
+        u.id,u.username,u.ctime,u.utime,u.nickname, IFNULL(ext.openid,IFNULL(u.openid,IFNULL(u.alipay_unionid,IFNULL(u.sina_unionid,IFNULL(u.baidu_unionid,''))))) as openid,u.third_party,u.password,u.mobile,u.email,u.gender,u.avatar,u.birthday,u.province,u.city,u.address,u.remark,u.sys_user_id,u.status,u.move_in_black_time,u.move_out_black_time,u.authorization_time, IFNULL(ext.sys_user_id,u.sys_user_id)
+    </sql>
+
+
+    <select id="listPage" resultMap="BaseResultMap">
+        select * from (select <include refid="cloumns_list"></include>
+        from user u left join user_wx_ext ext on u.openid=ext.user_openid
+        <include refid="query"></include>
+          ) t order by t.ctime DESC
+        limit #{begin},#{size}
+    </select>
+
+    <select id="selectPageGMDS" resultMap="BaseResultMap">
+        select * from user u
+        <include refid="query"></include>
+        order by u.ctime DESC
+    </select>
+
+    <select id="findTotalSize" resultType="int">
+        select count(DISTINCT u.id) as cnt from user u left join user_wx_ext ext on u.openid=ext.user_openid
+        <include refid="query"></include>
+    </select>
+
+    <select id="findTotalSizeGMDS" resultType="int">
+        select count(DISTINCT u.id) as cnt from user u
+        <include refid="query"></include>
+    </select>
+
+    <sql id="query">
+        <where>
+            u.is_deleted = 0
+            <if test="nickname != null and nickname != ''">
+                and u.nickname like concat('%',#{nickname},'%')
+            </if>
+            <if test="gender != null and gender != ''">
+                and u.gender = #{gender}
+            </if>
+            <if test="userName != null and userName != ''">
+                and u.user_name like concat('%',#{userName},'%')
+            </if>
+            <if test="hasMobile != null and hasMobile != '' and hasMobile==1">
+                and u.mobile is not null
+            </if>
+            <if test="hasMobile != null and hasMobile != '' and hasMobile==0">
+                and u.mobile is null
+            </if>
+            <if test="mobile != null and mobile !='' ">
+                and u.MODULE  like #{mobile}
+            </if>
+
+            <if test="startTime != null ">
+                and u.ctime <![CDATA[ >= ]]> #{startTime}
+            </if>
+            <if test="status != null ">
+                and u.status = #{status}
+            </if>
+            <if test="endTime != null  and endTime != null">
+                and u.ctime  <![CDATA[ <= ]]> #{endTime }
+            </if>
+            <if test="sysUserIds != null and sysUserIds.get(0) != null">
+                and u.sys_user_id IN
+                <foreach item="item" index="index" collection="sysUserIds" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="ids != null and ids.get(0) != null">
+                and u.id IN
+                <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </sql>
+
+    <sql id="limit_data">
+        limit #{qr.begin},#{qr.size}
+
+    </sql>
+
+    <sql id="affQuery">
+        <where>
+            u.is_deleted = 0
+            <if test="query.ownerIds != null and query.ownerIds.size() != 0">
+                AND ud.owner_id IN
+                <foreach item="item" index="index" collection="query.ownerIds" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="query.userId != null">
+                AND u.id = #{query.userId}
+            </if>
+            <if test="query.openid != null and query.openid != ''">
+                AND u.openid like concat('%',#{query.openid},'%')
+            </if>
+            <if test="query.nickname != null and query.nickname != ''">
+                AND u.nickname like concat('%',#{query.nickname},'%')
+            </if>
+            <if test="query.hasMobile != null and query.hasMobile != ''  and query.hasMobile == 1">
+                AND u.mobile is not null
+            </if>
+            <if test="query.hasMobile != null and query.hasMobile != '' and query.hasMobile != 0">
+                AND u.mobile is null
+            </if>
+            <if test="query.mobile != null and query.mobile != ''">
+                AND u.mobile like concat('%',#{query.mobile},'%')
+            </if>
+            <if test="query.gender != null and query.gender != ''">
+                AND u.gender = #{gender}
+            </if>
+            <if test="query.startTime != null ">
+                and u.ctime <![CDATA[ >= ]]> #{query.startTime}
+            </if>
+            <if test="query.status != null ">
+                and u.status = #{query.status}
+            </if>
+            <if test="query.endTime != null  and query.endTime != null">
+                and u.ctime  <![CDATA[ <= ]]> #{query.endTime }
+            </if>
+        </where>
+    </sql>
+
+    <select id="countAffiliation" resultType="int">
+        SELECT
+        count(distinct u.id)
+        FROM
+        `user` u
+        LEFT JOIN
+        user_device ud
+        ON u.id = ud.user_id
+        <include refid="affQuery"></include>
+    </select>
+
+    <select id="listAffiliation" resultMap="BaseResultMap">
+        SELECT
+        DISTINCT u.*
+        FROM
+        `user` u
+        LEFT JOIN
+        user_device ud
+        ON u.id = ud.user_id
+        <include refid="affQuery"></include>
+        <if test="query.orderByField != null and query.orderByField != ''">
+            order by u.${query.orderByField} ${query.asc}
+        </if>
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="getUserActive" resultType="int">
+       SELECT
+          count(DISTINCT u.id) AS count
+       FROM
+       `user_active_record` u
+       LEFT JOIN user_device ud ON u.user_id = ud.user_id
+       LEFT JOIN device d ON d.sno = ud.sno
+       WHERE
+       d.is_deleted = 0
+       AND
+        DATE_SUB(CURDATE(), INTERVAL #{day} DAY) <![CDATA[ <= ]]> date(u.active_time)
+      AND
+        d.owner_id IN
+        <foreach item="item" index="index" collection="ownerIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="getNewUser" resultType="int">
+        SELECT
+        count(distinct u.id) as count
+        FROM
+        `user` u
+        LEFT JOIN user_device ud ON u.id = ud.user_id
+        LEFT JOIN device d ON d.sno = ud.sno
+        WHERE
+        d.is_deleted = 0
+        AND u.is_deleted = 0
+        AND DATE_SUB(CURDATE(), INTERVAL #{day} DAY) <![CDATA[ <= ]]> date(u.ctime)
+        AND
+        d.owner_id IN
+        <foreach item="item" index="index" collection="ownerIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="findByUsername" resultMap="BaseResultMap" parameterType="java.lang.String">
+		SELECT <include refid="cloumns"></include>
+		FROM `user` where username=#{username}
+	</select>
+
+    <select id="findByOpenid" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT <include refid="cloumns"></include>
+        FROM `user` where  is_deleted =0 and openid=#{openid,jdbcType=VARCHAR} or alipay_unionid=#{openid,jdbcType=VARCHAR} or sina_unionid=#{openid,jdbcType=VARCHAR} or baidu_unionid=#{openid,jdbcType=VARCHAR} or mobile=#{openid,jdbcType=VARCHAR}
+    </select>
+
+    <select id="findByUnionids" resultMap="BaseResultMap" >
+        SELECT <include refid="cloumns"></include>
+        FROM `user` ext
+        where ext.is_deleted =0
+        <if test="unionids != null and unionids.size() != 0">
+            and (
+                ext.id IN
+                <foreach item="item" index="index" collection="unionids" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                or ext.openid IN
+                <foreach item="item" index="index" collection="unionids" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                or ext.alipay_unionid IN
+                <foreach item="item" index="index" collection="unionids" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                or ext.sina_unionid IN
+                <foreach item="item" index="index" collection="unionids" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                or ext.baidu_unionid IN
+                <foreach item="item" index="index" collection="unionids" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            )
+        </if>
+        <if test="sysUserIds != null and sysUserIds.size() != 0">
+            and ext.sys_user_id IN
+            <foreach item="item" index="index" collection="sysUserIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="getDiffSysUserId" resultType="int">
+		select distinct sys_user_id from `user` where sys_user_id IS NOT NULL and is_deleted= 0;
+	</select>
+
+    <select id="findDiffProvince" resultType="string">
+		select distinct province from `user` where sys_user_id = #{sysUserId} and is_deleted=0;
+	</select>
+
+    <select id="findProvinceAndCount" resultType="map">
+		select replace(province, '省', '') AS province,COUNT(username) AS count from `user` where sys_user_id = #{sysUserId} and is_deleted=0
+		GROUP BY replace(province, '省', '')
+	</select>
+
+
+    <select id="getTrendDate" resultType="map">
+		select
+		( SELECT COUNT(username) FROM `user`
+		  WHERE sys_user_id=#{sysUserId} and is_deleted=0 and date(ctime) <![CDATA[<=]]> date(#{date})) as total,
+		( SELECT COUNT(username) FROM `user`
+		  WHERE DATE_FORMAT(ctime,'%Y-%m-%d') = DATE_FORMAT(#{date},'%Y-%m-%d')
+		  AND sys_user_id=#{sysUserId}  and is_deleted=0) as new,
+		(  select count(DISTINCT u.id)
+           from user u
+           left join order_base o on u.id = o.user_id
+           where u.sys_user_id=#{sysUserId}  and u.is_deleted=0
+           and (DATE (u.utime) BETWEEN DATE (DATE_SUB(#{date},INTERVAL 7 DAY)) and DATE (#{date})
+           or DATE (o.ctime) BETWEEN DATE (DATE_SUB(#{date},INTERVAL 7 DAY)) and DATE (#{date}))) as active
+	</select>
+
+    <select id="getTotal" resultType="int">
+        SELECT COUNT(id) FROM `user`
+		  WHERE sys_user_id=#{sysUserId} and is_deleted=0
+    </select>
+
+    <select id="getNewByDate" resultType="int">
+        SELECT COUNT(id) FROM `user`
+		  WHERE ctime between #{start} and #{end}
+		  AND sys_user_id=#{sysUserId}  and is_deleted=0
+    </select>
+
+    <select id="getOrderedCount" resultType="int">
+        select count(DISTINCT u.id) from user u
+        inner join order_base o on o.user_id = u.id
+        where o.is_deleted = 0 and o.order_status in (4,5)
+        and o.sys_user_id=#{sysUserId} and u.is_deleted=0
+    </select>
+
+    <select id="getNewOrderedCount" resultType="int">
+        select count(tmp.user_id) from (
+        select u.id as user_id, min(o.ctime) as first_ordered_time from user u
+        inner join order_base o on o.user_id = u.id
+        where o.is_deleted = 0 and o.order_status in (4,5)
+        and o.sys_user_id=#{sysUserId} and u.is_deleted=0
+        group by u.id
+        having first_ordered_time between #{start} and #{end}
+        ) tmp
+    </select>
+
+    <select id="getActive" resultType="int">
+           select count(DISTINCT u.id)
+           from user u
+           left join order_base o on concat(u.id, '') = o.user_id
+           where u.sys_user_id=#{sysUserId} and u.is_deleted=0
+           and u.utime BETWEEN #{fromDate} and #{toDate}
+    </select>
+
+    <select id="getSex" resultType="int">
+        SELECT COUNT(id) AS 'count' FROM `user`
+         WHERE sys_user_id=#{sysUserId} and is_deleted=0
+         AND gender = #{gender}
+    </select>
+
+    <sql id="getTimesCondition">
+        <choose>
+            <when test="times1 != null and times2 != null">
+                HAVING COUNT(o.`order_no`) &gt;=#{times1} AND COUNT(o.`order_no`) &lt;=#{times2}
+            </when>
+            <when test="times1 != null and times2 == null">
+                HAVING COUNT(o.`order_no`) > #{times1}
+            </when>
+            <when test="times1 == null and times2 != null">
+                HAVING COUNT(o.`order_no`) &lt; #{times2}
+            </when>
+            <otherwise>
+                HAVING COUNT(o.`order_no`) &lt;0
+            </otherwise>
+        </choose>
+    </sql>
+
+    <select id="getOrderTimes" resultType="java.util.Map">
+        SELECT u.id as userId, count(o.order_no) as orderTimes FROM `user` u
+        LEFT JOIN order_base o on  o.`user_id` = concat(u.`id`,'')
+        AND o.`ctime` BETWEEN #{fromDate} AND #{toDate}
+        AND o.`order_status` in(4,5)
+        WHERE u.sys_user_id = #{sysUserId} and u.is_deleted=0
+        GROUP BY u.id
+    </select>
+
+    <select id="findMaxEndTimeByOpenid" resultType="java.util.Date">
+       select max(end_time) from user_card where  user_id = #{userId} and status = 1
+    </select>
+
+</mapper>

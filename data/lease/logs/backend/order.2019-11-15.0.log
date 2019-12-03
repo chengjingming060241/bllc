@@ -1,0 +1,6 @@
+2019-11-15 14:07:14.147 [http-nio-8090-exec-8] WARN  ORDER_LOGGER - 请查看statDeviceOrderWidget中是否有最近一天:2019-11-15 14:07:14，产品id:null和当前用户:596的设备数据
+2019-11-15 16:39:29.124 [http-nio-8090-exec-1] WARN  ORDER_LOGGER - 请查看statDeviceOrderWidget中是否有最近一天:2019-11-15 16:39:29，产品id:null和当前用户:596的设备数据
+2019-11-15 16:52:40.815 [http-nio-8090-exec-4] WARN  ORDER_LOGGER - 请查看statDeviceOrderWidget中是否有最近一天:2019-11-15 16:52:40，产品id:null和当前用户:596的设备数据
+2019-11-15 17:44:01.273 [http-nio-8090-exec-1] WARN  ORDER_LOGGER - 请查看statDeviceOrderWidget中是否有最近一天:2019-11-15 17:44:01，产品id:null和当前用户:596的设备数据
+2019-11-15 17:51:29.604 [http-nio-8090-exec-1] WARN  ORDER_LOGGER - 请查看statDeviceOrderWidget中是否有最近一天:2019-11-15 17:51:29，产品id:null和当前用户:596的设备数据
+2019-11-15 17:53:40.228 [http-nio-8090-exec-10] WARN  ORDER_LOGGER - 请查看statDeviceOrderWidget中是否有最近一天:2019-11-15 17:53:40，产品id:null和当前用户:596的设备数据

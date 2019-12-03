@@ -1,0 +1,11 @@
+FROM daocloud.io/gizwits2015/docker-maven3-jdk8-alpine:1.0.1
+MAINTAINER Qiuhua Lai <qhlai@gizwits.com>
+RUN mkdir -p /usr/bin/application
+COPY . /tmp/build
+WORKDIR /tmp/build
+RUN mvn -e -DskipTests=true clean package && \
+    cp gizwits-lease-app/target/*.jar /usr/bin/application/ && \
+    cp gizwits-lease-backend/target/*.jar /usr/bin/application/ && \
+    cp gizwits-lease-netty/target/*.jar /usr/bin/application/ && \
+    cp gizwits-lease-job/target/*.jar /usr/bin/application/
+CMD echo "compile success"

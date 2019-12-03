@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gizwits.lease.benefit.dao.OrderShareProfitDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gizwits.lease.benefit.entity.OrderShareProfit">
+        <id column="order_no" property="orderNo"/>
+        <result column="share_profit_level" property="shareProfitLevel"/>
+        <result column="share_profit_user" property="shareProfitUser"/>
+        <result column="order_money" property="orderMoney"/>
+        <result column="share_profit_percent" property="shareProfitPercent"/>
+        <result column="share_money" property="shareMoney"/>
+        <result column="share_profit_bill_no" property="shareProfitBillNo"/>
+        <result column="ctime" property="ctime"/>
+        <result column="utime" property="utime"/>
+        <result column="status" property="status"/>
+        <result column="pay_type" property="payType"/>
+        <result column="trade_no" property="tradeNo"/>
+        <result column="payment_no" property="paymentNo"/>
+        <result column="payment_time" property="paymentTime"/>
+        <result column="is_try_again" property="isTryAgain"/>
+        <result column="is_generate" property="isGenerate"/>
+        <result column="personal" property="personal"/>
+        <result column="share_benefit_result" property="shareBenefitResult"/>
+    </resultMap>
+
+
+    <sql id="AllColumns">
+		order_no,share_profit_level,share_profit_user,order_money,share_profit_percent,share_money,share_profit_bill_no,
+		ctime,utime,status,pay_type,trade_no,payment_no,payment_time,is_try_again
+	</sql>
+
+    <select id="sumShareProfitByBill" resultType="com.gizwits.lease.benefit.dto.OrderShareProfitSumDto">
+		SELECT SUM(order_money) AS orderMoney, SUM(share_money) AS shareMoney,count(DISTINCT order_no) as orderNum
+		FROM order_share_profit WHERE share_profit_bill_no = #{billNo}
+	</select>
+
+    <!--用户的层级可能发生变化-->
+    <select id="selectWaitToShareProfit" resultMap="BaseResultMap">
+        select
+        <include refid="AllColumns"></include>
+        from order_share_profit
+        where share_profit_user = #{user} and status in (1,2,3,5)
+        and order_no <![CDATA[<>]]> #{orderNo}
+        and ctime  <![CDATA[ <= ]]> #{ctime}
+
+
+    </select>
+
+    <update id="updateShareSuccess">
+        update order_share_profit set status = 4,utime=now(),trade_no=#{tradeNo} ,share_benefit_result = '分润成功'
+        where order_no in
+        <foreach collection="orderNos" close=")" open="(" separator="," item="item">
+            #{item}
+        </foreach>
+        and share_profit_user = #{user} and status <![CDATA[<>]]> 4
+    </update>
+
+    <update id="updateOrderShareProfitToShare">
+		update order_share_profit set status = 2,utime=now() , share_benefit_result = '待分润'
+		where order_no =#{orderNo} and share_profit_level != 1
+	</update>
+
+    <select id="queryAllUserIdsByLeve" resultType="int">
+		select share_profit_user from order_share_profit where share_profit_level = #{level} group by share_profit_user
+	</select>
+
+    <update id="updateOrderShareProfitToShareByLevel">
+		 update order_share_profit p,order_base o  set p.status = 2,p.utime = now()
+		 where o.order_no = p.order_no
+		 and  o.order_status = 5
+		 and p.share_profit_level != 1
+		 and p.status =0
+		 and p.share_profit_user = #{userId};
+	</update>
+
+    <update id="updateOrderShareProfitToGenerate">
+        update order_share_profit
+        set is_generate = 1
+        where is_generate = 0 and share_profit_user = #{user} and order_no in
+        <foreach collection="orderNos" close=")" open="(" separator="," item="item">
+            #{item}
+        </foreach>
+    </update>
+
+    <resultMap id="benefitMap" type="com.gizwits.lease.benefit.dto.BenefitResultListDto">
+        <id column="order_no" property="orderNo"/>
+        <result column="share_money" property="shareMoney"/>
+        <result column="utime" property="utime"/>
+        <result column="pay_type" property="payType"/>
+        <result column="personal" property="personal"/>
+        <result column="share_benefit_result" property="shareBenefitResult"/>
+        <result column="share_profit_user" property="sysAccountId"/>
+    </resultMap>
+
+    <select id="selectPage" resultMap="benefitMap" parameterType="com.gizwits.lease.benefit.dto.BenefitResultQueryDto">
+        select p.order_no,p.share_money,p.utime,p.pay_type,p.personal,p.share_benefit_result,p.share_profit_user
+        from order_share_profit p join order_base b on b.order_no = p.order_no
+        <include refid="query"></include>
+        order by p.utime DESC
+        limit #{begin},#{pageSize}
+    </select>
+
+    <select id="selectTotal" resultType="int">
+        select count(*)
+        from order_share_profit p join order_base b on b.order_no = p.order_no
+        <include refid="query"></include>
+    </select>
+
+    <sql id="query">
+        <where>
+            p.share_profit_level != 1 and b.order_status = 5 and p.share_money >= 0.01
+            <if test="null != orderNos and orderNos.size() >0">
+                and p.order_no in
+                <foreach item="item" index="index" collection="orderNos" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="beginTime != null ">
+                and p.utime <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="beginTime != null  and endTime != null">
+                and p.utime  <![CDATA[ <= ]]> #{endTime }
+            </if>
+            <if test="orderNo != null and orderNo != ''">
+                and p.order_no like concat('%', #{orderNo},'%')
+            </if>
+            <if test="null != nickname and nickname != ''">
+                and b.user_name like concat('%',#{nickname},'%')
+            </if>
+        </where>
+    </sql>
+
+    <select id="selectOrderNos" resultType="java.lang.String">
+        select order_no
+        from order_share_profit
+        <where>
+            <if test="null != userId">
+                and share_profit_user = #{userId}
+            </if>
+            <if test="startTime != null ">
+                and utime <![CDATA[ >= ]]> #{startTime}
+            </if>
+            <if test="startTime != null  and now != null">
+                and utime  <![CDATA[ <= ]]> #{now }
+            </if>
+        </where>
+    </select>
+</mapper>

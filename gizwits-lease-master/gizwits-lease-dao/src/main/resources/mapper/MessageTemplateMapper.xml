@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gizwits.lease.message.dao.MessageTemplateDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.gizwits.lease.message.entity.MessageTemplate">
+		<id column="id" property="id" />
+		<result column="ctime" property="ctime" />
+		<result column="utime" property="utime" />
+		<result column="title" property="title" />
+		<result column="content" property="content" />
+		<result column="command" property="command" />
+		<result column="type" property="type" />
+		<result column="product_id" property="productId" />
+		<result column="sys_user_id" property="sysUserId" />
+		<result column="sys_user_name" property="sysUserName" />
+		<result column="is_deleted" property="isDeleted" />
+		<result column="service_id" property="serviceId" />
+		<result column="service_name" property="serviceName" />
+		<result column="depend_on_data_point" property="dependOnDataPoint" />
+		<result column="rate" property="rate" />
+		<result column="rate_type" property="rateType" />
+	</resultMap>
+
+	<select id="getTriggerByOnlyProductId" resultType="java.lang.String" parameterType="java.lang.Integer">
+		select  `command` from message_template where is_deleted = 0 and ((type = 5 and depend_on_data_point =1) or type = 4)
+		and product_id = #{productId}
+	</select>
+</mapper>

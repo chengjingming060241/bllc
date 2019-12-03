@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-app" />
+    <file type="web" url="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-backend" />
+    <file type="web" url="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-job" />
+  </component>
+  <component name="JavaScriptSettings">
+    <option name="languageLevel" value="ES6" />
+  </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-app/pom.xml" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-backend/pom.xml" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-common/pom.xml" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-dao/pom.xml" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-job/pom.xml" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/pom.xml" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-netty/pom.xml" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/pom.xml" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-wechat/pom.xml" />
+        <option value="$PROJECT_DIR$/gizwits-lease-master/pom.xml" />
+        <option value="$PROJECT_DIR$/gizwits-boot-master/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK" />
+</project>

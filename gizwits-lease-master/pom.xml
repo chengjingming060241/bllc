@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.gizwits</groupId>
+    <artifactId>gizwits-lease</artifactId>
+    <packaging>pom</packaging>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>Gizwits-Boot Maven Webapp</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <it.skip>true</it.skip>
+        <docker.registry>daocloud.io</docker.registry>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>nexus-daocloud</id>
+            <name>Nexus daocloud</name>
+            <url>http://nexus.daocloud.io/repository/maven-public/</url>
+        </repository>
+        <repository>
+            <id>archiva.internal</id>
+            <name>Gizwits Internal Repo</name>
+            <url>https://archiva.gizwits.com/repository/internal/</url>
+        </repository>
+    </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>archiva.internal</id>
+            <name>Internal Release Repository</name>
+            <url>https://archiva.gizwits.com/repository/internal/</url>
+        </repository>
+    </distributionManagement>
+
+    <dependencies>
+        <!--需要安装lombok插件并开启annotation-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.18</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.gizwits</groupId>
+            <artifactId>gizwits-boot</artifactId>
+            <version>1.3_ym</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>3.9.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.qcloud</groupId>
+            <artifactId>cos_api</artifactId>
+            <version>4.4</version>
+        </dependency>
+
+    </dependencies>
+
+    <modules>
+        <module>gizwits-lease-backend</module>
+        <module>gizwits-lease-app</module>
+        <module>gizwits-lease-job</module>
+        <module>gizwits-lease-model</module>
+        <module>gizwits-lease-dao</module>
+        <module>gizwits-lease-service</module>
+        <module>gizwits-lease-common</module>
+        <module>gizwits-lease-netty</module>
+    </modules>
+
+    <build>
+        <plugins>
+            <!-- 跳过Test -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.19.1</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>1.4.2.RELEASE</version>
+                <configuration>
+                    <mainClass>${start-class}</mainClass>
+                    <skip>${it.skip}</skip>
+                    <addResources>true</addResources>
+                    <fork>true</fork>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <profiles>
+        <profile>
+            <id>docker</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                        <configuration>
+                            <goal>docker</goal>
+                            <registry>${docker.registry}</registry>
+                            <skip>${it.skip}</skip>
+                            <images>
+                                <image>
+                                    <name>daocloud.io/gizwits2015/${project.artifactId}</name>
+                                    <build>
+                                        <from>openjdk:8-alpine3.7</from>
+                                        <maintainer>qhlai@gizwits.com</maintainer>
+                                        <tags>
+                                            <tag>latest</tag>
+                                        </tags>
+                                        <!--<dockerFileDir>${project.basedir}</dockerFileDir>-->
+                                        <!-- 压缩类型 -->
+                                        <!--  <compression>gzip</compression>-->
+                                        <!-- <assembly>元素使用xml结构，并定义和构建docker镜像的组成（文件打包） -->
+                                        <assembly>
+                                            <descriptorRef>artifact</descriptorRef>
+                                            <!--<descriptor>assembly.xml</descriptor>-->
+                                            <permissions>auto</permissions>
+                                        </assembly>
+                                        <!-- 不设置assembly <name>, 默认docker内部文件夹为maven -->
+                                        <cmd>java -jar maven/${project.name}-${project.version}.jar</cmd>
+                                    </build>
+
+                                    <!--<external>
+                                        <type>compose</type>
+                                        <basedir>${basedir}/docker</basedir>
+                                        <prefix>docker</prefix>
+                                        <composeFile>docker-compose.yml</composeFile>
+                                    </external>-->
+                                    <run>
+                                        <ports>
+                                            <port>${docker.port}</port>
+                                        </ports>
+                                    </run>
+                                </image>
+                            </images>
+                            <!-- docker daocloud.io 安全认证 -->
+                            <authConfig>
+                                <username>qhlai@gizwits.com</username>
+                                <password>{+vrkfb6z9isHNJHdY0tuRvOHJ9k7ukCf0y06U5O7O2w=}</password>
+                            </authConfig>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>docker:build</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>docker:start</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                    <goal>logs</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>docker:deploy</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                    <goal>push</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+    </profiles>
+
+</project>

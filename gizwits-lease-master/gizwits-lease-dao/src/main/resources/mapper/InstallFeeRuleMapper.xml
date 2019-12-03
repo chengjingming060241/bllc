@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gizwits.lease.install.dao.InstallFeeRuleDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.gizwits.lease.install.entity.InstallFeeRule">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="product_id" property="productId" />
+		<result column="fee" property="fee" />
+		<result column="sys_user_id" property="sysUserId" />
+		<result column="ctime" property="ctime" />
+		<result column="utime" property="utime" />
+		<result column="del" property="del" />
+	</resultMap>
+
+	<select id="list" resultType="com.gizwits.lease.install.dto.InstallFeeRuleListDto">
+		select ifr.id, ifr.name, ifr.product_id, p.name as productName, ifr.fee, ifr.sys_user_id, ifr.ctime, ifr.utime
+		from install_fee_rule ifr
+		left join product p on ifr.product_id = p.id
+		where ifr.del = 0 and p.is_deleted = 0
+		<if test="name!=null and name!=''">
+			and ifr.name like concat('%',#{name},'%')
+		</if>
+		<if test="productName!=null and productName!=''">
+			and p.name like concat('%',#{productName},'%')
+		</if>
+		<if test="sysUserIds!=null and sysUserIds.size()>0">
+			and ifr.sys_user_id in
+			<foreach collection="sysUserIds" item="sysUserId" open="(" separator="," close=")">
+				#{sysUserId}
+			</foreach>
+		</if>
+		order by ifr.ctime desc
+	</select>
+
+	<select id="getRuleByProductIdAndAgentId" resultMap="BaseResultMap">
+		select ifr.*
+		from install_fee_rule ifr
+		left join install_fee_rule_to_agent ifrta on ifr.id = ifrta.rule_id and ifrta.del = 0
+		where ifr.del = 0 and ifr.product_id = #{productId}
+		and ifrta.agent_id = #{agentId}
+		order by ifrta.ctime desc
+		limit 1
+	</select>
+
+	<select id="getRuleByProductIdAndOperatorId" resultMap="BaseResultMap">
+		select ifr.*
+		from install_fee_rule ifr
+		left join install_fee_rule_to_operator ifrto on ifr.id = ifrto.rule_id and ifrto.del = 0
+		where ifr.del = 0 and ifr.product_id = #{productId}
+		and ifrto.operator_id = #{operatorId}
+		order by ifrto.ctime desc
+		limit 1
+	</select>
+
+	<select id="getAgentIdsFromRuleByProductId" resultType="java.lang.Integer">
+		select ifrta.agent_id
+		from install_fee_rule_to_agent ifrta
+		left join install_fee_rule ifr on ifr.id = ifrta.rule_id and ifr.del = 0
+		where ifrta.del = 0 and ifr.product_id = #{productId}
+	</select>
+
+	<select id="getOperatorIdsFromRuleByProductId" resultType="java.lang.Integer">
+		select ifrto.operator_id
+		from install_fee_rule_to_operator ifrto
+		left join install_fee_rule ifr on ifr.id = ifrto.rule_id and ifr.del = 0
+		where ifrto.del = 0 and ifr.product_id = #{productId}
+	</select>
+
+</mapper>

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gizwits.lease.stat.dao.StatDeviceTrendDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gizwits.lease.stat.entity.StatDeviceTrend">
+        <id column="id" property="id"/>
+        <result column="ctime" property="ctime"/>
+        <result column="sys_user_id" property="sysUserId"/>
+        <result column="new_count" property="newCount"/>
+        <result column="product_id" property="productId"/>
+        <result column="ordered_count" property="orderedCount"/>
+        <result column="ordered_percent" property="orderedPercent"/>
+        <result column="active_count" property="activeCount"/>
+        <result column="previous_deivce_total" property="previousDeviceTotal"/>
+        <result column="new_activated_count" property="newActivatedCount"/>
+        <result column="fault_count" property="faultCount"/>
+        <result column="alert_count" property="alertCount"/>
+    </resultMap>
+
+    <select id="getNewTrend" resultMap="BaseResultMap">
+        <if test="dto.productId!=null">
+            SELECT ctime,new_count FROM stat_device_trend
+            WHERE sys_user_id = #{sysUserId}
+            AND product_id = #{dto.productId}
+        </if>
+        <if test="dto.productId ==null">
+            SELECT ctime,sum(new_count) AS new_count FROM stat_device_trend
+            WHERE sys_user_id = #{sysUserId}
+        </if>
+        <if test="dto.fromDate!=null and dto.toDate!=null">
+            And Date_format(ctime,'%Y-%m-%d') between Date_format(#{dto.fromDate},'%Y-%m-%d') and
+            Date_format(#{dto.toDate},'%Y-%m-%d')
+        </if>
+        <if test="dto.productId ==null">
+            GROUP BY date_format(ctime,'%Y-%m-%d')
+        </if>
+        ORDER BY ctime
+    </select>
+
+    <select id="getNewTrendByIds" resultMap="BaseResultMap">
+        select * from (SELECT ctime,sum(new_count) AS new_count,sum(previous_deivce_total) as previous_deivce_total FROM stat_device_trend
+        <include refid="widgetWhere"/>
+        GROUP BY date_format(ctime,'%Y-%m-%d')) t
+        ORDER BY t.ctime
+    </select>
+
+    <select id="getActiveTrend" resultMap="BaseResultMap">
+        <if test="dto.productId!=null">
+            SELECT ctime,active_count FROM stat_device_trend
+            WHERE sys_user_id = #{sysUserId}
+            AND product_id = #{dto.productId}
+        </if>
+        <if test="dto.productId==null">
+            SELECT ctime,sum(active_count) as active_count FROM stat_device_trend
+            WHERE sys_user_id = #{sysUserId}
+        </if>
+        <if test="dto.fromDate!=null and dto.toDate!=null">
+            And Date_format(ctime,'%Y-%m-%d') between Date_format(#{dto.fromDate},'%Y-%m-%d') and
+            Date_format(#{dto.toDate},'%Y-%m-%d')
+        </if>
+        <if test="dto.productId ==null">
+            GROUP BY date_format(ctime,'%Y-%m-%d')
+        </if>
+        ORDER BY ctime
+    </select>
+
+    <select id="getActiveTrendByIds" resultMap="BaseResultMap">
+        select * from (SELECT ctime,sum(active_count) as active_count FROM stat_device_trend
+        <include refid="widgetWhere"/>
+        GROUP BY date_format(ctime,'%Y-%m-%d')) t
+        ORDER BY t.ctime
+    </select>
+
+    <select id="getUsePecentTrend" resultMap="BaseResultMap">
+        <if test="dto.productId != null">
+            SELECT ctime,ordered_percent FROM stat_device_trend
+            WHERE sys_user_id = #{sysUserId}
+            AND product_id = #{dto.productId}
+        </if>
+        <if test="dto.productId == null">
+            SELECT ctime,sum(ordered_percent) as ordered_percent FROM stat_device_trend
+            WHERE sys_user_id = #{sysUserId}
+        </if>
+        <if test="dto.fromDate!=null and dto.toDate!=null">
+            And Date_format(ctime,'%Y-%m-%d') between Date_format(#{dto.fromDate},'%Y-%m-%d') and
+            Date_format(#{dto.toDate},'%Y-%m-%d')
+        </if>
+        <if test="dto.productId ==null">
+            GROUP BY date_format(ctime,'%Y-%m-%d')
+        </if>
+        ORDER BY ctime
+    </select>
+
+    <select id="getUsePecentTrendByIds" resultMap="BaseResultMap">
+       select * from ( SELECT ctime,sum(ordered_percent) as ordered_percent, sum(previous_deivce_total) as
+        previous_deivce_total,sum(ordered_count) as ordered_count FROM stat_device_trend
+        <include refid="widgetWhere"/>
+        GROUP BY date_format(ctime,'%Y-%m-%d')) t
+        ORDER BY t.ctime
+    </select>
+
+    <select id="getNewActivatedTrend" resultMap="BaseResultMap">
+       select * from ( SELECT ctime, SUM(new_activated_count) AS new_activated_count FROM stat_device_trend
+        <include refid="widgetWhere"/>
+        GROUP BY date_format(ctime,'%Y-%m-%d')) t
+        ORDER BY t.ctime
+    </select>
+
+    <select id="getFaultDeviceTrend" resultMap="BaseResultMap">
+        SELECT ctime, SUM(fault_count) AS fault_count FROM stat_device_trend
+        <include refid="widgetWhere"/>
+    </select>
+
+    <select id="getAlertDeviceTrend" resultMap="BaseResultMap">
+       select * from ( SELECT ctime, SUM(alert_count) AS alert_count FROM stat_device_trend
+        <include refid="widgetWhere"/>
+        GROUP BY date_format(ctime,'%Y-%m-%d')) t
+        ORDER BY t.ctime
+    </select>
+
+    <sql id="widgetWhere">
+       <where>
+        <if test="dto.productId !=null and dto.productId != 0">
+            AND product_id = #{dto.productId}
+        </if>
+        <if test="null !=ids and ids.size>0">
+            AND sys_user_id IN
+            <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="dto.fromDate!=null and dto.toDate!=null">
+            And Date_format(ctime,'%Y-%m-%d') between Date_format(#{dto.fromDate},'%Y-%m-%d') and
+            Date_format(#{dto.toDate},'%Y-%m-%d')
+        </if>
+       </where>
+
+    </sql>
+</mapper>

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="gizwits-lease-job:war">
+    <output-path>$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-job/target</output-path>
+    <root id="archive" name="gizwits-lease-job-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="gizwits-lease-job:war exploded" />
+    </root>
+  </artifact>
+</component>
