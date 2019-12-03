@@ -217,6 +217,11 @@ public interface DeviceService extends IService<Device> {
      */
     Page<DeviceShowDto> putListPage(Pageable<DeviceQueryDto> pageable);
 
+    /**
+     * 出库列表
+     */
+    Page<DeviceShowDto> outListPage(Pageable<DeviceQueryDto> pageable);
+
     Page<DeviceShowDto> listPage2(Pageable<DeviceQueryDto> pageable);
 
     /**

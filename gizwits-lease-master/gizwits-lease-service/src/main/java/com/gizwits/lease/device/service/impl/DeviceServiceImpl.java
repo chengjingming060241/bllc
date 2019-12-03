@@ -1464,6 +1464,33 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceDao, Device> implements
     }
 
     @Override
+    public Page<DeviceShowDto> outListPage(Pageable<DeviceQueryDto> pageable) {
+
+        Page<Device> page = new Page<>();
+        BeanUtils.copyProperties(pageable, page);
+        DeviceQueryDto queryDto = pageable.getQuery();
+        if (null != queryDto.getWorkStatus()) {
+            handleQueryWorkStatus(queryDto);
+        }
+        Wrapper<Device> wrapper = new EntityWrapper<>();
+        //修改时间
+        if (pageable.getQuery().getUpTimeStart()!=null && pageable.getQuery().getUpTimeEnd()!=null){
+            wrapper.between("shift_out_time",pageable.getQuery().getUpTimeStart(),pageable.getQuery().getUpTimeEnd());
+        }
+        wrapper.orderBy("shift_out_time", false);  //根据更新时间排序
+        wrapper.groupBy("out_batch");
+
+        Page<Device> page1 = selectPage(page,
+                QueryResolverUtils.parse(pageable.getQuery(), wrapper));
+        List<Device> devices = page1.getRecords();
+        Page<DeviceShowDto> result = new Page<>();
+        BeanUtils.copyProperties(page1, result);
+        List<DeviceShowDto> list = getOutDeviceShowDtos(devices);
+        result.setRecords(list);
+        return result;
+    }
+
+    @Override
     public Page<DeviceShowDto> listPage2(Pageable<DeviceQueryDto> pageable) {
 
         Page<Device> page = new Page<>();
@@ -1540,6 +1567,23 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceDao, Device> implements
             showDto.setSupplierName(device.getSupplierName());
             showDto.setOperatorName(device.getOperatorName());
             showDto.setEntryTime(device.getEntryTime());
+            list.add(showDto);
+        }
+        return list;
+    }
+
+    /**出库列表 */
+    private List<DeviceShowDto> getOutDeviceShowDtos(List<Device> devices) {
+        List<DeviceShowDto> list = new ArrayList<>(devices.size());
+        for (Device device : devices) {
+            DeviceShowDto showDto = new DeviceShowDto();
+            showDto.setLaunchArea(device.getLaunchAreaName());
+            showDto.setDeviceCount(selectCount(new EntityWrapper<Device>()
+                    .eq("out_batch",device.getOutBatch()).eq("is_deleted", DeleteStatus.NOT_DELETED.getCode())));
+            showDto.setAgentName(agentService.selectById(device.getAgentId()).getName());
+            showDto.setOperatorName(device.getOutOfStockName());
+            showDto.setOutBatch(device.getOutBatch());
+            showDto.setShiftOutTime(device.getShiftOutTime());
             list.add(showDto);
         }
         return list;

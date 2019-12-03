@@ -165,6 +165,7 @@ public class DeviceController extends BaseController {
 
         //防止前台查询已删除的数据
         pageable.getQuery().setIsDeleted(DeleteStatus.NOT_DELETED.getCode());
+        pageable.getQuery().setSweepCodeStatus(DeviceSweepCodeStatus.To_Be_But_Bf_Stock.getCode());
         return success(deviceService.putListPage(pageable));
     }
 
@@ -213,7 +214,8 @@ public class DeviceController extends BaseController {
 
         //防止前台查询已删除的数据
         pageable.getQuery().setIsDeleted(DeleteStatus.NOT_DELETED.getCode());
-        return success(deviceService.listPage(pageable));
+        pageable.getQuery().setSweepCodeStatus(DeviceSweepCodeStatus.Out_of_stock.getCode());
+        return success(deviceService.outListPage(pageable));
     }
 
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
