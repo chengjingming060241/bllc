@@ -368,4 +368,14 @@
        select max(end_time) from user_card where  user_id = #{userId} and status = 1
     </select>
 
+    <select id="getUserWidget" resultType="com.gizwits.lease.stat.vo.StatUserWidgetVo">
+SELECT
+	*
+FROM
+	( SELECT count( u1.id ) AS totalCount FROM user u1 WHERE u1.is_deleted = 0) total
+JOIN
+   (select  count( u2.id ) AS newCount FROM user u2 WHERE u2.is_deleted = 0 and date_format(u2.ctime,'%Y-%m-%d') = date_format(#{date},'%Y-%m-%d')) as yesterAdd
+
+    </select>
+
 </mapper>

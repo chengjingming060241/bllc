@@ -26,6 +26,9 @@ import com.gizwits.lease.model.DeleteDto;
 import com.gizwits.lease.model.DeviceAddressModel;
 import com.gizwits.lease.order.entity.OrderBase;
 import com.gizwits.lease.product.entity.Product;
+import com.gizwits.lease.stat.dto.StatDeviceDto;
+import com.gizwits.lease.stat.vo.StatAlarmWidgetVo;
+import com.gizwits.lease.stat.vo.StatDeviceWidgetVo;
 
 import java.util.List;
 import java.util.Map;
@@ -323,4 +326,21 @@ public interface DeviceService extends IService<Device> {
     void updateLockFlag(String sno, Integer abnormalTimes, Boolean lock);
 
     void assingModeOrArea(DeviceAssignDto deviceAssignDto);
+
+
+    //Sunny ADD//
+    /***
+     * 设备看板-----设备总数，昨日新增数，设备在线率，设备活跃率
+     * @param statDeviceDto
+     * @return
+     */
+    StatDeviceWidgetVo getDeviceWidget(StatDeviceDto statDeviceDto);
+    /***
+     * 故障报警看板-----报警设备数，报警率，故障设备数，故障率
+     * @param statDeviceDto
+     * @return
+     */
+    StatAlarmWidgetVo getAlarmAndFaultWidget(StatDeviceDto statDeviceDto);
+
+    //Sunny END//
 }

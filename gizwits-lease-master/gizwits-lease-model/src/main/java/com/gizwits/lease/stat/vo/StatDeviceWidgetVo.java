@@ -1,5 +1,7 @@
 package com.gizwits.lease.stat.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -36,6 +38,27 @@ public class StatDeviceWidgetVo {
     private Integer alertDeviceCount;
     @ApiModelProperty("设备报警率")
     private Double alertDeviceRate;
+
+    @JsonIgnore
+    private Integer onlineCount;
+    @JsonIgnore
+    private Integer activeCount;
+
+    public Integer getOnlineCount() {
+        return onlineCount;
+    }
+
+    public void setOnlineCount(Integer onlineCount) {
+        this.onlineCount = onlineCount;
+    }
+
+    public Integer getActiveCount() {
+        return activeCount;
+    }
+
+    public void setActiveCount(Integer activeCount) {
+        this.activeCount = activeCount;
+    }
 
     public StatDeviceWidgetVo(Integer totalCount, Integer newCount, Integer orderedCount, Integer alarmCount,
                               Double onlineRate, Double activatedRate,
@@ -166,5 +189,9 @@ public class StatDeviceWidgetVo {
 
     public void setAlertDeviceRate(Double alertDeviceRate) {
         this.alertDeviceRate = alertDeviceRate;
+    }
+
+    //无参-Sunny
+    public StatDeviceWidgetVo() {
     }
 }

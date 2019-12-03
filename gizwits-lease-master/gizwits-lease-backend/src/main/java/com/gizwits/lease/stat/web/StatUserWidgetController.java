@@ -9,6 +9,7 @@ import com.gizwits.lease.common.version.DefaultVersion;
 import com.gizwits.lease.common.version.Version;
 import com.gizwits.lease.stat.service.StatUserWidgetService;
 import com.gizwits.lease.stat.vo.StatUserWidgetVo;
+import com.gizwits.lease.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -37,16 +38,19 @@ public class StatUserWidgetController extends BaseController {
     private SysUserService sysUserService;
     @Autowired
     private StatUserWidgetService statUserWidgetService;
+    @Autowired
+    private UserService userService;
 
     @ApiOperation(value = "用户看板（productId不填时为全部）")
     @RequestMapping(value = "/user", method = RequestMethod.POST)
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
     @DefaultVersion(display = {"totalCount","newCount","newOrderedCount","orderedCount"})
     public ResponseObject<StatUserWidgetVo> userWidget() {
-        SysUser currentUser = sysUserService.getCurrentUserOwner();
-        List<Integer> ids = sysUserService.resolveSysUserAllSubIds(currentUser);
-        StatUserWidgetVo statUserWidgetVo = statUserWidgetService.widget(currentUser, ids);
-        return success(statUserWidgetVo);
+//        SysUser currentUser = sysUserService.getCurrentUserOwner();
+//        List<Integer> ids = sysUserService.resolveSysUserAllSubIds(currentUser);
+//        StatUserWidgetVo statUserWidgetVo = statUserWidgetService.widget(currentUser, ids);
+//        return success(statUserWidgetVo);
+        return success(userService.getUserWidget());
     }
 
     @Version(uri = "/user",version = "1.1",display = {"totalCount","newCount","activeCount","activePercent"})

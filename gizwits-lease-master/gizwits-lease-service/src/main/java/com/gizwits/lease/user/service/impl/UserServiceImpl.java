@@ -42,6 +42,7 @@ import com.gizwits.lease.exceptions.LeaseException;
 import com.gizwits.lease.manager.entity.Manufacturer;
 import com.gizwits.lease.manager.service.ManufacturerService;
 import com.gizwits.lease.redis.RedisService;
+import com.gizwits.lease.stat.vo.StatUserWidgetVo;
 import com.gizwits.lease.user.dao.UserDao;
 import com.gizwits.lease.user.dto.*;
 import com.gizwits.lease.user.entity.User;
@@ -49,10 +50,7 @@ import com.gizwits.lease.user.entity.UserWxExt;
 import com.gizwits.lease.user.service.UserChargeCardService;
 import com.gizwits.lease.user.service.UserService;
 import com.gizwits.lease.user.service.UserWxExtService;
-import com.gizwits.lease.util.GizwitsUtil;
-import com.gizwits.lease.util.RandomUtils;
-import com.gizwits.lease.util.TencentUtil;
-import com.gizwits.lease.util.WxUtil;
+import com.gizwits.lease.util.*;
 import com.gizwits.lease.wallet.service.UserWalletService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.map.HashedMap;
@@ -1685,5 +1683,17 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
         String code = sendMessageCode(mobile);
         redisService.cacheBindMessageCode(mobile, code, 300L);
     }
+
+    //==================================//
+
+    @Override
+    public StatUserWidgetVo getUserWidget() {
+        StatUserWidgetVo vo=new StatUserWidgetVo();
+         Date yesterDay= DateUtil.addDay(new Date(),-1);
+            vo=userDao.getUserWidget(yesterDay);
+        return vo;
+    }
+
+    //===================================//
 
 }

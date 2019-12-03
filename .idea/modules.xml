@@ -4,15 +4,26 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/bllc.iml" filepath="$PROJECT_DIR$/.idea/bllc.iml" />
       <module fileurl="file://$PROJECT_DIR$/gizwits-boot-master/gizwits-boot.iml" filepath="$PROJECT_DIR$/gizwits-boot-master/gizwits-boot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gizwits-boot-master/gizwits-boot.iml" filepath="$PROJECT_DIR$/gizwits-boot-master/gizwits-boot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease.iml" filepath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease.iml" />
       <module fileurl="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease.iml" filepath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease.iml" />
       <module fileurl="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-app/gizwits-lease-app.iml" filepath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-app/gizwits-lease-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-app/gizwits-lease-app.iml" filepath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-app/gizwits-lease-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-backend/gizwits-lease-backend.iml" filepath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-backend/gizwits-lease-backend.iml" />
       <module fileurl="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-backend/gizwits-lease-backend.iml" filepath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-backend/gizwits-lease-backend.iml" />
       <module fileurl="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-common/gizwits-lease-common.iml" filepath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-common/gizwits-lease-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-common/gizwits-lease-common.iml" filepath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-common/gizwits-lease-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-dao/gizwits-lease-dao.iml" filepath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-dao/gizwits-lease-dao.iml" />
       <module fileurl="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-dao/gizwits-lease-dao.iml" filepath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-dao/gizwits-lease-dao.iml" />
       <module fileurl="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-job/gizwits-lease-job.iml" filepath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-job/gizwits-lease-job.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-job/gizwits-lease-job.iml" filepath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-job/gizwits-lease-job.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/gizwits-lease-model.iml" filepath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/gizwits-lease-model.iml" />
       <module fileurl="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/gizwits-lease-model.iml" filepath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-model/gizwits-lease-model.iml" />
       <module fileurl="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-netty/gizwits-lease-netty.iml" filepath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-netty/gizwits-lease-netty.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-netty/gizwits-lease-netty.iml" filepath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-netty/gizwits-lease-netty.iml" />
       <module fileurl="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/gizwits-lease-service.iml" filepath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/gizwits-lease-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/gizwits-lease-service.iml" filepath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-service/gizwits-lease-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-wechat/gizwits-lease-wechat.iml" filepath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-wechat/gizwits-lease-wechat.iml" />
       <module fileurl="file://$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-wechat/gizwits-lease-wechat.iml" filepath="$PROJECT_DIR$/gizwits-lease-master/gizwits-lease-wechat/gizwits-lease-wechat.iml" />
     </modules>
   </component>

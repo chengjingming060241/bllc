@@ -56,13 +56,13 @@ import com.gizwits.lease.product.dto.*;
 import com.gizwits.lease.product.entity.*;
 import com.gizwits.lease.product.service.*;
 import com.gizwits.lease.redis.RedisService;
+import com.gizwits.lease.stat.dto.StatDeviceDto;
+import com.gizwits.lease.stat.vo.StatAlarmWidgetVo;
+import com.gizwits.lease.stat.vo.StatDeviceWidgetVo;
 import com.gizwits.lease.user.entity.User;
 import com.gizwits.lease.user.service.UserService;
 import com.gizwits.lease.user.service.UserWeixinService;
-import com.gizwits.lease.util.DeviceControlAPI;
-import com.gizwits.lease.util.GizwitsUtil;
-import com.gizwits.lease.util.QrcodeUtil;
-import com.gizwits.lease.util.WxUtil;
+import com.gizwits.lease.util.*;
 
 import groovy.util.IFileNameFinder;
 import org.apache.commons.collections.CollectionUtils;
@@ -76,6 +76,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -2233,6 +2234,44 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceDao, Device> implements
             default:
                 break;
         }
-
     }
+
+    //===============================ADD============================================//
+
+    @Override
+    public StatDeviceWidgetVo getDeviceWidget(StatDeviceDto statDeviceDto) {
+            StatDeviceWidgetVo vo=new StatDeviceWidgetVo();
+             Date yesterday= DateUtil.addDay(new Date(),-1);
+            //获取设备总数，昨日新增设备数，设备在线数，设备活跃数
+            vo=deviceDao.selectTotalDeviceCount(statDeviceDto.getProductId(),yesterday);
+
+            //如果设备总数为0，则在线率，活跃率为0
+            if(vo.getTotalCount()==0){
+                vo.setOnlineRate(0.0);
+                vo.setActivatedRate(0.0);
+            }else{
+                vo.setOnlineRate(BigDecimal.valueOf((double) vo.getOnlineCount()/ vo.getTotalCount()).setScale(0, BigDecimal.ROUND_HALF_UP)
+                        .doubleValue()*100);
+                vo.setActivatedRate(BigDecimal.valueOf((double) vo.getActiveCount()/ vo.getTotalCount()).setScale(0, BigDecimal.ROUND_HALF_UP)
+                        .doubleValue()*100);
+            }
+        return vo;
+    }
+
+    @Override
+    public StatAlarmWidgetVo getAlarmAndFaultWidget(StatDeviceDto statDeviceDto) {
+        StatAlarmWidgetVo vo=new StatAlarmWidgetVo();
+         vo=deviceDao.getAlarmAndFaultWidget(statDeviceDto.getProductId());
+         if(vo.getTotalCount()==0){
+             vo.setAlarmPercent(0.0);
+             vo.setFaultPercent(0.0);
+         }else{
+             vo.setAlarmPercent(BigDecimal.valueOf((double) vo.getWarnCount()/ vo.getTotalCount()).setScale(0, BigDecimal.ROUND_HALF_UP)
+                     .doubleValue()*100);
+             vo.setFaultPercent(BigDecimal.valueOf((double) vo.getFaultCount()/ vo.getTotalCount()).setScale(0, BigDecimal.ROUND_HALF_UP)
+                     .doubleValue()*100);
+         }
+        return vo;
+    }
+//===============================END==============================================//
 }

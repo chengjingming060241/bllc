@@ -248,4 +248,88 @@
     <update id="updateActivateStatus">
         UPDATE device SET activate_status = 2, activated_time = #{time} WHERE sno = #{sno} AND activate_status = 1
     </update>
+
+    <select id="selectTotalDeviceCount" resultType="com.gizwits.lease.stat.vo.StatDeviceWidgetVo">
+        SELECT
+        *
+        FROM
+        ( SELECT count( d1.sno ) AS totalCount FROM device d1 WHERE d1.is_deleted = 0
+        <if test="productId!=null">
+        and d1.product_id=#{productId}
+      </if>
+        ) total
+        JOIN (
+        SELECT
+        count( d2.sno ) AS yesterNewCount
+        FROM
+        device d2
+        WHERE
+        d2.is_deleted = 0
+        <if test="productId!=null">
+            and d2.product_id=#{productId}
+        </if>
+        <if test="date!=null">
+            and date_format(d2.ctime,'%Y-%m-%d') = date_format(#{date},'%Y-%m-%d')
+        </if>
+        ) AS yesterAdd
+        JOIN (
+        SELECT
+        count( d3.sno ) AS onlineCount
+        FROM
+        device d3
+        WHERE
+        d3.is_deleted = 0
+        <if test="productId!=null">
+            and d3.product_id=#{productId}
+        </if>
+        AND d3.online_status = 1
+        ) AS onlineDevice
+        JOIN (
+        SELECT
+        count( d4.sno ) AS activeCount
+        FROM
+        device d4
+        WHERE
+        d4.is_deleted = 0
+        <if test="productId!=null">
+            and d4.product_id=#{productId}
+        </if>
+        AND d4.work_status = 3
+        ) AS activeDevice
+    </select>
+
+    <select id="getAlarmAndFaultWidget" resultType="com.gizwits.lease.stat.vo.StatAlarmWidgetVo">
+SELECT
+	*
+FROM
+	( SELECT count( d1.sno ) AS totalCount FROM device d1 WHERE d1.is_deleted = 0
+        <if test="productId!=null">
+            and d4.product_id=#{productId}
+        </if>
+	 ) AS total
+	JOIN (
+SELECT
+	count( d2.sno ) AS faultCount
+FROM
+	device d2
+WHERE
+	d2.is_deleted = 0
+	AND d2.work_status = 6
+        <if test="productId!=null">
+            and d4.product_id=#{productId}
+        </if>
+	) AS fault
+	JOIN (
+SELECT
+	count( d3.sno ) AS warnCount
+FROM
+	device d3
+WHERE
+	d3.is_deleted = 0
+	AND d3.work_status = 8
+        <if test="productId!=null">
+            and d4.product_id=#{productId}
+        </if>
+	) AS warn
+    </select>
 </mapper>
