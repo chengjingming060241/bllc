@@ -219,7 +219,7 @@ public class DeviceStockController extends BaseController {
 
 
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
-    @ApiOperation(value = "出库记录列表", notes = "设备列表", consumes = "application/json")
+    @ApiOperation(value = "出库记录表", notes = "设备列表", consumes = "application/json")
     @RequestMapping(value = "/outDeviceList", method = RequestMethod.POST)
     public ResponseObject<Page<DeviceShowDto>> outDeviceList(@RequestBody @Valid RequestObject<Pageable<DeviceQueryDto>> requestObject) {
         Pageable<DeviceQueryDto> pageable = requestObject.getData();
