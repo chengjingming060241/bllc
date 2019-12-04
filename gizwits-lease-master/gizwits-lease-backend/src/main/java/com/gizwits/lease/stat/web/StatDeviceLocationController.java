@@ -7,6 +7,7 @@ import com.gizwits.boot.base.ResponseObject;
 import com.gizwits.boot.sys.entity.SysUser;
 import com.gizwits.boot.sys.service.SysUserService;
 import com.gizwits.boot.utils.ParamUtil;
+import com.gizwits.lease.device.service.DeviceService;
 import com.gizwits.lease.product.entity.Product;
 import com.gizwits.lease.product.service.ProductService;
 import com.gizwits.lease.stat.dto.StatDeviceDto;
@@ -44,57 +45,83 @@ public class StatDeviceLocationController extends BaseController {
     @Autowired
     private ProductService productService;
 
-    //设备分布
-    @ApiOperation(value = "获取设备分布图（productId）")
+    @Autowired
+    private DeviceService deviceService;
+
+//    //设备分布
+//    @ApiOperation(value = "获取设备分布图（productId）")
+//    @RequestMapping(value = "/deviceDitribution", method = RequestMethod.POST)
+//    @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
+//    public ResponseObject<List<StatLocationVo>> ditribution(@RequestBody @Valid RequestObject<StatDeviceDto> requestObject) {
+//        if(ParamUtil.isNullOrEmptyOrZero(requestObject.getData())){
+//            StatDeviceDto deviceDto = new StatDeviceDto();
+//            deviceDto.setProductId(0);
+//            requestObject.setData(deviceDto);
+//        }
+//
+//        SysUser currentUser = sysUserService.getCurrentUserOwner();
+//        //根据当前用户查询需要共享的用户
+//        List<Integer> sysUserIds = sysUserService.resolveSysUserAllSubIds(currentUser);
+//
+//        List<Integer> productIds;
+//        Integer productId = requestObject.getData().getProductId();
+//        if(ParamUtil.isNullOrZero(productId)){
+//            productIds = productService.getProductsWithPermission().stream().map(Product::getId).collect(Collectors.toList());
+//        }else {
+//            productIds = new ArrayList<>();
+//            productIds.add(productId);
+//        }
+//
+//        List<StatLocationVo> list = statDeviceLocationService.getDistribution(productIds, currentUser, sysUserIds);
+//        return success(list);
+//    }
+//
+//    //设备分布排行
+//    @ApiOperation(value = "获取设备分布图排行（productId）")
+//    @RequestMapping(value = "/deviceRank", method = RequestMethod.POST)
+//    @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
+//    public ResponseObject<List<StatLocationVo>> rank(@RequestBody @Valid RequestObject<StatDeviceDto> requestObject) {
+//        if(ParamUtil.isNullOrEmptyOrZero(requestObject.getData())){
+//            StatDeviceDto deviceDto = new StatDeviceDto();
+//            deviceDto.setProductId(0);
+//            requestObject.setData(deviceDto);
+//        }
+//        SysUser currentUser = sysUserService.getCurrentUserOwner();
+//        List<Integer> ids = sysUserService.resolveSysUserAllSubIds(currentUser);
+//
+//        List<Integer> productIds;
+//        Integer productId = requestObject.getData().getProductId();
+//        if(ParamUtil.isNullOrZero(productId)){
+//            productIds = productService.getProductsWithPermission().stream().map(Product::getId).collect(Collectors.toList());
+//        }else {
+//            productIds = new ArrayList<>();
+//            productIds.add(productId);
+//        }
+//
+//        List<StatLocationVo> list = statDeviceLocationService.getRank(productIds, currentUser, ids);
+//        return success(list);
+//    }
+
+    //=========================================================================//
+    @ApiOperation(value = "获取设备分布，排行榜--省（productId）")
     @RequestMapping(value = "/deviceDitribution", method = RequestMethod.POST)
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
-    public ResponseObject<List<StatLocationVo>> ditribution(@RequestBody @Valid RequestObject<StatDeviceDto> requestObject) {
-        if(ParamUtil.isNullOrEmptyOrZero(requestObject.getData())){
-            StatDeviceDto deviceDto = new StatDeviceDto();
-            deviceDto.setProductId(0);
-            requestObject.setData(deviceDto);
-        }
+    public ResponseObject<List<StatLocationVo>> ditributionByProvince(@RequestBody @Valid RequestObject<StatDeviceDto> requestObject) {
 
-        SysUser currentUser = sysUserService.getCurrentUserOwner();
-        //根据当前用户查询需要共享的用户
-        List<Integer> sysUserIds = sysUserService.resolveSysUserAllSubIds(currentUser);
-
-        List<Integer> productIds;
-        Integer productId = requestObject.getData().getProductId();
-        if(ParamUtil.isNullOrZero(productId)){
-            productIds = productService.getProductsWithPermission().stream().map(Product::getId).collect(Collectors.toList());
-        }else {
-            productIds = new ArrayList<>();
-            productIds.add(productId);
-        }
-
-        List<StatLocationVo> list = statDeviceLocationService.getDistribution(productIds, currentUser, sysUserIds);
-        return success(list);
+         return success(deviceService.ditributionByProvince(requestObject.getData()));
     }
+    @ApiOperation(value = "获取设备分布图，排行榜--市（productId）")
+    @RequestMapping(value = "/ditributionByCity", method = RequestMethod.POST)
+    @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
+    public ResponseObject<List<StatLocationVo>> ditributionByCity(@RequestBody @Valid RequestObject<StatDeviceDto> requestObject) {
 
-    //设备分布排行
-    @ApiOperation(value = "获取设备分布图排行（productId）")
+        return success(deviceService.ditributionByCity(requestObject.getData()));
+    }
+    @ApiOperation(value = "获取设备分布图排行-省（productId）")
     @RequestMapping(value = "/deviceRank", method = RequestMethod.POST)
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
-    public ResponseObject<List<StatLocationVo>> rank(@RequestBody @Valid RequestObject<StatDeviceDto> requestObject) {
-        if(ParamUtil.isNullOrEmptyOrZero(requestObject.getData())){
-            StatDeviceDto deviceDto = new StatDeviceDto();
-            deviceDto.setProductId(0);
-            requestObject.setData(deviceDto);
-        }
-        SysUser currentUser = sysUserService.getCurrentUserOwner();
-        List<Integer> ids = sysUserService.resolveSysUserAllSubIds(currentUser);
-
-        List<Integer> productIds;
-        Integer productId = requestObject.getData().getProductId();
-        if(ParamUtil.isNullOrZero(productId)){
-            productIds = productService.getProductsWithPermission().stream().map(Product::getId).collect(Collectors.toList());
-        }else {
-            productIds = new ArrayList<>();
-            productIds.add(productId);
-        }
-
-        List<StatLocationVo> list = statDeviceLocationService.getRank(productIds, currentUser, ids);
-        return success(list);
+    public ResponseObject<List<StatLocationVo>> rankByProvince(@RequestBody @Valid RequestObject<StatDeviceDto> requestObject) {
+        return success(deviceService.ditributionByProvince(requestObject.getData()));
     }
+    //=========================================================================//
 }

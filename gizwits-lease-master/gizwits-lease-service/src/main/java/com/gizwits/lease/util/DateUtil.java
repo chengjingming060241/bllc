@@ -913,6 +913,16 @@ public class DateUtil {
         }
         return dates;
     }
+    public static String dateToString(Date date, String format){
+        SimpleDateFormat sdf=new SimpleDateFormat(format);
+        String time=null;
+        try{
+            time=sdf.format(date);
+        }catch (Exception e){
+
+        }
+        return time;
+    }
 
     public static void main(String args[]) {
 //        System.out.println(getTimestampString(null));
@@ -954,11 +964,12 @@ public class DateUtil {
 //
 //        System.out.println(addZero("3", 3, "before"));
 
-        System.out.println(addDay(new Date(),-7));
-
-        System.out.println(DateUtil.getDayStartTime(new Date()));
-
-        System.out.println(DateUtil.getDayEndTime(new Date()));
+//        System.out.println(addDay(new Date(),-7));
+//
+//        System.out.println(DateUtil.getDayStartTime(new Date()));
+//
+//        System.out.println(DateUtil.getDayEndTime(new Date()));
+        System.out.println(dateToString(new Date(),"yyyy-MM-dd"));
 
     }
 

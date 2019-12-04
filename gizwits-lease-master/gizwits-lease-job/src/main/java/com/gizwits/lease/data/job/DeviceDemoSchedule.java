@@ -16,7 +16,7 @@ import java.util.Date;
  * User: Joke
  * Date: 2018-03-02
  */
-@Component
+//@Component
 public class DeviceDemoSchedule {
 
     private static Logger logger = LoggerFactory.getLogger(DeviceDemoSchedule.class);

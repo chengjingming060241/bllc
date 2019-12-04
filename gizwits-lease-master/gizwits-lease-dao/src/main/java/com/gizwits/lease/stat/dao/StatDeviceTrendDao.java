@@ -17,9 +17,9 @@ import java.util.List;
  */
 public interface StatDeviceTrendDao extends BaseMapper<StatDeviceTrend> {
 
-    List<StatDeviceTrend> getNewTrend(@Param("sysUserId") Integer sysUserId, @Param("dto") StatDeviceTrendDto statDeviceTrendDto);
+    List<StatDeviceTrend> getNewTrend(@Param("dto") StatDeviceTrendDto statDeviceTrendDto);
 
-    List<StatDeviceTrend> getActiveTrend(@Param("sysUserId") Integer sysUserId, @Param("dto") StatDeviceTrendDto statDeviceTrendDto);
+    List<StatDeviceTrend> getActiveTrend(StatDeviceTrendDto statDeviceTrendDto);
 
     List<StatDeviceTrend> getUsePecentTrend(@Param("sysUserId") Integer sysUserId, @Param("dto") StatDeviceTrendDto statDeviceTrendDto);
 
@@ -31,6 +31,10 @@ public interface StatDeviceTrendDao extends BaseMapper<StatDeviceTrend> {
 
     List<StatDeviceTrend> getNewActivatedTrend(@Param("ids") List<Integer> ids, @Param("dto") StatDeviceTrendDto statDeviceTrendDto);
 
-    List<StatDeviceTrend> getFaultDeviceTrend(@Param("ids") List<Integer> ids, @Param("dto") StatDeviceTrendDto statDeviceTrendDto);
-    List<StatDeviceTrend> getAlertDeviceTrend(@Param("ids") List<Integer> ids, @Param("dto") StatDeviceTrendDto statDeviceTrendDto);
+    List<StatDeviceTrend> getFaultDeviceTrend(@Param("dto") StatDeviceTrendDto statDeviceTrendDto);
+    List<StatDeviceTrend> getAlertDeviceTrend(@Param("dto") StatDeviceTrendDto statDeviceTrendDto);
+
+    //Sunny add=====================/
+    List<StatDeviceTrend> getTotalTrend(StatDeviceTrendDto statDeviceTrendDto);
+    //Sunny end=====================/
 }

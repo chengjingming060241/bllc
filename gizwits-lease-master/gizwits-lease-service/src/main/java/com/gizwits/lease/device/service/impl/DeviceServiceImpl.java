@@ -57,8 +57,11 @@ import com.gizwits.lease.product.entity.*;
 import com.gizwits.lease.product.service.*;
 import com.gizwits.lease.redis.RedisService;
 import com.gizwits.lease.stat.dto.StatDeviceDto;
+import com.gizwits.lease.stat.dto.StatDeviceTrendDto;
 import com.gizwits.lease.stat.vo.StatAlarmWidgetVo;
 import com.gizwits.lease.stat.vo.StatDeviceWidgetVo;
+import com.gizwits.lease.stat.vo.StatLocationVo;
+import com.gizwits.lease.stat.vo.StatTrendVo;
 import com.gizwits.lease.user.entity.User;
 import com.gizwits.lease.user.service.UserService;
 import com.gizwits.lease.user.service.UserWeixinService;
@@ -2040,5 +2043,54 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceDao, Device> implements
          }
         return vo;
     }
+
+    @Override
+    public List<StatLocationVo> ditributionByProvince(StatDeviceDto statDeviceDto) {
+          Integer productId=statDeviceDto.getProductId();
+           final Integer allCount;
+          if(productId==null){
+                allCount=selectCount(new EntityWrapper<Device>().eq("is_deleted",0));
+          }else{
+                allCount=selectCount(new EntityWrapper<Device>().eq("product_id",productId).eq("is_deleted",0));
+          }
+          List<StatLocationVo> vo=deviceDao.ditributionByProvince(productId);
+          if(ParamUtil.isNullOrEmptyOrZero(vo)||allCount==0){
+              return new LinkedList<>();
+          }
+        vo.stream().forEach(item->{
+            if(item.getProvince()==null||item.getProvince().equals("")){ item.setProvince("其他");}
+            item.setCount(item.getDeviceCount());
+            item.setProportion(BigDecimal.valueOf(item.getDeviceCount().doubleValue()/ allCount).setScale(1, BigDecimal.ROUND_HALF_UP)
+                        .doubleValue());
+        });
+
+        Collections.sort(vo);
+        return vo;
+    }
+
+    @Override
+    public List<StatLocationVo> ditributionByCity(StatDeviceDto statDeviceDto) {
+        Integer productId=statDeviceDto.getProductId();
+        String province=statDeviceDto.getProvince();
+        final Integer allCount;
+        if(productId==null){
+            allCount=selectCount(new EntityWrapper<Device>().eq("province",province).eq("is_deleted",0));
+        }else{
+            allCount=selectCount(new EntityWrapper<Device>().eq("province",province).eq("product_id",productId).eq("is_deleted",0));
+        }
+        List<StatLocationVo> vo=deviceDao.ditributionByProvince(productId);
+        if(ParamUtil.isNullOrEmptyOrZero(vo)||allCount==0){
+            return new LinkedList<>();
+        }
+        vo.stream().forEach(item->{
+            if(item.getProvince()==null||item.getProvince().equals("")){ item.setProvince("其他");}
+            item.setCount(item.getDeviceCount());
+            item.setProportion(BigDecimal.valueOf(item.getDeviceCount().doubleValue()/ allCount).setScale(1, BigDecimal.ROUND_HALF_UP)
+                    .doubleValue());
+        });
+        Collections.sort(vo);
+        return vo;
+    }
+
 //===============================END==============================================//
 }

@@ -18,7 +18,7 @@ import java.util.List;
  */
 public interface StatUserTrendDao extends BaseMapper<StatUserTrend> {
 
-    List<StatUserTrend> getNewTrend(@Param("ids") List<Integer> ids, @Param("dto") StatUserTrendDto statUserTrendDto);
+    List<StatUserTrend> getNewTrend(@Param("dto") StatUserTrendDto statUserTrendDto);
 
     List<StatUserTrend> getActiveTrend(@Param("ids") List<Integer> ids, @Param("dto") StatUserTrendDto statUserTrendDto);
 
@@ -29,4 +29,8 @@ public interface StatUserTrendDao extends BaseMapper<StatUserTrend> {
     StatUserTrend getTimes(@Param("ids") List<Integer> ids,@Param("date") Date yesterday);
 
     StatUserTrend getWidgetActiveAndTotal(@Param("ids") List<Integer> ids, @Param("dto") StatUserTrendDto statUserTrendDto);
+
+  //================================//
+  List<StatUserTrend> getTotalTrend(StatUserTrendDto statUserTrendDto);
+    //================================//
 }

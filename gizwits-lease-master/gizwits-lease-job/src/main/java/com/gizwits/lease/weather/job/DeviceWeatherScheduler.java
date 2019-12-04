@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
  *  更新设备天气
  */
 
-@Component
+//@Component
 public class DeviceWeatherScheduler {
 
     @Autowired

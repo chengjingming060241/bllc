@@ -378,4 +378,16 @@ JOIN
 
     </select>
 
+    <select id="ditribution" resultType="com.gizwits.lease.stat.vo.StatLocationVo">
+         select province,count(id) as deviceCount from user where is_deleted=0
+         group by province
+
+    </select>
+    <select id="ditributionByCity" resultType="com.gizwits.lease.stat.vo.StatLocationVo">
+         select city,count(id) as deviceCount from user where is_deleted=0
+         and province=#{province}
+         group by city
+    </select>
+
+
 </mapper>

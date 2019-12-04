@@ -16,7 +16,7 @@ import java.util.Date;
  * 定时发送消息
  * Created by yinhui on 2017/8/8.
  */
-@Component
+//@Component
 public class MessageSendScheduler {
     protected static Logger logger = LoggerFactory.getLogger(MessageSendScheduler.class);
 

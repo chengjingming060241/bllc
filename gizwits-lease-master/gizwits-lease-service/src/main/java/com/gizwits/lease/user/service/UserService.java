@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.service.IService;
 import com.gizwits.boot.dto.JwtAuthenticationDto;
 import com.gizwits.boot.dto.Pageable;
 import com.gizwits.boot.sys.entity.SysUserExt;
+import com.gizwits.lease.stat.vo.StatLocationVo;
 import com.gizwits.lease.stat.vo.StatUserWidgetVo;
 import com.gizwits.lease.user.dto.*;
 import com.gizwits.lease.user.dto.UserForDetailDto;
@@ -22,6 +23,7 @@ import com.gizwits.lease.enums.MoveType;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -238,5 +240,13 @@ public interface UserService extends IService<User> {
      * 用户看板，统计app用户总数，昨日新增app用户数
      */
     StatUserWidgetVo getUserWidget();
+    /**
+     * 用户分布图，省级别
+     */
+    List<StatLocationVo>  ditribution();
+    /**
+     * 用户分布图，市级别
+     */
+    List<StatLocationVo> userDitributionByCity(String province);
 //=================END=====================//
 }

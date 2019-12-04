@@ -1,6 +1,7 @@
 package com.gizwits.lease.stat.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.enums.SqlLike;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.gizwits.boot.enums.DeleteStatus;
@@ -15,12 +16,15 @@ import com.gizwits.boot.utils.ParamUtil;
 import com.gizwits.lease.device.dao.DeviceDao;
 import com.gizwits.lease.exceptions.LeaseExceEnums;
 import com.gizwits.lease.order.dao.OrderBaseDao;
+import com.gizwits.lease.product.entity.Product;
+import com.gizwits.lease.product.service.ProductService;
 import com.gizwits.lease.redis.RedisService;
 import com.gizwits.lease.stat.dao.StatDeviceTrendDao;
 import com.gizwits.lease.stat.dto.StatDeviceTrendDto;
 import com.gizwits.lease.stat.entity.StatDeviceTrend;
 import com.gizwits.lease.stat.entity.StatUserTrend;
 import com.gizwits.lease.stat.service.StatDeviceTrendService;
+import com.gizwits.lease.stat.vo.StatDeviceStatisticsVo;
 import com.gizwits.lease.stat.vo.StatTrendVo;
 import com.gizwits.lease.util.DateUtil;
 import com.gizwits.lease.utils.ObjectUtils;
@@ -57,6 +61,9 @@ public class StatDeviceTrendServiceImpl extends ServiceImpl<StatDeviceTrendDao, 
     private StatDeviceTrendDao statDeviceTrendDao;
     @Autowired
     private SysUserService sysUserService;
+
+    @Autowired
+    private ProductService productService;
 
     // private static ExecutorService executorService = Executors.newFixedThreadPool(10);
 
@@ -131,44 +138,29 @@ public class StatDeviceTrendServiceImpl extends ServiceImpl<StatDeviceTrendDao, 
     }
 
     @Override
-    public List<StatTrendVo> getNewTrend(StatDeviceTrendDto statDeviceTrendDto, SysUser currentUser, List<Integer> ids) {
-        if (currentUser == null) {
-            throw new SystemException(LeaseExceEnums.ENTITY_NOT_EXISTS.getCode(), "请以正确的参数请求");
-        }
-        List<StatTrendVo> statTrendVoList = new ArrayList<>();
-
-        List<StatDeviceTrend> list = statDeviceTrendDao.getNewTrendByIds(ids, statDeviceTrendDto);
-        if (list.size() == 0) {
-            loggerDevice.warn("请查看stat_device_trend表中是否含有当前用户：" + currentUser.getId() + "日期在" + DateKit.getTimestampString(statDeviceTrendDto.getFromDate()) + "和" + DateKit.getTimestampString(statDeviceTrendDto.getToDate()) + "的新增数量记录");
-        }
-        for (int i = 0; i < list.size(); ++i) {
-            StatTrendVo statTrendVo = new StatTrendVo();
-            StatDeviceTrend statDeviceTrend = list.get(i);
-            statTrendVo.setTime(DateKit.getTimestampString(statDeviceTrend.getCtime()));
-            statTrendVo.setCount(statDeviceTrend.getNewCount());
-            statTrendVoList.add(statTrendVo);
-        }
-        return statTrendVoList;
+    public List<StatTrendVo> getNewTrend(StatDeviceTrendDto statDeviceTrendDto) {
+        List<StatTrendVo> result=new ArrayList<>();
+        List<StatDeviceTrend> list=statDeviceTrendDao.getNewTrend(statDeviceTrendDto);
+        list.stream().forEach(item->{
+            StatTrendVo vo=new StatTrendVo();
+            vo.setCount(item.getNewCount()==null?0:item.getNewCount());
+            vo.setTime(DateUtil.dateToString(item.getCtime(),"yyyy-MM-dd"));
+            result.add(vo);
+        });
+        return result;
     }
 
     @Override
-    public List<StatTrendVo> getActiveTrend(StatDeviceTrendDto statDeviceTrendDto, SysUser currentUser, List<Integer> ids) {
-        if (currentUser == null) {
-            throw new SystemException(LeaseExceEnums.ENTITY_NOT_EXISTS.getCode(), "请以正确的参数请求");
-        }
-        List<StatTrendVo> statTrendVoList = new ArrayList<>();
-        List<StatDeviceTrend> list = statDeviceTrendDao.getActiveTrendByIds(ids, statDeviceTrendDto);
-        if (list.size() == 0) {
-            loggerDevice.warn("请查看stat_device_trend表中是否含有当前用户：" + currentUser.getId() + "日期在" + DateKit.getTimestampString(statDeviceTrendDto.getFromDate()) + "和" + DateKit.getTimestampString(statDeviceTrendDto.getToDate()) + "的活跃数量记录");
-        }
-        for (int i = 0; i < list.size(); ++i) {
-            StatTrendVo statTrendVo = new StatTrendVo();
-            StatDeviceTrend statDeviceTrend = list.get(i);
-            statTrendVo.setTime(DateKit.getTimestampString(statDeviceTrend.getCtime()));
-            statTrendVo.setCount(statDeviceTrend.getActiveCount());
-            statTrendVoList.add(statTrendVo);
-        }
-        return statTrendVoList;
+    public List<StatTrendVo> getActiveTrend(StatDeviceTrendDto statDeviceTrendDto) {
+        List<StatTrendVo> result=new ArrayList<>();
+        List<StatDeviceTrend> list=statDeviceTrendDao.getActiveTrend(statDeviceTrendDto);
+        list.stream().forEach(item->{
+            StatTrendVo vo=new StatTrendVo();
+            vo.setCount(item.getActiveCount()==null?0:item.getActiveCount());
+            vo.setTime(DateUtil.dateToString(item.getCtime(),"yyyy-MM-dd"));
+            result.add(vo);
+        });
+        return result;
     }
 
 
@@ -224,45 +216,72 @@ public class StatDeviceTrendServiceImpl extends ServiceImpl<StatDeviceTrendDao, 
     }
 
     @Override
-    public List<StatTrendVo> getFaultDeviceTrend(StatDeviceTrendDto statDeviceTrendDto, SysUser currentUser, List<Integer> ids) {
-        if (currentUser == null) {
-            throw new SystemException(LeaseExceEnums.ENTITY_NOT_EXISTS.getCode(), "请以正确的参数请求");
-        }
-        List<StatTrendVo> statTrendVoList = new ArrayList<>();
-        List<StatDeviceTrend> list = statDeviceTrendDao.getFaultDeviceTrend(ids, statDeviceTrendDto);
-
-
-        if (list.size() == 0 || list.get(0) ==null) {
-            loggerDevice.warn("请查看stat_device_trend表中是否含有当前用户：" + currentUser.getId() + "日期在" + DateKit.getTimestampString(statDeviceTrendDto.getFromDate()) + "和" + DateKit.getTimestampString(statDeviceTrendDto.getToDate()) + "的订单率数量记录");
-            return statTrendVoList;
-        }
-        for (int i = 0; i < list.size(); ++i) {
-            StatTrendVo statTrendVo = new StatTrendVo();
-            StatDeviceTrend statDeviceTrend = list.get(i);
-            statTrendVo.setTime(DateKit.getTimestampString(statDeviceTrend.getCtime()));
-            statTrendVo.setCount(statDeviceTrend.getFaultCount());
-            statTrendVoList.add(statTrendVo);
-        }
-        return statTrendVoList;
+    public List<StatTrendVo> getFaultDeviceTrend(StatDeviceTrendDto statDeviceTrendDto) {
+        List<StatTrendVo> result=new ArrayList<>();
+        List<StatDeviceTrend> list=statDeviceTrendDao.getFaultDeviceTrend(statDeviceTrendDto);
+        list.stream().forEach(item->{
+            StatTrendVo vo=new StatTrendVo();
+            vo.setCount(item.getFaultCount()==null?0:item.getFaultCount());
+            vo.setTime(DateUtil.dateToString(item.getCtime(),"yyyy-MM-dd"));
+            result.add(vo);
+        });
+        return result;
     }
 
     @Override
-    public List<StatTrendVo> getAlertDeviceTrend(StatDeviceTrendDto statDeviceTrendDto, SysUser currentUser, List<Integer> ids) {
-        if (currentUser == null) {
-            throw new SystemException(LeaseExceEnums.ENTITY_NOT_EXISTS.getCode(), "请以正确的参数请求");
+    public List<StatTrendVo> getAlertDeviceTrend(StatDeviceTrendDto statDeviceTrendDto) {
+        List<StatTrendVo> result=new ArrayList<>();
+        List<StatDeviceTrend> list=statDeviceTrendDao.getAlertDeviceTrend(statDeviceTrendDto);
+        list.stream().forEach(item->{
+            StatTrendVo vo=new StatTrendVo();
+            vo.setCount(item.getAlertCount()==null?0:item.getAlertCount());
+            vo.setTime(DateUtil.dateToString(item.getCtime(),"yyyy-MM-dd"));
+            result.add(vo);
+        });
+        return result;
+    }
+
+    @Override
+    public void statisticsDeviceTrend() {
+        Date today=new Date();
+        String strToday=DateUtil.dateToString(today,"yyyy-MM-dd");
+        //获取所有产品
+        List<Product> products=productService.getAllUseableProduct();
+        if(ParamUtil.isNullOrEmptyOrZero(products)){
+            return ;
         }
-        List<StatTrendVo> statTrendVoList = new ArrayList<>();
-        List<StatDeviceTrend> list = statDeviceTrendDao.getAlertDeviceTrend(ids, statDeviceTrendDto);
-        if (list.size() == 0) {
-            loggerDevice.warn("请查看stat_device_trend表中是否含有当前用户：" + currentUser.getId() + "日期在" + DateKit.getTimestampString(statDeviceTrendDto.getFromDate()) + "和" + DateKit.getTimestampString(statDeviceTrendDto.getToDate()) + "的订单率数量记录");
+        List<Integer> productIds=products.stream().map(item->item.getId()).collect(Collectors.toList());
+        //删除今日的旧数据
+         delete(new EntityWrapper<StatDeviceTrend>().like("ctime",strToday, SqlLike.RIGHT).in("product_id",productIds));
+        //根据产品区分统计
+        List<StatDeviceTrend> vos=new ArrayList<>();
+        for (Product p:products) {
+            StatDeviceStatisticsVo vo=deviceDao.getDeviceStatictics(p.getId(),today);
+             StatDeviceTrend deviceTrend=new StatDeviceTrend();
+              deviceTrend.setCtime(new Date());
+              deviceTrend.setProductId(p.getId());
+              deviceTrend.setNewCount(vo.getAddCount()==null?0:vo.getAddCount());
+              deviceTrend.setActiveCount(vo.getActiveCount()==null?0:vo.getActiveCount());
+              deviceTrend.setFaultCount(vo.getFaultCount()==null?0:vo.getFaultCount());
+              deviceTrend.setAlertCount(vo.getAlarmCount()==null?0:vo.getAlarmCount());
+              deviceTrend.setPreviousDeviceTotal(vo.getTotal()==null?0:vo.getTotal());
+              vos.add(deviceTrend);
         }
-        for (int i = 0; i < list.size(); ++i) {
-            StatTrendVo statTrendVo = new StatTrendVo();
-            StatDeviceTrend statDeviceTrend = list.get(i);
-            statTrendVo.setTime(DateKit.getTimestampString(statDeviceTrend.getCtime()));
-            statTrendVo.setCount(statDeviceTrend.getAlertCount());
-            statTrendVoList.add(statTrendVo);
-        }
-        return statTrendVoList;
+        //一键插入
+        insertBatch(vos);
+
+    }
+
+    @Override
+    public List<StatTrendVo> allTotalTrend(StatDeviceTrendDto statDeviceTrendDto) {
+         List<StatTrendVo> result=new ArrayList<>();
+         List<StatDeviceTrend> list=statDeviceTrendDao.getTotalTrend(statDeviceTrendDto);
+          list.stream().forEach(item->{
+              StatTrendVo vo=new StatTrendVo();
+               vo.setCount(item.getPreviousDeviceTotal());
+               vo.setTime(DateUtil.dateToString(item.getCtime(),"yyyy-MM-dd"));
+               result.add(vo);
+          });
+        return result;
     }
 }

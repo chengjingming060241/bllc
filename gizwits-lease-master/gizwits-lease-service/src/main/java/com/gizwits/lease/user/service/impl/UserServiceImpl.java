@@ -42,6 +42,7 @@ import com.gizwits.lease.exceptions.LeaseException;
 import com.gizwits.lease.manager.entity.Manufacturer;
 import com.gizwits.lease.manager.service.ManufacturerService;
 import com.gizwits.lease.redis.RedisService;
+import com.gizwits.lease.stat.vo.StatLocationVo;
 import com.gizwits.lease.stat.vo.StatUserWidgetVo;
 import com.gizwits.lease.user.dao.UserDao;
 import com.gizwits.lease.user.dto.*;
@@ -57,6 +58,7 @@ import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -64,14 +66,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
-import java.util.UUID;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -1694,6 +1690,43 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
         return vo;
     }
 
+    @Override
+    public List<StatLocationVo> ditribution() {
+        List<StatLocationVo> list=userDao.ditribution();
+        if(ParamUtil.isNullOrEmptyOrZero(list)){
+            return new LinkedList<>();
+        }
+        Integer total=selectCount(new EntityWrapper<User>().eq("is_deleted",0));
+        if(total==0){
+            return new LinkedList<>();
+        }
+        list.stream().forEach(item->{
+             if(item.getProvince()==null||item.getProvince().equals("")) item.setProvince("其他");
+             item.setCount(item.getDeviceCount());
+             item.setProportion(BigDecimal.valueOf(item.getDeviceCount().doubleValue()/ total).setScale(1, BigDecimal.ROUND_HALF_UP)
+                     .doubleValue());
+        });
+        return list;
+    }
+
+    @Override
+    public List<StatLocationVo> userDitributionByCity(String province) {
+        List<StatLocationVo> list=userDao.ditributionByCity(province);
+        if(ParamUtil.isNullOrEmptyOrZero(list)){
+            return new LinkedList<>();
+        }
+        Integer total=selectCount(new EntityWrapper<User>().eq("province",province).eq("is_deleted",0));
+        if(total==0){
+            return new LinkedList<>();
+        }
+        list.stream().forEach(item->{
+            if(item.getProvince()==null||item.getProvince().equals("")) item.setProvince("其他");
+            item.setCount(item.getDeviceCount());
+            item.setProportion(BigDecimal.valueOf(item.getDeviceCount().doubleValue()/ total).setScale(1, BigDecimal.ROUND_HALF_UP)
+                    .doubleValue());
+        });
+        return list;
+    }
     //===================================//
 
 }

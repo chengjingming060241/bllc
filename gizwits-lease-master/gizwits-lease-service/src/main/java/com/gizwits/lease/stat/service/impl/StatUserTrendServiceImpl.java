@@ -1,5 +1,6 @@
 package com.gizwits.lease.stat.service.impl;
 
+import com.baomidou.mybatisplus.enums.SqlLike;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.gizwits.boot.enums.DeleteStatus;
@@ -8,6 +9,8 @@ import com.gizwits.boot.exceptions.SystemException;
 import com.gizwits.boot.sys.entity.SysUser;
 import com.gizwits.boot.sys.service.SysUserService;
 import com.gizwits.boot.utils.DateKit;
+import com.gizwits.boot.utils.DateUtil;
+import com.gizwits.boot.utils.ParamUtil;
 import com.gizwits.lease.user.dao.UserDao;
 import com.gizwits.lease.constant.SexType;
 import com.gizwits.lease.exceptions.LeaseExceEnums;
@@ -19,6 +22,7 @@ import com.gizwits.lease.stat.vo.StatSexVo;
 import com.gizwits.lease.stat.vo.StatTimesVo;
 import com.gizwits.lease.stat.vo.StatTrendVo;
 
+import com.gizwits.lease.user.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -123,25 +127,19 @@ public class StatUserTrendServiceImpl extends ServiceImpl<StatUserTrendDao, Stat
     }
 
     @Override
-    public List<StatTrendVo> getNewTrend(SysUser currentUser, StatUserTrendDto statUserTrendDto, List<Integer> ids) {
-        //判断当前currentUser
-        if (currentUser == null) {
-            throw new SystemException(LeaseExceEnums.ENTITY_NOT_EXISTS.getCode(), "请以正确的参数请求");
+    public List<StatTrendVo> getNewTrend(StatUserTrendDto statUserTrendDto) {
+        List<StatTrendVo> result=new ArrayList<>();
+        List<StatUserTrend> list=statUserTrendDao.getNewTrend(statUserTrendDto);
+        if(ParamUtil.isNullOrEmptyOrZero(list)){
+            return  result;
         }
-        List<StatTrendVo> statTrendVos = new ArrayList<>();
-        //根据给定的日期获取数据
-        List<StatUserTrend> list = statUserTrendDao.getNewTrend(ids, statUserTrendDto);
-        if (list.size()==0){
-            loggerStat.warn("请查看stat_user_trend表中是否含有当前用户："+ currentUser.getId()+"时间为："+DateKit.getTimestampString(statUserTrendDto.getFromDate())+"~"+DateKit.getTimestampString(statUserTrendDto.getToDate())+"的新增数量记录");
-        }
-        for (int i = 0; i < list.size(); ++i) {
-            StatTrendVo statTrendVo = new StatTrendVo();
-            StatUserTrend statUserTrend = list.get(i);
-            statTrendVo.setTime(DateKit.getTimestampString(statUserTrend.getCtime()));
-            statTrendVo.setCount(statUserTrend.getNewCount());
-            statTrendVos.add(statTrendVo);
-        }
-        return statTrendVos;
+        list.stream().forEach(item->{
+            StatTrendVo vo=new StatTrendVo();
+            vo.setCount(item.getNewCount()==null?0:item.getNewCount());
+            vo.setTime(DateUtil.dateToString(item.getCtime(),"yyyy-MM-dd"));
+            result.add(vo);
+        });
+        return result;
     }
 
     @Override
@@ -167,25 +165,19 @@ public class StatUserTrendServiceImpl extends ServiceImpl<StatUserTrendDao, Stat
     }
 
     @Override
-    public List<StatTrendVo> getTotalTrend(SysUser currentUser, StatUserTrendDto statUserTrendDto, List<Integer> ids) {
-        //判断当前currentUser
-        if (currentUser == null) {
-            throw new SystemException(LeaseExceEnums.ENTITY_NOT_EXISTS.getCode(), "请以正确的参数请求");
+    public List<StatTrendVo> getTotalTrend(StatUserTrendDto statUserTrendDto) {
+        List<StatTrendVo> result=new ArrayList<>();
+        List<StatUserTrend> list=statUserTrendDao.getTotalTrend(statUserTrendDto);
+        if(ParamUtil.isNullOrEmptyOrZero(list)){
+            return  result;
         }
-        List<StatTrendVo> statTrendVos = new ArrayList<>();
-        //根据给定的日期获取数据
-        List<StatUserTrend> list = statUserTrendDao.getTotalTrend(ids, statUserTrendDto);
-        if (list.size()==0){
-            loggerStat.warn("请查看stat_user_trend表中是否含有当前用户："+ currentUser.getId()+"时间为："+DateKit.getTimestampString(statUserTrendDto.getFromDate())+"~"+DateKit.getTimestampString(statUserTrendDto.getToDate())+"的总数量记录");
-        }
-        for (int i = 0; i < list.size(); ++i) {
-            StatTrendVo statTrendVo = new StatTrendVo();
-            StatUserTrend statUserTrend = list.get(i);
-            statTrendVo.setTime(DateKit.getTimestampString(statUserTrend.getCtime()));
-            statTrendVo.setCount(statUserTrend.getTotalCount());
-            statTrendVos.add(statTrendVo);
-        }
-        return statTrendVos;
+        list.stream().forEach(item->{
+            StatTrendVo vo=new StatTrendVo();
+            vo.setCount(item.getTotalCount()==null?0:item.getTotalCount());
+            vo.setTime(DateUtil.dateToString(item.getCtime(),"yyyy-MM-dd"));
+            result.add(vo);
+        });
+        return result;
     }
 
     @Override
@@ -223,4 +215,21 @@ public class StatUserTrendServiceImpl extends ServiceImpl<StatUserTrendDao, Stat
         return statTimesVo;
     }
 
+    @Override
+    public void statisticsUserTrend() {
+        Date today=new Date();
+        String strToday= DateUtil.dateToString(today,"yyyy-MM-dd");
+
+        //删除今日已经存在的纪律
+        delete(new EntityWrapper<StatUserTrend>().like("ctime",strToday, SqlLike.RIGHT));
+        StatUserTrend statUserTrend=new StatUserTrend();
+        //获取当前所有用户
+        Integer totalUserCount=userDao.selectCount(new EntityWrapper<User>().eq("is_deleted",0));
+        //获取今日新增用户数
+        Integer addUserCount=userDao.selectCount(new EntityWrapper<User>().like("ctime",strToday,SqlLike.RIGHT).eq("is_deleted",0));
+        statUserTrend.setCtime(today);
+        statUserTrend.setTotalCount(totalUserCount);
+        statUserTrend.setNewCount(addUserCount);
+        insert(statUserTrend);
+    }
 }
