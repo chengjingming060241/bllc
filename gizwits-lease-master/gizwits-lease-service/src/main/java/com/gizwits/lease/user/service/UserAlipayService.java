@@ -1,6 +1,6 @@
 package com.gizwits.lease.user.service;
 
-import com.alipay.api.response.AlipayFundTransToaccountTransferResponse;
+
 import com.gizwits.boot.sys.entity.SysUserExt;
 import com.gizwits.lease.benefit.entity.OrderShareProfit;
 import com.gizwits.lease.benefit.entity.ShareBenefitSheet;
@@ -29,10 +29,10 @@ public interface UserAlipayService {
 
     String signByAlipaysOrder(AlipayOrderDto alipayOrderDto);
 
-    AlipayFundTransToaccountTransferResponse shareBenefitSheetByAlipay(OrderShareProfit orderShareProfit, SysUserExt sysUserExt);
-
-
-    AlipayFundTransToaccountTransferResponse transforToAccount(String payeeType, String payeeAccount, String accountRealname, String tradeNo, Double money, String message, SysUserExt sysUserExt);
+//    AlipayFundTransToaccountTransferResponse shareBenefitSheetByAlipay(OrderShareProfit orderShareProfit, SysUserExt sysUserExt);
+//
+//
+//    AlipayFundTransToaccountTransferResponse transforToAccount(String payeeType, String payeeAccount, String accountRealname, String tradeNo, Double money, String message, SysUserExt sysUserExt);
 
     String queryShareBenefitSheetStatus(ShareBenefitSheet shareBenefitSheet, SysUserExt sysUserExt);
 }

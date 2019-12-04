@@ -214,7 +214,6 @@ public class DeviceQrcodeServiceImpl implements DeviceQrcodeService {
             Device forUpdate = new Device();
             forUpdate.setSno(device.getSno());
             forUpdate.setUtime(now);
-            forUpdate.setEntryTime(now);
             forUpdate.setStatus(DeviceNormalStatus.ENTRY.getCode());
             forUpdate.setMac(mac);
             forUpdate.setName(device.getMac());

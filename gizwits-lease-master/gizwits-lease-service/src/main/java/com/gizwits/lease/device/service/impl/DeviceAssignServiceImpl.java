@@ -16,11 +16,13 @@ import com.gizwits.lease.common.perm.dto.AssignDestinationDto;
 import com.gizwits.lease.constant.DeviceNormalStatus;
 import com.gizwits.lease.constant.DeviceSweepCodeStatus;
 import com.gizwits.lease.device.entity.Device;
+import com.gizwits.lease.device.entity.DeviceStock;
 import com.gizwits.lease.device.entity.dto.DeviceAddDetailsDto;
 import com.gizwits.lease.device.entity.dto.DeviceForAssignDto;
 import com.gizwits.lease.device.entity.dto.DeviceForUnbindDto;
 import com.gizwits.lease.device.service.DeviceAssignService;
 import com.gizwits.lease.device.service.DeviceService;
+import com.gizwits.lease.device.service.DeviceStockService;
 import com.gizwits.lease.enums.AssignDestinationType;
 import com.gizwits.lease.exceptions.LeaseExceEnums;
 import com.gizwits.lease.exceptions.LeaseException;
@@ -55,6 +57,9 @@ public class DeviceAssignServiceImpl implements DeviceAssignService {
 
     @Autowired
     private DeviceService deviceService;
+
+    @Autowired
+    private DeviceStockService deviceStockService;
 
     @Autowired
     private AgentService agentService;
@@ -95,7 +100,7 @@ public class DeviceAssignServiceImpl implements DeviceAssignService {
         }
         Date now = new Date();
         for (DeviceAddDetailsDto detailsDto : dto.getDeviceAddDetailsDtos()) {
-            Device sn2 = deviceService.selectOne(new EntityWrapper<Device>()
+            DeviceStock sn2 = deviceStockService.selectOne(new EntityWrapper<DeviceStock>()
                     .eq("sn2", detailsDto.getsN2())
                     .eq("is_deleted", DeleteStatus.NOT_DELETED.getCode()));
             sn2.setAgentId(dto.getAssignedId());
@@ -105,7 +110,8 @@ public class DeviceAssignServiceImpl implements DeviceAssignService {
             sn2.setOutOfStockId(dto.getCurrentUser().getId());
             sn2.setOutOfStockName(dto.getCurrentUser().getRealName());
             sn2.setSweepCodeStatus(DeviceSweepCodeStatus.Out_of_stock.getCode());
-            deviceService.insertOrUpdate(sn2);
+            sn2.setIsDeletedOut(DeleteStatus.NOT_DELETED.getCode());
+            deviceStockService.insertOrUpdate(sn2);
         }
         return new ArrayList<>();
     }
@@ -114,8 +120,8 @@ public class DeviceAssignServiceImpl implements DeviceAssignService {
     private List<String> isExist(List<DeviceAddDetailsDto> detailsDto){
        List<String> strings = new ArrayList<>();
         for (DeviceAddDetailsDto dto :detailsDto){
-            if (dto.getsN2()!=null && deviceService.selectCount(
-                    new EntityWrapper<Device>().eq("sn2",dto.getsN2()).eq("is_deleted", DeleteStatus.NOT_DELETED.getCode())) == 0){
+            if (dto.getsN2()!=null && deviceStockService.selectCount(
+                    new EntityWrapper<DeviceStock>().eq("sn2",dto.getsN2()).eq("is_deleted", DeleteStatus.NOT_DELETED.getCode())) == 0){
                 strings.add(dto.getsN2());
             }
         }

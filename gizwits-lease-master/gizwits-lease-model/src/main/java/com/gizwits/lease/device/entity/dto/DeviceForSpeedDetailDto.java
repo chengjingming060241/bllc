@@ -3,6 +3,7 @@ package com.gizwits.lease.device.entity.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gizwits.boot.base.Constants;
 import com.gizwits.lease.device.entity.Device;
+import com.gizwits.lease.device.entity.DeviceStock;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.beans.BeanUtils;
 import java.util.Date;
@@ -60,6 +61,10 @@ public class DeviceForSpeedDetailDto {
     }
 
     public DeviceForSpeedDetailDto(Device device) {
+        BeanUtils.copyProperties(device, this);
+    }
+
+    public DeviceForSpeedDetailDto(DeviceStock device) {
         BeanUtils.copyProperties(device, this);
     }
 

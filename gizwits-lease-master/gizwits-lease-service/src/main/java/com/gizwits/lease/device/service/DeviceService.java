@@ -177,16 +177,6 @@ public interface DeviceService extends IService<Device> {
      */
     DeviceForDetailDto detail(String id);
 
-    /*库存管理设备扫码进度详情**/
-    DeviceForSpeedDetailDto detail2(String id);
-
-    /*库存详情**/
-    DeviceForStockDetailDto stockDetails(String id);
-
-
-    /*库存详情**/
-    Page<DeviceForSpeedDetailDto> putDeviceDetails(Pageable<DeviceQueryDto> pageable);
-
     /**
      * 管理端查询设备详情
      */
@@ -197,10 +187,6 @@ public interface DeviceService extends IService<Device> {
      */
     boolean update(DeviceForUpdateDto dto);
 
-    /**
-     * 更新
-     */
-    String stockUpdate(DeviceForUpdateDto dto);
 
     /**检查设备码是否已绑定*/
     String DoesItAlreadyExist(String sno , String mac, String sn1 , String sn2, String iMEI);
@@ -210,20 +196,6 @@ public interface DeviceService extends IService<Device> {
      */
     Page<DeviceShowDto> listPage(Pageable<DeviceQueryDto> pageable);
 
-    /**
-     * 库存列表
-     */
-    Page<DeviceShowDto> StockListPage(Pageable<DeviceQueryDto> pageable);
-
-    /**
-     * 入库列表
-     */
-    Page<DeviceShowDto> putListPage(Pageable<DeviceQueryDto> pageable);
-
-    /**
-     * 出库列表
-     */
-    Page<DeviceShowDto> outListPage(Pageable<DeviceQueryDto> pageable);
 
     Page<DeviceShowDto> listPage2(Pageable<DeviceQueryDto> pageable);
 
