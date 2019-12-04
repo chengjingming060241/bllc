@@ -25,10 +25,6 @@ public class    DeviceAddDto implements Serializable{
     @JsonIgnore
     private Integer uncheckOrigin;
 
-    private Integer productId;
-
-    private String productName;
-
     @ApiModelProperty("供应商")
     private String supplierName;
 
@@ -40,11 +36,22 @@ public class    DeviceAddDto implements Serializable{
     @ApiModelProperty("控制器类型")
     private Boolean controlType;
 
+    @ApiModelProperty("产品id")
+    private Integer productId;
+
     @ApiModelProperty("IMEI模式")
     private Boolean IMEIType;
 
     @ApiModelProperty("批次")
     private String batch;
+
+    public Integer getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Integer productId) {
+        this.productId = productId;
+    }
 
     public String getDeivceLaunchAreaName() {
         return deivceLaunchAreaName;
@@ -111,24 +118,6 @@ public class    DeviceAddDto implements Serializable{
         this.remarks = remarks;
     }
 
-
-    public Integer getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Integer productId) {
-        this.productId = productId;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-
     public Integer getDeviceLaunchAreaId() {
         return deviceLaunchAreaId;
     }
@@ -144,12 +133,13 @@ public class    DeviceAddDto implements Serializable{
                 "deviceAddDetailsDtos=" + deviceAddDetailsDtos +
                 ", remarks='" + remarks + '\'' +
                 ", uncheckOrigin=" + uncheckOrigin +
-                ", productId=" + productId +
-                ", productName='" + productName + '\'' +
                 ", supplierName='" + supplierName + '\'' +
                 ", deviceLaunchAreaId=" + deviceLaunchAreaId +
+                ", deivceLaunchAreaName='" + deivceLaunchAreaName + '\'' +
                 ", controlType=" + controlType +
+                ", productId=" + productId +
                 ", IMEIType=" + IMEIType +
+                ", batch='" + batch + '\'' +
                 '}';
     }
 }

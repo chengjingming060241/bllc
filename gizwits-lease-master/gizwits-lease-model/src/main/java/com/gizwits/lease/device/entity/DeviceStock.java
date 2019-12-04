@@ -135,7 +135,7 @@ public class DeviceStock extends Model<DeviceStock> {
     private String batch;
 
     /**
-     * 出库批 次
+     * 出库批次
      */
     @TableField("out_batch")
     private String outBatch;
