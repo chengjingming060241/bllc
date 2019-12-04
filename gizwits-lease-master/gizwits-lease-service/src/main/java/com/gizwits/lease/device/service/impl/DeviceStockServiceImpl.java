@@ -93,6 +93,9 @@ public class DeviceStockServiceImpl extends ServiceImpl<DeviceStockDao, DeviceSt
     @Autowired
     private DeviceService deviceService;
 
+    @Autowired
+    private AgentService agentService;
+
 
 
     /**
@@ -107,7 +110,6 @@ public class DeviceStockServiceImpl extends ServiceImpl<DeviceStockDao, DeviceSt
         }
         String result = "";
         SysUser sysUser = sysUserService.getCurrentUserOwner();
-        DeviceStock device = new DeviceStock();
         Date now = new Date();
 
         List<String> addResult = new ArrayList();
@@ -130,6 +132,7 @@ public class DeviceStockServiceImpl extends ServiceImpl<DeviceStockDao, DeviceSt
                     addResult.add(detailsDto.getMac());
 
                 } else {
+                    DeviceStock device = new DeviceStock();
                     device.setSno(deviceService.getSno());
                     device.setMac(detailsDto.getMac());
                     device.setUtime(now);
@@ -142,16 +145,18 @@ public class DeviceStockServiceImpl extends ServiceImpl<DeviceStockDao, DeviceSt
                     }
                     device.setControlType(deviceAddDto.getControlType());
                     device.setIsDeleted(DeleteStatus.NOT_DELETED.getCode());
+                    device.setIsDeletedOut(DeleteStatus.NOT_DELETED.getCode());
+                    device.setIsDeletedPut(DeleteStatus.NOT_DELETED.getCode());
                     devices.add(device);
                 }
             }
 
             for (DeviceStock dev : devices) {
-                insertOrUpdate(dev);
+                insert(dev);
             }
 
             if (addResult.size()>0){
-                 result = "以下设备添加失败:"+addResult.toString()+",原因："+LeaseExceEnums.DEVICE_EXISTS;
+                 result = "以下设备添加失败:"+addResult.toString()+",原因："+LeaseExceEnums.DEVICE_EXISTS.getMessage();
             }else {
                  result = "添加成功";
 
@@ -183,7 +188,7 @@ public class DeviceStockServiceImpl extends ServiceImpl<DeviceStockDao, DeviceSt
                       insertOrUpdate(deviceSn1);
                   }
               }else{
-                  DeviceStock devices = selectOne(new EntityWrapper<DeviceStock>().isNull("sn1").eq("is_deleted", DeleteStatus.NOT_DELETED.getCode()));
+                  DeviceStock devices = selectOne(new EntityWrapper<DeviceStock>().isNull("sn1").isNull("sn2").eq("is_deleted", DeleteStatus.NOT_DELETED.getCode()));
                   if (Objects.isNull(devices)){
                       addResult.add(detailsDto.getsN2());
                   }else {
@@ -198,7 +203,7 @@ public class DeviceStockServiceImpl extends ServiceImpl<DeviceStockDao, DeviceSt
               }
             }
             if (addResult.size()>0){
-                result = "以下设备添加失败:"+addResult.toString()+",原因："+LeaseExceEnums.DEVICE_DONT_EXISTS;
+                result = "以下设备添加失败:"+addResult.toString()+",原因："+LeaseExceEnums.DEVICE_DONT_EXISTS.getMessage();
             }else {
                 result = "添加成功";
 
@@ -220,7 +225,7 @@ public class DeviceStockServiceImpl extends ServiceImpl<DeviceStockDao, DeviceSt
             for (DeviceAddDetailsDto detailsDto : deviceAddDto.getDeviceAddDetailsDtos()) {
                 DeviceStock devicePut = selectOne(new EntityWrapper<DeviceStock>().eq("sn2", detailsDto.getsN2()).eq("is_deleted", DeleteStatus.NOT_DELETED.getCode()));
                 //判断产品是否符合规则
-                ProductCategory productCategory = productCategoryService.selectOne(new EntityWrapper<ProductCategory>().eq("category_type", deviceAddDto.getControlType()).eq("is_deleted", DeleteStatus.NOT_DELETED.getCode()));
+                ProductCategory productCategory = productCategoryService.selectById(deviceAddDto.getProductId());
                 if (productCategory.getCategoryId() == null){
                     addResult.add(detailsDto.getsN2());
                     continue;
@@ -243,12 +248,11 @@ public class DeviceStockServiceImpl extends ServiceImpl<DeviceStockDao, DeviceSt
                 devicePut.setRemarks(deviceAddDto.getRemarks());
                 devicePut.setSupplierName(deviceAddDto.getSupplierName());  //供应商
                 devicePut.setBatch(deviceAddDto.getBatch());  //批次
-                device.setIsDeletedPut(DeleteStatus.NOT_DELETED.getCode());
                 insertOrUpdate(devicePut);
             }
 
             if (addResult.size()>0){
-                result = "以下设备添加失败:"+addResult.toString()+",原因："+LeaseExceEnums.PRODUCT_DONT_EXISTS;
+                result = "以下设备添加失败:"+addResult.toString()+",原因："+LeaseExceEnums.PRODUCT_DONT_EXISTS.getMessage();
             }else {
                 result = "添加成功";
 
@@ -296,7 +300,7 @@ public class DeviceStockServiceImpl extends ServiceImpl<DeviceStockDao, DeviceSt
     }
 
     @Override
-    public Page<DeviceForSpeedDetailDto> putDeviceDetails(Pageable<DeviceQueryDto> pageable) {
+    public Page<DeviceForSpeedDetailDto> putDeviceDetails(Pageable<DeviceStockQueryDto> pageable) {
         Page<DeviceStock> page = new Page<>();
         BeanUtils.copyProperties(pageable, page);
         Wrapper<DeviceStock> wrapper = new EntityWrapper<>();
@@ -319,7 +323,7 @@ public class DeviceStockServiceImpl extends ServiceImpl<DeviceStockDao, DeviceSt
 
 
     @Override
-    public Page<DeviceForSpeedDetailDto> outDeviceDetails(Pageable<DeviceQueryDto> pageable) {
+    public Page<DeviceForSpeedDetailDto> outDeviceDetails(Pageable<DeviceStockQueryDto> pageable) {
         Page<DeviceStock> page = new Page<>();
         BeanUtils.copyProperties(pageable, page);
         Wrapper<DeviceStock> wrapper = new EntityWrapper<>();
@@ -372,7 +376,7 @@ public class DeviceStockServiceImpl extends ServiceImpl<DeviceStockDao, DeviceSt
 
 
     @Override
-    public Page<DeviceShowDto> listPage(Pageable<DeviceQueryDto> pageable) {
+    public Page<DeviceShowDto> listPage(Pageable<DeviceStockQueryDto> pageable) {
 
         Page<DeviceStock> page = new Page<>();
         BeanUtils.copyProperties(pageable, page);
@@ -395,7 +399,7 @@ public class DeviceStockServiceImpl extends ServiceImpl<DeviceStockDao, DeviceSt
     }
 
     @Override
-    public Page<DeviceShowDto> StockListPage(Pageable<DeviceQueryDto> pageable) {
+    public Page<DeviceShowDto> StockListPage(Pageable<DeviceStockQueryDto> pageable) {
 
         Page<DeviceStock> page = new Page<>();
         BeanUtils.copyProperties(pageable, page);
@@ -418,7 +422,7 @@ public class DeviceStockServiceImpl extends ServiceImpl<DeviceStockDao, DeviceSt
     }
 
     @Override
-    public Page<DeviceShowDto> putListPage(Pageable<DeviceQueryDto> pageable) {
+    public Page<DeviceShowDto> putListPage(Pageable<DeviceStockQueryDto> pageable) {
 
         Page<DeviceStock> page = new Page<>();
         BeanUtils.copyProperties(pageable, page);
@@ -427,6 +431,7 @@ public class DeviceStockServiceImpl extends ServiceImpl<DeviceStockDao, DeviceSt
         if (pageable.getQuery().getUpTimeStart()!=null && pageable.getQuery().getUpTimeEnd()!=null){
             wrapper.between("entry_time",pageable.getQuery().getUpTimeStart(),pageable.getQuery().getUpTimeEnd());
         }
+        wrapper.ge("sweep_code_status",DeviceSweepCodeStatus.To_Be_But_Bf_Stock.getCode());
         wrapper.orderBy("entry_time", false);  //根据入库时间排序
         wrapper.groupBy("batch");
 
@@ -441,7 +446,7 @@ public class DeviceStockServiceImpl extends ServiceImpl<DeviceStockDao, DeviceSt
     }
 
     @Override
-    public Page<DeviceShowDto> outListPage(Pageable<DeviceQueryDto> pageable) {
+    public Page<DeviceShowDto> outListPage(Pageable<DeviceStockQueryDto> pageable) {
 
         Page<DeviceStock> page = new Page<>();
         BeanUtils.copyProperties(pageable, page);
@@ -450,6 +455,7 @@ public class DeviceStockServiceImpl extends ServiceImpl<DeviceStockDao, DeviceSt
         if (pageable.getQuery().getUpTimeStart()!=null && pageable.getQuery().getUpTimeEnd()!=null){
             wrapper.between("shift_out_time",pageable.getQuery().getUpTimeStart(),pageable.getQuery().getUpTimeEnd());
         }
+        wrapper.ge("sweep_code_status",DeviceSweepCodeStatus.Out_of_stock.getCode());
         wrapper.orderBy("shift_out_time", false);  //根据出库时间排序
         wrapper.groupBy("out_batch");
 
@@ -491,13 +497,13 @@ public class DeviceStockServiceImpl extends ServiceImpl<DeviceStockDao, DeviceSt
         List<DeviceShowDto> list = new ArrayList<>(devices.size());
         for (DeviceStock device : devices) {
             DeviceShowDto showDto = new DeviceShowDto();
-            showDto.setCategoryType(productCategoryService.selectById(device.getProductCategoryId()).getCategoryType());   //型号
             showDto.setLaunchArea(device.getLaunchAreaName());
             showDto.setDeviceCount(selectCount(new EntityWrapper<DeviceStock>()
-                    .eq("batch",device.getBatch()).eq("is_deleted", DeleteStatus.NOT_DELETED.getCode())));
+                    .eq("batch",device.getBatch()).eq("is_deleted_put", DeleteStatus.NOT_DELETED.getCode())));
             showDto.setSupplierName(device.getSupplierName());
-            showDto.setOperatorName(device.getOperatorName());
+            showDto.setWarehousingName(device.getWarehousingName());
             showDto.setEntryTime(device.getEntryTime());
+            showDto.setBatch(device.getBatch());
             list.add(showDto);
         }
         return list;
@@ -508,13 +514,13 @@ public class DeviceStockServiceImpl extends ServiceImpl<DeviceStockDao, DeviceSt
         List<DeviceShowDto> list = new ArrayList<>(devices.size());
         for (DeviceStock device : devices) {
             DeviceShowDto showDto = new DeviceShowDto();
-            showDto.setCategoryType(productCategoryService.selectById(device.getProductCategoryId()).getCategoryType());   //型号
             showDto.setLaunchArea(device.getLaunchAreaName());
             showDto.setDeviceCount(selectCount(new EntityWrapper<DeviceStock>()
-                    .eq("out_batch",device.getOutBatch()).eq("is_deleted", DeleteStatus.NOT_DELETED.getCode())));
-            showDto.setSupplierName(device.getSupplierName());
-            showDto.setOperatorName(device.getOperatorName());
-            showDto.setEntryTime(device.getEntryTime());
+                    .eq("out_batch",device.getOutBatch()).eq("is_deleted_out", DeleteStatus.NOT_DELETED.getCode())));
+            showDto.setOutOfStockName(device.getOutOfStockName());
+            showDto.setShiftOutTime(device.getShiftOutTime());
+            showDto.setOutBatch(device.getOutBatch());
+            showDto.setAgentName(agentService.selectById(device.getAgentId()).getName());
             list.add(showDto);
         }
         return list;
@@ -613,24 +619,28 @@ public class DeviceStockServiceImpl extends ServiceImpl<DeviceStockDao, DeviceSt
 
         if (selectCount(new EntityWrapper<DeviceStock>().eq("mac",mac)
                 .eq("is_deleted", DeleteStatus.NOT_DELETED.getCode()).ne("sno", sno))>0){
-            return LeaseExceEnums.DEVICE_MAC_EXISTS.getMessage();
+//            return LeaseExceEnums.DEVICE_MAC_EXISTS.getMessage();
+            LeaseException.throwSystemException(LeaseExceEnums.DEVICE_MAC_EXISTS);
         }
         if (sn1!=null && !sn1.equals("")){
             if (selectCount(new EntityWrapper<DeviceStock>().eq("sn1",sn1)
                     .eq("is_deleted", DeleteStatus.NOT_DELETED.getCode()).ne("sno", sno))>0){
-                return LeaseExceEnums.DEVICE_SN1_EXISTS.getMessage();
+                LeaseException.throwSystemException(LeaseExceEnums.DEVICE_SN1_EXISTS);
+//                return LeaseExceEnums.DEVICE_SN1_EXISTS.getMessage();
             }
         }
         if (sn2!=null && !sn2.equals("")){
             if (selectCount(new EntityWrapper<DeviceStock>().eq("sn2",sn2)
                     .eq("is_deleted", DeleteStatus.NOT_DELETED.getCode()).ne("sno", sno))>0){
-                return LeaseExceEnums.DEVICE_SN2_EXISTS.getMessage();
+//                return LeaseExceEnums.DEVICE_SN2_EXISTS.getMessage();
+                LeaseException.throwSystemException(LeaseExceEnums.DEVICE_SN2_EXISTS);
             }
         }
         if (sn2!=null && !sn2.equals("")){
             if (selectCount(new EntityWrapper<DeviceStock>().eq("imei",iMEI)
                     .eq("is_deleted", DeleteStatus.NOT_DELETED.getCode()).ne("sno", sno))>0){
-                return LeaseExceEnums.DEVICE_IMEI_EXISTS.getMessage();
+//                return LeaseExceEnums.DEVICE_IMEI_EXISTS.getMessage();
+                LeaseException.throwSystemException(LeaseExceEnums.DEVICE_IMEI_EXISTS);
             }
         }
         return "";

@@ -38,15 +38,19 @@ public class DeviceForSpeedDetailDto {
     @ApiModelProperty("入库时间")
     private Date entryTime;
 
+    @ApiModelProperty("出库时间")
+    private Date shiftOutTime;
+
     @ApiModelProperty("扫码员姓名")
     private String operatorName;
 
     @ApiModelProperty("入库员姓名")
     private String WarehousingName;
 
-    /**
-     * 备注
-     */
+    @ApiModelProperty("出库员姓名")
+    private String outOfStockName;
+
+    /*备注*/
     private String remarks;
 
     @ApiModelProperty(" 产品型号")
@@ -66,6 +70,22 @@ public class DeviceForSpeedDetailDto {
 
     public DeviceForSpeedDetailDto(DeviceStock device) {
         BeanUtils.copyProperties(device, this);
+    }
+
+    public Date getShiftOutTime() {
+        return shiftOutTime;
+    }
+
+    public void setShiftOutTime(Date shiftOutTime) {
+        this.shiftOutTime = shiftOutTime;
+    }
+
+    public String getOutOfStockName() {
+        return outOfStockName;
+    }
+
+    public void setOutOfStockName(String outOfStockName) {
+        this.outOfStockName = outOfStockName;
     }
 
     public String getRemarks() {
@@ -165,6 +185,22 @@ public class DeviceForSpeedDetailDto {
     }
 
 
-
-
+    @Override
+    public String toString() {
+        return "DeviceForSpeedDetailDto{" +
+                "sno='" + sno + '\'' +
+                ", ctime=" + ctime +
+                ", mac='" + mac + '\'' +
+                ", sN1='" + sN1 + '\'' +
+                ", sN2='" + sN2 + '\'' +
+                ", iMEI='" + iMEI + '\'' +
+                ", controlType=" + controlType +
+                ", sweepCodeTime=" + sweepCodeTime +
+                ", entryTime=" + entryTime +
+                ", operatorName='" + operatorName + '\'' +
+                ", WarehousingName='" + WarehousingName + '\'' +
+                ", remarks='" + remarks + '\'' +
+                ", categoryType='" + categoryType + '\'' +
+                '}';
+    }
 }

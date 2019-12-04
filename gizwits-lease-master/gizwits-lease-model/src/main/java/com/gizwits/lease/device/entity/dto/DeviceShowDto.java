@@ -29,6 +29,9 @@ public class DeviceShowDto implements Serializable{
     @ApiModelProperty("入库批次")
     private String batch;
 
+    @ApiModelProperty("出库批次")
+    private String outBatch;
+
     @ApiModelProperty("供应商")
     private String supplierName;
 
@@ -38,11 +41,23 @@ public class DeviceShowDto implements Serializable{
     @ApiModelProperty("入库时间")
     private Date entryTime;
 
+    @ApiModelProperty("出库时间")
+    private Date shiftOutTime;
+
     @ApiModelProperty(" 产品型号")
     private String categoryType;
 
     @ApiModelProperty("经办人")
     private String operatorName;
+
+    @ApiModelProperty("出库员")
+    private String outOfStockName;
+
+    @ApiModelProperty("入库员")
+    private String WarehousingName;
+
+    @ApiModelProperty("经销商")
+    private String agentName;
 
     @ApiModelProperty("设备数量")
     private Integer deviceCount;
@@ -72,6 +87,46 @@ public class DeviceShowDto implements Serializable{
     private String activateStatusDesc;
 
     private Boolean lock;
+
+    public String getAgentName() {
+        return agentName;
+    }
+
+    public void setAgentName(String agentName) {
+        this.agentName = agentName;
+    }
+
+    public String getOutBatch() {
+        return outBatch;
+    }
+
+    public void setOutBatch(String outBatch) {
+        this.outBatch = outBatch;
+    }
+
+    public Date getShiftOutTime() {
+        return shiftOutTime;
+    }
+
+    public void setShiftOutTime(Date shiftOutTime) {
+        this.shiftOutTime = shiftOutTime;
+    }
+
+    public String getOutOfStockName() {
+        return outOfStockName;
+    }
+
+    public void setOutOfStockName(String outOfStockName) {
+        this.outOfStockName = outOfStockName;
+    }
+
+    public String getWarehousingName() {
+        return WarehousingName;
+    }
+
+    public void setWarehousingName(String warehousingName) {
+        WarehousingName = warehousingName;
+    }
 
     public Integer getDeviceCount() {
         return deviceCount;
@@ -327,5 +382,44 @@ public class DeviceShowDto implements Serializable{
 
     public void setActivateStatusDesc(String activateStatusDesc) {
         this.activateStatusDesc = activateStatusDesc;
+    }
+
+    @Override
+    public String toString() {
+        return "DeviceShowDto{" +
+                "ctime=" + ctime +
+                ", sno='" + sno + '\'' +
+                ", mac='" + mac + '\'' +
+                ", sN1='" + sN1 + '\'' +
+                ", sN2='" + sN2 + '\'' +
+                ", iMEI='" + iMEI + '\'' +
+                ", name='" + name + '\'' +
+                ", product='" + product + '\'' +
+                ", launchArea='" + launchArea + '\'' +
+                ", serviceMode='" + serviceMode + '\'' +
+                ", lastOnLineTime=" + lastOnLineTime +
+                ", status='" + status + '\'' +
+                ", onlineStatus='" + onlineStatus + '\'' +
+                ", workStatusDesc='" + workStatusDesc + '\'' +
+                ", batch='" + batch + '\'' +
+                ", supplierName='" + supplierName + '\'' +
+                ", sweepCodeStatus='" + sweepCodeStatus + '\'' +
+                ", entryTime=" + entryTime +
+                ", categoryType='" + categoryType + '\'' +
+                ", operatorName='" + operatorName + '\'' +
+                ", deviceCount=" + deviceCount +
+                ", workStatus=" + workStatus +
+                ", gizDid='" + gizDid + '\'' +
+                ", province='" + province + '\'' +
+                ", city='" + city + '\'' +
+                ", area='" + area + '\'' +
+                ", address='" + address + '\'' +
+                ", ownerName='" + ownerName + '\'' +
+                ", remarks='" + remarks + '\'' +
+                ", belongOperatorName='" + belongOperatorName + '\'' +
+                ", activateStatus=" + activateStatus +
+                ", activateStatusDesc='" + activateStatusDesc + '\'' +
+                ", lock=" + lock +
+                '}';
     }
 }

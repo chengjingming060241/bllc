@@ -48,10 +48,10 @@ public interface DeviceStockService extends IService<DeviceStock> {
 
 
     /*入库详情**/
-    Page<DeviceForSpeedDetailDto> putDeviceDetails(Pageable<DeviceQueryDto> pageable);
+    Page<DeviceForSpeedDetailDto> putDeviceDetails(Pageable<DeviceStockQueryDto> pageable);
 
     /*出库详情**/
-    Page<DeviceForSpeedDetailDto> outDeviceDetails(Pageable<DeviceQueryDto> pageable);
+    Page<DeviceForSpeedDetailDto> outDeviceDetails(Pageable<DeviceStockQueryDto> pageable);
 
     /**
      * 更新
@@ -64,23 +64,23 @@ public interface DeviceStockService extends IService<DeviceStock> {
     /**
      * 分页查询列表
      */
-    Page<DeviceShowDto> listPage(Pageable<DeviceQueryDto> pageable);
+    Page<DeviceShowDto> listPage(Pageable<DeviceStockQueryDto> pageable);
 
     /**
      * 库存列表
      */
-    Page<DeviceShowDto> StockListPage(Pageable<DeviceQueryDto> pageable);
+    Page<DeviceShowDto> StockListPage(Pageable<DeviceStockQueryDto> pageable);
 
     /**
      * 入库列表
      */
-    Page<DeviceShowDto> putListPage(Pageable<DeviceQueryDto> pageable);
+    Page<DeviceShowDto> putListPage(Pageable<DeviceStockQueryDto> pageable);
 
 
     /**
      * 入库列表
      */
-    Page<DeviceShowDto> outListPage(Pageable<DeviceQueryDto> pageable);
+    Page<DeviceShowDto> outListPage(Pageable<DeviceStockQueryDto> pageable);
 
 
 

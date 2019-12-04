@@ -153,7 +153,21 @@ public class DeviceForStockDetailDto {
         this.mac = mac;
     }
 
-
-
-
+    @Override
+    public String toString() {
+        return "DeviceForStockDetailDto{" +
+                "sno='" + sno + '\'' +
+                ", ctime=" + ctime +
+                ", mac='" + mac + '\'' +
+                ", sN1='" + sN1 + '\'' +
+                ", sN2='" + sN2 + '\'' +
+                ", iMEI='" + iMEI + '\'' +
+                ", entryTime=" + entryTime +
+                ", WarehousingName='" + WarehousingName + '\'' +
+                ", sweepCodeStatusName='" + sweepCodeStatusName + '\'' +
+                ", batch='" + batch + '\'' +
+                ", launchAreaName='" + launchAreaName + '\'' +
+                ", categoryType='" + categoryType + '\'' +
+                '}';
+    }
 }

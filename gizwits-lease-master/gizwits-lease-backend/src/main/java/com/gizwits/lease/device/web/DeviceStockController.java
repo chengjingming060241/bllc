@@ -9,18 +9,12 @@ import com.gizwits.boot.dto.Pageable;
 import com.gizwits.boot.enums.DeleteStatus;
 import com.gizwits.boot.sys.entity.SysUser;
 import com.gizwits.boot.sys.service.SysUserService;
-import com.gizwits.boot.utils.ParamUtil;
 import com.gizwits.lease.RequestLock;
-import com.gizwits.lease.common.perm.dto.AssignDestinationDto;
 import com.gizwits.lease.common.version.DefaultVersion;
-import com.gizwits.lease.common.version.Version;
 import com.gizwits.lease.constant.DeviceSweepCodeStatus;
 import com.gizwits.lease.device.entity.dto.*;
 import com.gizwits.lease.device.service.DeviceAssignService;
-import com.gizwits.lease.device.service.DeviceService;
 import com.gizwits.lease.device.service.DeviceStockService;
-import com.gizwits.lease.device.service.DeviceToProductServiceModeService;
-import com.gizwits.lease.enums.AssignDestinationType;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -29,22 +23,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
 import javax.validation.Valid;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 
 /**
  * <p>
- * 设备表 前端控制器
+ * 库存设备表 前端控制器
  * </p>
  *
- * @author zhl
- * @since 2017-07-11
  */
 @RestController
 @EnableSwagger2
@@ -74,20 +63,10 @@ public class DeviceStockController extends BaseController {
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
     @ApiOperation(value = "库存设备列表", notes = "设备列表", consumes = "application/json")
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    @DefaultVersion(display = {"mac", "sno", "name", "product", "belongOperatorName", "launchArea", "serviceMode", "workStatusDesc", "onlineStatus", "activateStatusDesc"})
-    public ResponseObject<Page<DeviceShowDto>> list(@RequestBody @Valid RequestObject<Pageable<DeviceQueryDto>> requestObject) {
-        Pageable<DeviceQueryDto> pageable = requestObject.getData();
+    public ResponseObject<Page<DeviceShowDto>> list(@RequestBody @Valid RequestObject<Pageable<DeviceStockQueryDto>> requestObject) {
+        Pageable<DeviceStockQueryDto> pageable = requestObject.getData();
         if (Objects.isNull(pageable.getQuery())) {
-            pageable.setQuery(new DeviceQueryDto());
-        }
-        Integer creatorId = pageable.getQuery().getOperatorAccountId();
-        if (Objects.isNull(creatorId)) {
-            creatorId = pageable.getQuery().getCreatorId();
-        }
-        if (Objects.nonNull(creatorId)) {
-            pageable.getQuery().setAccessableOwnerIds(sysUserService.resolveSysUserAllSubAdminIds(sysUserService.selectById(creatorId)));
-        } else {
-            pageable.getQuery().setAccessableOwnerIds(sysUserService.resolveSysUserAllSubAdminIds(sysUserService.getCurrentUserOwner()));
+            pageable.setQuery(new DeviceStockQueryDto());
         }
         //状态默认为“待扫码”
         if (Objects.isNull(pageable.getQuery().getSweepCodeStatus())){
@@ -109,21 +88,13 @@ public class DeviceStockController extends BaseController {
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
     @ApiOperation(value = "库存列表", notes = "设备列表", consumes = "application/json")
     @RequestMapping(value = "/stockList", method = RequestMethod.POST)
-    public ResponseObject<Page<DeviceShowDto>> stockList(@RequestBody @Valid RequestObject<Pageable<DeviceQueryDto>> requestObject) {
-        Pageable<DeviceQueryDto> pageable = requestObject.getData();
+    public ResponseObject<Page<DeviceShowDto>> stockList(@RequestBody @Valid RequestObject<Pageable<DeviceStockQueryDto>> requestObject) {
+        Pageable<DeviceStockQueryDto> pageable = requestObject.getData();
         if (Objects.isNull(pageable.getQuery())) {
-            pageable.setQuery(new DeviceQueryDto());
+            pageable.setQuery(new DeviceStockQueryDto());
         }
-        Integer creatorId = pageable.getQuery().getOperatorAccountId();
-        if (Objects.isNull(creatorId)) {
-            creatorId = pageable.getQuery().getCreatorId();
-        }
-        if (Objects.nonNull(creatorId)) {
-            pageable.getQuery().setAccessableOwnerIds(sysUserService.resolveSysUserAllSubAdminIds(sysUserService.selectById(creatorId)));
-        } else {
-            pageable.getQuery().setAccessableOwnerIds(sysUserService.resolveSysUserAllSubAdminIds(sysUserService.getCurrentUserOwner()));
-        }
-        //状态默认为“待出库”
+
+        //状态默认为“已入库”
         if (Objects.isNull(pageable.getQuery().getSweepCodeStatus())){
             pageable.getQuery().setSweepCodeStatus(DeviceSweepCodeStatus.To_Be_But_Bf_Stock.getCode());
         }
@@ -167,19 +138,10 @@ public class DeviceStockController extends BaseController {
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
     @ApiOperation(value = "入库记录列表", notes = "设备列表", consumes = "application/json")
     @RequestMapping(value = "/putDeviceList", method = RequestMethod.POST)
-    public ResponseObject<Page<DeviceShowDto>> putDeviceList(@RequestBody @Valid RequestObject<Pageable<DeviceQueryDto>> requestObject) {
-        Pageable<DeviceQueryDto> pageable = requestObject.getData();
+    public ResponseObject<Page<DeviceShowDto>> putDeviceList(@RequestBody @Valid RequestObject<Pageable<DeviceStockQueryDto>> requestObject) {
+        Pageable<DeviceStockQueryDto> pageable = requestObject.getData();
         if (Objects.isNull(pageable.getQuery())) {
-            pageable.setQuery(new DeviceQueryDto());
-        }
-        Integer creatorId = pageable.getQuery().getOperatorAccountId();
-        if (Objects.isNull(creatorId)) {
-            creatorId = pageable.getQuery().getCreatorId();
-        }
-        if (Objects.nonNull(creatorId)) {
-            pageable.getQuery().setAccessableOwnerIds(sysUserService.resolveSysUserAllSubAdminIds(sysUserService.selectById(creatorId)));
-        } else {
-            pageable.getQuery().setAccessableOwnerIds(sysUserService.resolveSysUserAllSubAdminIds(sysUserService.getCurrentUserOwner()));
+            pageable.setQuery(new DeviceStockQueryDto());
         }
 
         //防止前台查询已删除的数据
@@ -190,19 +152,10 @@ public class DeviceStockController extends BaseController {
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
     @ApiOperation(value = "入库记录详情", consumes = "application/json")
     @PostMapping("/putDeviceDetails")
-    public ResponseObject<Page<DeviceForSpeedDetailDto>> putDeviceDetails(@RequestBody @Valid RequestObject<Pageable<DeviceQueryDto>> requestObject) {
-        Pageable<DeviceQueryDto> pageable = requestObject.getData();
+    public ResponseObject<Page<DeviceForSpeedDetailDto>> putDeviceDetails(@RequestBody @Valid RequestObject<Pageable<DeviceStockQueryDto>> requestObject) {
+        Pageable<DeviceStockQueryDto> pageable = requestObject.getData();
         if (Objects.isNull(pageable.getQuery())) {
-            pageable.setQuery(new DeviceQueryDto());
-        }
-        Integer creatorId = pageable.getQuery().getOperatorAccountId();
-        if (Objects.isNull(creatorId)) {
-            creatorId = pageable.getQuery().getCreatorId();
-        }
-        if (Objects.nonNull(creatorId)) {
-            pageable.getQuery().setAccessableOwnerIds(sysUserService.resolveSysUserAllSubAdminIds(sysUserService.selectById(creatorId)));
-        } else {
-            pageable.getQuery().setAccessableOwnerIds(sysUserService.resolveSysUserAllSubAdminIds(sysUserService.getCurrentUserOwner()));
+            pageable.setQuery(new DeviceStockQueryDto());
         }
 
         //防止前台查询已删除的数据
@@ -221,21 +174,11 @@ public class DeviceStockController extends BaseController {
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
     @ApiOperation(value = "出库记录表", notes = "设备列表", consumes = "application/json")
     @RequestMapping(value = "/outDeviceList", method = RequestMethod.POST)
-    public ResponseObject<Page<DeviceShowDto>> outDeviceList(@RequestBody @Valid RequestObject<Pageable<DeviceQueryDto>> requestObject) {
-        Pageable<DeviceQueryDto> pageable = requestObject.getData();
+    public ResponseObject<Page<DeviceShowDto>> outDeviceList(@RequestBody @Valid RequestObject<Pageable<DeviceStockQueryDto>> requestObject) {
+        Pageable<DeviceStockQueryDto> pageable = requestObject.getData();
         if (Objects.isNull(pageable.getQuery())) {
-            pageable.setQuery(new DeviceQueryDto());
+            pageable.setQuery(new DeviceStockQueryDto());
         }
-        Integer creatorId = pageable.getQuery().getOperatorAccountId();
-        if (Objects.isNull(creatorId)) {
-            creatorId = pageable.getQuery().getCreatorId();
-        }
-        if (Objects.nonNull(creatorId)) {
-            pageable.getQuery().setAccessableOwnerIds(sysUserService.resolveSysUserAllSubAdminIds(sysUserService.selectById(creatorId)));
-        } else {
-            pageable.getQuery().setAccessableOwnerIds(sysUserService.resolveSysUserAllSubAdminIds(sysUserService.getCurrentUserOwner()));
-        }
-
         //防止前台查询已删除的数据
         pageable.getQuery().setIsDeletedOut(DeleteStatus.NOT_DELETED.getCode());
         return success(deviceStockService.outListPage(pageable));
@@ -244,21 +187,11 @@ public class DeviceStockController extends BaseController {
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
     @ApiOperation(value = "出库记录详情", consumes = "application/json")
     @PostMapping("/outDeviceDetails")
-    public ResponseObject<Page<DeviceForSpeedDetailDto>> outDeviceDetails(@RequestBody @Valid RequestObject<Pageable<DeviceQueryDto>> requestObject) {
-        Pageable<DeviceQueryDto> pageable = requestObject.getData();
+    public ResponseObject<Page<DeviceForSpeedDetailDto>> outDeviceDetails(@RequestBody @Valid RequestObject<Pageable<DeviceStockQueryDto>> requestObject) {
+        Pageable<DeviceStockQueryDto> pageable = requestObject.getData();
         if (Objects.isNull(pageable.getQuery())) {
-            pageable.setQuery(new DeviceQueryDto());
+            pageable.setQuery(new DeviceStockQueryDto());
         }
-        Integer creatorId = pageable.getQuery().getOperatorAccountId();
-        if (Objects.isNull(creatorId)) {
-            creatorId = pageable.getQuery().getCreatorId();
-        }
-        if (Objects.nonNull(creatorId)) {
-            pageable.getQuery().setAccessableOwnerIds(sysUserService.resolveSysUserAllSubAdminIds(sysUserService.selectById(creatorId)));
-        } else {
-            pageable.getQuery().setAccessableOwnerIds(sysUserService.resolveSysUserAllSubAdminIds(sysUserService.getCurrentUserOwner()));
-        }
-
         //防止前台查询已删除的数据
         pageable.getQuery().setIsDeletedOut(DeleteStatus.NOT_DELETED.getCode());
         return success(deviceStockService.outDeviceDetails(pageable));
