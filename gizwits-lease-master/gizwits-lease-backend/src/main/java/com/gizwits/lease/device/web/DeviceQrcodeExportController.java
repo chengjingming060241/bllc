@@ -30,10 +30,7 @@ import com.gizwits.lease.RequestLock;
 import com.gizwits.lease.common.version.DefaultVersion;
 import com.gizwits.lease.common.version.Version;
 import com.gizwits.lease.config.CommonSystemConfig;
-import com.gizwits.lease.constant.DeviceExcelTemplate;
-import com.gizwits.lease.constant.DeviceLaunchAreaExcelTemplate;
-import com.gizwits.lease.constant.DeviceStockTemplate;
-import com.gizwits.lease.constant.ProductCategoryExcelTemplate;
+import com.gizwits.lease.constant.*;
 import com.gizwits.lease.device.entity.Device;
 import com.gizwits.lease.device.entity.dto.DeviceExport;
 import com.gizwits.lease.device.entity.dto.DeviceExportResultDto;
@@ -43,6 +40,8 @@ import com.gizwits.lease.device.service.DeviceQrcodeService;
 import com.gizwits.lease.device.vo.DeviceQrcodeExportDto;
 import com.gizwits.lease.exceptions.LeaseExceEnums;
 import com.gizwits.lease.exceptions.LeaseException;
+import com.gizwits.lease.manager.dto.AgentExportResultDto;
+import com.gizwits.lease.manager.service.AgentService;
 import com.gizwits.lease.product.dto.ProductExportResultDto;
 import com.gizwits.lease.product.service.ProductQrcodeService;
 import com.gizwits.lease.utils.ImportExcelUtils;
@@ -102,6 +101,9 @@ public class DeviceQrcodeExportController extends BaseController {
     @Autowired
     private DeviceLaunchAreaAssignService deviceLaunchAreaAssignService;
 
+    @Autowired
+    private AgentService agentService;
+
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
     @ApiOperation(value = "导出二维码", consumes = "application/json")
     @PostMapping(value = "/export")
@@ -156,28 +158,28 @@ public class DeviceQrcodeExportController extends BaseController {
     @PostMapping("/upload")
     @DefaultVersion
     @RequestLock
-    public ResponseObject< List<DeviceLaunchAreaExportResultDto>> upload(@RequestParam("file") MultipartFile file,
-                                                                         @RequestParam(value = "productId",required = false) Integer productId) throws Exception {
+    public ResponseObject< List<AgentExportResultDto>> upload(@RequestParam("file") MultipartFile file,
+                                                              @RequestParam(value = "productId",required = false) Integer productId) throws Exception {
         List<List<Object>> originData = ImportExcelUtils.parse(file.getInputStream(), file.getOriginalFilename());
         SysUser currentUserOwner = sysUserService.getCurrentUserOwner();
 //        if(currentUserOwner.getIsAdmin().equals(SysUserType.MANUFACTURER.getCode())) {
 
-            return success(deviceLaunchAreaAssignService.importExcel(convertLaunchArea(originData)));
+            return success(agentService.importExcel(convertAgent(originData)));
 //        }
 //        else{
 //            return success(productQrcodeService.importDeviceExcelForAssign(convert2(originData)));
 //        }
     }
 
-    private List<DeviceLaunchAreaExcelTemplate> convertLaunchArea(List<List<Object>> originData) {
+    private List<AgentExcelTemplate> convertAgent(List<List<Object>> originData) {
         if (CollectionUtils.isEmpty(originData)) {
             LeaseException.throwSystemException(LeaseExceEnums.EXCEL_NO_DATA);
         }
-        return originData.stream().filter(this::isValidLaunchArea).map(list ->
-                new DeviceLaunchAreaExcelTemplate(String.valueOf(list.get(0)), String.valueOf(list.get(1)),String.valueOf(list.get(2)),String.valueOf(list.get(3)),String.valueOf(list.get(4)))).collect(Collectors.toList());
+        return originData.stream().filter(this::isValidAgent).map(list ->
+                new AgentExcelTemplate(String.valueOf(list.get(0)), String.valueOf(list.get(1)),String.valueOf(list.get(2)),String.valueOf(list.get(3)),String.valueOf(list.get(4)))).collect(Collectors.toList());
     }
 
-    private boolean isValidLaunchArea(List<Object> list) {
+    private boolean isValidAgent(List<Object> list) {
         return CollectionUtils.isNotEmpty(list) && list.size() == 5 && Objects.nonNull(list.get(0))
                 && Objects.nonNull(list.get(2)) && Objects.nonNull(list.get(3))&& Objects.nonNull(list.get(4));
     }

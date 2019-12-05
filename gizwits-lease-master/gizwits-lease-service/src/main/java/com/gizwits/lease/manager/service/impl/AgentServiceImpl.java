@@ -19,11 +19,17 @@ import com.gizwits.boot.sys.service.SysUserService;
 import com.gizwits.boot.utils.CommonEventPublisherUtils;
 import com.gizwits.boot.utils.ParamUtil;
 import com.gizwits.boot.utils.QueryResolverUtils;
+import com.gizwits.lease.constant.AgentExcelTemplate;
+import com.gizwits.lease.constant.BooleanEnum;
+import com.gizwits.lease.constant.DeviceLaunchAreaExcelTemplate;
 import com.gizwits.lease.device.entity.Device;
+import com.gizwits.lease.device.entity.DeviceLaunchArea;
+import com.gizwits.lease.device.entity.dto.DeviceLaunchAreaExportResultDto;
 import com.gizwits.lease.device.entity.dto.DeviceQueryDto;
 import com.gizwits.lease.device.entity.dto.OperatorStatusChangeDto;
 import com.gizwits.lease.device.service.DeviceLaunchAreaService;
 import com.gizwits.lease.device.service.DeviceService;
+import com.gizwits.lease.enums.DeviceExPortFailType;
 import com.gizwits.lease.enums.ExistEnum;
 import com.gizwits.lease.enums.StatusType;
 import com.gizwits.lease.event.NameModifyEvent;
@@ -475,6 +481,102 @@ public class AgentServiceImpl extends ServiceImpl<AgentDao, Agent> implements Ag
         wrapper.eq("is_deleted", DeleteStatus.NOT_DELETED.getCode());
         wrapper.eq("sys_account_id", sysUserId);
         return selectCount(wrapper) > 0;
+    }
+
+
+    @Override
+    public List<AgentExportResultDto> importExcel(List<AgentExcelTemplate> validData) {
+        if (CollectionUtils.isEmpty(validData)) {
+            LeaseException.throwSystemException(LeaseExceEnums.EXCEL_NO_DATA);
+        }
+        LOGGER.info("待导入的数据共:{}条", validData.size());
+        List<AgentExportResultDto> resultDtoList = new ArrayList<>();
+        List<String> failMacList = new LinkedList<>();
+        List<Agent> forUpdateList = new LinkedList<>();
+        Date now = new Date();
+        for (AgentExcelTemplate data : validData) {
+            // 防止导入时文件格式为数值，将科学计数法转为数值
+            String name = data.getName().trim();
+
+            // 查看导入文件是否有重复数据
+            if (!resolveDate(validData, data)) {
+                AgentExportResultDto dto = new AgentExportResultDto();
+                dto.setName(name);
+                failMacList.add(data.getName());
+                dto.setReason(DeviceExPortFailType.FILA_DATA_DUPLICATION.getDesc());
+                resultDtoList.add(dto);
+                continue;
+            }
+            Agent agent = resolveOne(resultDtoList, data, now);
+            if (agent == null) {
+                failMacList.add(data.getName());
+            } else {
+                forUpdateList.add(agent);
+            }
+        }
+
+        if (forUpdateList.size() > 0) {
+            insertBatch(forUpdateList);
+        }
+        LOGGER.info("已导入{}条设备数据", forUpdateList.size());
+        if (failMacList.size() > 0) {
+            throwImportFailException(failMacList);
+        }
+        return resultDtoList;
+    }
+
+    private void throwImportFailException(List<String> failMacList) {
+        LOGGER.info("======>>>>导入失败的产品名称：" + failMacList.toString());
+    }
+
+    private boolean resolveDate(List<AgentExcelTemplate> validData, AgentExcelTemplate data) {
+        List<AgentExcelTemplate> origin = new ArrayList<>();
+        origin.addAll(validData);
+        origin.remove(data);
+        for (AgentExcelTemplate template : origin) {
+            template.setName(template.getName());
+            if (template.getName().equalsIgnoreCase(data.getName())) {
+                return false;
+            }
+
+        }
+        return true;
+    }
+
+    private Agent resolveOne(List<AgentExportResultDto> resultDto, AgentExcelTemplate data, Date now) {
+        String name = data.getName().trim();
+        Agent agents = getDeviceLaunchAreaByName(name);
+        AgentExportResultDto dto = new AgentExportResultDto();
+        dto.setName(data.getName());
+
+        if (null != agents) {
+            dto.setReason(LeaseExceEnums.PRODUCT_IS_EXISTS.getMessage());
+            resultDto.add(dto);
+            return null;
+        }
+        else {
+
+            SysUser current = sysUserService.getCurrentUserOwner();
+            Agent agent = new Agent();
+            agent.setCtime(now);
+            agent.setUtime(now);
+            agent.setSysUserId(current.getId());
+            agent.setSysUserName(current.getUsername());
+            agent.setStatus(0);
+
+            agent.setProvince(data.getProvince());
+            agent.setCity(data.getCity());
+            agent.setArea(data.getArea());
+            agent.setAddress(data.getAddress());
+            agent.setName(name);
+
+            agent.setIsDeleted(BooleanEnum.FALSE.getCode());
+            return agent;
+        }
+    }
+
+    private Agent getDeviceLaunchAreaByName(String name){
+        return selectOne(new EntityWrapper<Agent>().eq("name", name));
     }
 
 }

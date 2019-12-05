@@ -5,6 +5,9 @@ import java.util.List;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.gizwits.boot.dto.Pageable;
 import com.gizwits.boot.dto.SysUserForPullDto;
+import com.gizwits.lease.constant.AgentExcelTemplate;
+import com.gizwits.lease.constant.DeviceLaunchAreaExcelTemplate;
+import com.gizwits.lease.device.entity.dto.DeviceLaunchAreaExportResultDto;
 import com.gizwits.lease.manager.dto.*;
 import com.gizwits.lease.manager.entity.Agent;
 import com.baomidou.mybatisplus.service.IService;
@@ -67,4 +70,9 @@ public interface AgentService extends IService<Agent> {
     Agent selectById(Integer id);
 
     boolean isAgent(Integer sysUserId);
+
+    /**
+     * 导入产品数据
+     */
+    List<AgentExportResultDto> importExcel(List<AgentExcelTemplate> needToImportData);
 }

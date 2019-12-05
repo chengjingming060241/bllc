@@ -1,4 +1,4 @@
-package com.gizwits.lease.device.entity.dto;
+package com.gizwits.lease.manager.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -9,9 +9,9 @@ import java.io.Serializable;
  * User: yinhui
  * Date: 2018-07-04
  */
-public class DeviceLaunchAreaExportResultDto implements Serializable{
+public class AgentExportResultDto implements Serializable{
 
-    @ApiModelProperty("仓库名称")
+    @ApiModelProperty("经销商名称")
     private String name;
     @ApiModelProperty("导入失败的原因")
     private String reason;
