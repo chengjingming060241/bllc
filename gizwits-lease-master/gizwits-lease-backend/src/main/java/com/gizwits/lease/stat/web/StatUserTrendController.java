@@ -44,9 +44,8 @@ public class StatUserTrendController extends BaseController {
     @RequestMapping(value = "/newTrend", method = RequestMethod.POST)
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
     public ResponseObject<List<StatTrendVo>> newTrend(@RequestBody @Valid ResponseObject<StatUserTrendDto> responseObject) {
-        SysUser currentUser = sysUserService.getCurrentUserOwner();
-        List<Integer> ids = sysUserService.resolveSysUserAllSubIds(currentUser);
-        List<StatTrendVo> list = statUserTrendService.getNewTrend(currentUser, responseObject.getData(), ids);
+
+        List<StatTrendVo> list = statUserTrendService.getNewTrend(responseObject.getData());
         return success(list);
     }
 
@@ -66,9 +65,7 @@ public class StatUserTrendController extends BaseController {
     @RequestMapping(value = "/totalTrend", method = RequestMethod.POST)
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
     public ResponseObject<List<StatTrendVo>> totalTrend(@RequestBody @Valid RequestObject<StatUserTrendDto> requestObject) {
-        SysUser currentUser = sysUserService.getCurrentUserOwner();
-        List<Integer> ids = sysUserService.resolveSysUserAllSubIds(currentUser);
-        List<StatTrendVo> list = statUserTrendService.getTotalTrend(currentUser, requestObject.getData(), ids);
+        List<StatTrendVo> list = statUserTrendService.getTotalTrend(requestObject.getData());
         return success(list);
     }
 

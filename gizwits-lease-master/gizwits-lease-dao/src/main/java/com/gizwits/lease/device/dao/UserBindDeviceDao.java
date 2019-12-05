@@ -2,6 +2,10 @@ package com.gizwits.lease.device.dao;
 
 import com.gizwits.lease.device.entity.UserBindDevice;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.gizwits.lease.device.vo.UserBindDeviceListVo;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +17,6 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 public interface UserBindDeviceDao extends BaseMapper<UserBindDevice> {
 
+    List<UserBindDeviceListVo> findBindDeviceByUserId(@Param("userId") Integer userid,@Param("current") Integer current,@Param("size") Integer size);
+    Integer findBindDeviceByUserIdCount(@Param("userId") Integer userid);
 }

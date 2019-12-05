@@ -22,4 +22,26 @@
 		<result column="is_read" property="isRead" />
 	</resultMap>
 
+    <select id="selectFeedBack" resultType="com.gizwits.lease.message.vo.FeedbackListVo" parameterType="com.gizwits.lease.message.entity.dto.FeedbackQueryDto">
+          select fb.id as id,fb.mobile as mobile,fb.type as type,fb.content as content,fb.picture_num as imgCount,fb.status as status,fb.ctime as ctime
+          from feedback_user fb where fb.is_deleted=0
+          <if test="mobile!=null">
+               and fb.mobile like concat('%',#{mobile},'%')
+          </if>
+        <if test="content!=null">
+            and fb.content like concat('%',#{content},'%')
+        </if>
+        order by fb.ctime
+        limit #{current},#{size}
+    </select>
+    <select id="selectFeedBackCount" resultType="java.lang.Integer" parameterType="com.gizwits.lease.message.entity.dto.FeedbackQueryDto">
+        select count(fb.id)
+        from feedback_user fb where fb.is_deleted=0
+        <if test="mobile!=null">
+            and fb.mobile like concat('%',#{mobile},'%')
+        </if>
+        <if test="content!=null">
+            and fb.content like concat('%',#{content},'%')
+        </if>
+    </select>
 </mapper>

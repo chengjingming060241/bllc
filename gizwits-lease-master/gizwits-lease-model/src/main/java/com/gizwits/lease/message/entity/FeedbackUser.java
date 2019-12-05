@@ -93,9 +93,45 @@ public class FeedbackUser extends Model<FeedbackUser> {
      */
 	@TableField("is_read")
 	private Integer isRead;
+    /**
+     * 反馈类型，1设备使用，2滤网问题，3app使用
+     */
+	private Integer type;
+    /**
+     * 反馈状态，0未处理，1已处理，默认未处理
+     */
+	private Integer status;
+    /**
+     * 删除标识位=，0未删除，1已删除
+     */
+    @TableField("is_deleted")
+	private Integer isDeleted;
 
+    public Integer getType() {
+        return type;
+    }
 
-	public Integer getId() {
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Integer getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Integer isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public Integer getId() {
 		return id;
 	}
 

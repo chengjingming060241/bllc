@@ -22,6 +22,7 @@ import com.gizwits.lease.message.entity.FeedbackUser;
 import com.gizwits.lease.message.entity.dto.FeedbackQueryDto;
 import com.gizwits.lease.message.entity.dto.FeedbackUserDto;
 import com.gizwits.lease.message.service.FeedbackUserService;
+import com.gizwits.lease.message.vo.FeedbackListVo;
 import com.gizwits.lease.product.service.ProductService;
 import com.gizwits.lease.user.entity.User;
 import com.gizwits.lease.user.entity.UserWxExt;
@@ -71,32 +72,22 @@ public class FeedbackUserServiceImpl extends ServiceImpl<FeedbackUserDao, Feedba
     @Autowired
     private SysUserExtService sysUserExtService;
 
+    @Autowired
+    private FeedbackUserDao feedbackUserDao;
+
     protected static Logger logger = LoggerFactory.getLogger(FeedbackUserServiceImpl.class);
 
     @Override
-    public Page<FeedbackUser> page(Pageable<FeedbackQueryDto> pageable) {
-        /*List<Product> products = productService.getProductsWithPermission();
-        List<Integer> productIds = new ArrayList<>();
-        for (Product p : products) {
-            productIds.add(p.getId());
-        }
-        List<String> deviceSno = new ArrayList<>();
-        if (!ParamUtil.isNullOrEmptyOrZero(productIds)) {
-            deviceSno = deviceService.getSnosByProductId(productIds);
-        }*/
-
-        Page<FeedbackUser> page = new Page<>();
-        BeanUtils.copyProperties(pageable, page);
-        EntityWrapper<FeedbackUser> entityWrapper = new EntityWrapper<>();
-        SysUser sysUser = sysUserService.getCurrentUserOwner();
-        entityWrapper.eq("recipient_id", sysUser.getId());
-        /*if (!ParamUtil.isNullOrEmptyOrZero(deviceSno)) {
-            entityWrapper.eq("recipient_id", sysUser.getId());
-            entityWrapper.in("sno", deviceSno);
-        } else {
-            entityWrapper.eq("recipient_id", sysUser.getId());
-        }*/
-        return selectPage(page, QueryResolverUtils.parse(pageable.getQuery(), entityWrapper));
+    public Page<FeedbackListVo> page(Pageable<FeedbackQueryDto> pageable) {
+        FeedbackQueryDto queryDto=pageable.getQuery();
+        queryDto.setCurrent((pageable.getCurrent()-1)*pageable.getSize());
+        queryDto.setSize(pageable.getSize());
+       Page<FeedbackListVo> page=new Page();
+       List<FeedbackListVo> list=feedbackUserDao.selectFeedBack(queryDto);
+       Integer total= feedbackUserDao.selectFeedBackCount(queryDto);
+       page.setTotal(total);
+       page.setRecords(list);
+       return page;
     }
 
     @Override

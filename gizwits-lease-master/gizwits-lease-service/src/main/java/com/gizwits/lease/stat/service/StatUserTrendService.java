@@ -23,11 +23,13 @@ public interface StatUserTrendService extends IService<StatUserTrend> {
 
     void setDataForStatUserTrend(Date today);
 
-    List<StatTrendVo> getNewTrend(SysUser currentUser, StatUserTrendDto statUserTrendDto, List<Integer> ids);
+    void statisticsUserTrend();
+
+    List<StatTrendVo> getNewTrend(StatUserTrendDto statUserTrendDto);
 
     List<StatTrendVo> getActiveTrend(SysUser currentUser, StatUserTrendDto statUserTrendDto, List<Integer> ids);
 
-    List<StatTrendVo> getTotalTrend(SysUser currentUser, StatUserTrendDto statUserTrendDto, List<Integer> ids);
+    List<StatTrendVo> getTotalTrend(StatUserTrendDto statUserTrendDto);
 
     StatSexVo getSexDistribution(SysUser currentUser, List<Integer> ids);
 

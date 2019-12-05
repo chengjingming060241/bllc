@@ -22,14 +22,8 @@
     </resultMap>
 
     <select id="getNewTrend" resultMap="BaseResultMap">
-        select * from (SELECT ctime,sum(new_count) new_count FROM stat_user_trend
+        select * from (SELECT ctime,sum(new_count) as newCount FROM stat_user_trend
         <where>
-            <if test="null !=ids and ids.size>0">
-                AND sys_user_id IN
-                <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
-                    #{item}
-                </foreach>
-            </if>
             <if test="dto.fromDate!=null and dto.toDate!=null">
                 And Date_format(ctime,'%Y-%m-%d') between Date_format(#{dto.fromDate},'%Y-%m-%d') and
                 Date_format(#{dto.toDate},'%Y-%m-%d')
@@ -115,4 +109,19 @@
         GROUP BY Date_format(ctime,'%Y-%m-%d')) t
         ORDER BY t.ctime
     </select>
+
+    <select id="getTotalTrend" resultMap="BaseResultMap" parameterType="com.gizwits.lease.stat.dto.StatUserTrendDto">
+        select ctime,total_count as totalCount from stat_user_trend
+        <include refid="trendWhereSql"/>
+        group by Date_format(ctime,'%Y-%m-%d')
+        order by ctime
+    </select>
+       <sql id="trendWhereSql">
+           <where>
+               <if test="fromDate!=null and toDate!=null">
+                   And Date_format(ctime,'%Y-%m-%d') between Date_format(#{fromDate},'%Y-%m-%d') and
+                   Date_format(#{toDate},'%Y-%m-%d')
+               </if>
+           </where>
+       </sql>
 </mapper>

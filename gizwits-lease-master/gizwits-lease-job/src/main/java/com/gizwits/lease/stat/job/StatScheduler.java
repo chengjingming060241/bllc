@@ -45,7 +45,7 @@ public class StatScheduler {
 
     protected static Logger logger = LoggerFactory.getLogger(StatScheduler.class);
 
-    @Scheduled(cron = "#{cronConfig.getOrderAnalysis()}")
+//    @Scheduled(cron = "#{cronConfig.getOrderAnalysis()}")
     public void startOrderAnalysis() {
         //开始时间
         logger.info("开始orderAnalysis时间为：" + DateKit.getTimestampString(new Date()));
@@ -55,26 +55,26 @@ public class StatScheduler {
         logger.info("结束orderAnalysis时间为：" + DateKit.getTimestampString(new Date()));
     }
 
-    @Scheduled(cron = "#{cronConfig.getDeviceTrend()}")
-//    @Scheduled(cron = "#{cronConfig.getDeviceOrderWidget()}")
+//    @Scheduled(cron = "#{cronConfig.getDeviceTrend()}")
+//    @Scheduled(cron = "#{cronConfig.getEveryFiveMin()}")
     public void startDeviceTrend() {
         logger.info("开始DeviceTrend时间为：" + DateKit.getTimestampString(new Date()));
         //完成设备趋势统计入库
-        statDeviceTrendService.setDataForStatDeviceTrend();
-
+//        statDeviceTrendService.setDataForStatDeviceTrend();
+        statDeviceTrendService.statisticsDeviceTrend();
         logger.info("结束DeviceTrend时间为：" + DateKit.getTimestampString(new Date()));
     }
 
-    @Scheduled(cron = "#{cronConfig.getUserTrend()}")
+    @Scheduled(cron = "#{cronConfig.getEveryFiveMin()}")
     public void startUserTrend() {
         logger.info("开始UserTrend时间为：" + DateKit.getTimestampString(new Date()));
         //完成用户趋势统计入库
-        statUserTrendService.setDataForStatUserTrend(new Date());
-
+//        statUserTrendService.setDataForStatUserTrend(new Date());
+        statUserTrendService.statisticsUserTrend();
         logger.info("结束UserTrend时间为：" + DateKit.getTimestampString(new Date()));
     }
 
-    @Scheduled(cron = "#{cronConfig.getDeviceLocation()}")
+//    @Scheduled(cron = "#{cronConfig.getDeviceLocation()}")
 //    @Scheduled(cron = "#{cronConfig.getDeviceOrderWidget()}")
     public void startDeviceLocation() {
         logger.info("开始DeviceLocation时间为：" + DateKit.getTimestampString(new Date()));
@@ -84,7 +84,7 @@ public class StatScheduler {
         logger.info("结束DeviceLocation时间为：" + DateKit.getTimestampString(new Date()));
     }
 
-    @Scheduled(cron = "#{cronConfig.getUserLocation()}")
+//    @Scheduled(cron = "#{cronConfig.getUserLocation()}")
     public void startUserLocation() {
         logger.info("开始UserLocation时间为：" + DateKit.getTimestampString(new Date()));
         //用户分布入库
@@ -93,7 +93,7 @@ public class StatScheduler {
         logger.info("结束UserLocation时间为：" + DateKit.getTimestampString(new Date()));
     }
 
-    @Scheduled(cron = "#{cronConfig.getDeviceOrderWidget()}")
+//    @Scheduled(cron = "#{cronConfig.getDeviceOrderWidget()}")
     public void startDeviceOrderWidget() {
         logger.info("开始DeviceOrderWidget时间为：" + DateKit.getTimestampString(new Date()));
 
@@ -102,7 +102,7 @@ public class StatScheduler {
         logger.info("结束DeviceOrderWidget时间为：" + DateKit.getTimestampString(new Date()));
     }
 
-    @Scheduled(cron = "#{cronConfig.getUserWidget()}")
+//    @Scheduled(cron = "#{cronConfig.getUserWidget()}")
     public void startUserWidget() {
         logger.info("开始UserWidget时间为：" + DateKit.getTimestampString(new Date()));
 

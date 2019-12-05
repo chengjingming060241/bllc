@@ -8,11 +8,9 @@ import com.gizwits.boot.base.ResponseObject;
 import com.gizwits.boot.dto.Pageable;
 import com.gizwits.lease.common.version.DefaultVersion;
 import com.gizwits.lease.common.version.Version;
+import com.gizwits.lease.device.vo.UserBindDeviceListVo;
 import com.gizwits.lease.enums.MoveType;
-import com.gizwits.lease.user.dto.QueryForUserListDTO;
-import com.gizwits.lease.user.dto.UserForDetailDto;
-import com.gizwits.lease.user.dto.UserForListDto;
-import com.gizwits.lease.user.dto.UserForMoveDto;
+import com.gizwits.lease.user.dto.*;
 import com.gizwits.lease.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -27,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.validation.Valid;
+import java.util.List;
 
 
 /**
@@ -52,12 +51,12 @@ public class UserController extends BaseController {
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
     @ApiOperation(value = "用户列表", notes = "分页查询", consumes = "application/json")
     @PostMapping(value = "/page")
-    @DefaultVersion(display = {"id","avatar","nickname","region","openid","authorizationTime","mobile"})
+    @DefaultVersion(display = {"avatar","nickname","mobile","username","ctime"})
     public ResponseObject<Page<UserForListDto>> page(@RequestBody @Valid RequestObject<Pageable<QueryForUserListDTO>> requestObject) {
 
         Pageable pageable = requestObject.getData();
         pageable.setAsc(false);
-        pageable.setOrderByField("authorization_time");
+        pageable.setOrderByField("ctime");
         return success(userService.pageForAffiliation(requestObject.getData()));
     }
 
@@ -72,14 +71,9 @@ public class UserController extends BaseController {
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
     @ApiOperation(value = "详情", consumes = "application/json")
     @PostMapping("/detail")
-    @DefaultVersion(display = {"avatar","nickname","openid","region","genderDesc","bindMobile","authorizationTime"})
+    @DefaultVersion(display = {"avatar","nickname","bindMobile","username","genderDesc","region","firstBuyTime","ctime"})
     public ResponseObject<UserForDetailDto> detail(@RequestBody RequestObject<String> requestObject) {
 
-        return success(userService.detail(requestObject.getData()));
-    }
-
-    @Version(uri = "/detail",version = "1.1",display = {"id","nickname","ctime","region","genderDesc","mobile","lastLoginTime","bindWechat"})
-    public ResponseObject<UserForDetailDto> detail2(@RequestBody RequestObject<String> requestObject) {
         return success(userService.detail(requestObject.getData()));
     }
 
@@ -117,9 +111,27 @@ public class UserController extends BaseController {
         return success(userService.searchUser(requestObject.getData()));
     }
 
+    @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
+    @ApiOperation(value = "添加用户", notes = "添加用户", consumes = "application/json")
+    @PostMapping(value = "/add")
+    public ResponseObject<Boolean> add(@RequestBody @Valid RequestObject<UserAddDto> requestObject) {
 
+        return success(userService.add(requestObject.getData()));
+    }
+    @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
+    @ApiOperation(value = "删除用户(可批量)", notes = "删除用户(可批量)", consumes = "application/json")
+    @PostMapping(value = "/delete")
+    public ResponseObject<Boolean> delete(@RequestBody @Valid RequestObject<List<Integer>> requestObject) {
 
+        return success(userService.delete(requestObject.getData()));
+    }
+    @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
+    @ApiOperation(value = "获取用户绑定的设备", notes = "删除用户(可批量)", consumes = "application/json")
+    @PostMapping(value = "/bindDeviceList")
+    public ResponseObject<Page<UserBindDeviceListVo>> bindDeviceList(@RequestBody @Valid RequestObject<Pageable<Integer>> requestObject) {
 
+        return success(userService.bindDeviceList(requestObject.getData()));
+    }
 
 
 

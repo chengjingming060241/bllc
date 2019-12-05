@@ -16,4 +16,18 @@
 		<result column="mobile" property="mobile" />
 	</resultMap>
 
+    <select id="findBindDeviceByUserId" resultType="com.gizwits.lease.device.vo.UserBindDeviceListVo">
+         select d.sno as sno,d.mac as mac,d.name as name,d.online_status as onlineStatus,d.product_name as productName,ubd.ctime as bindDate
+    from device d  join user_bind_device ubd on d.mac=ubd.mac
+	 left join user u on u.id=ubd.user_id where d.is_deleted=0 and ubd.is_deleted=0 and u.is_deleted=0
+	 and u.id=#{userId}
+	order by d.online_status
+	limit #{current},#{size}
+    </select>
+    <select id="findBindDeviceByUserIdCount" resultType="java.lang.Integer">
+         select count(d.sno)
+    from device d  join user_bind_device ubd on d.mac=ubd.mac
+	 left join user u on u.id=ubd.user_id where d.is_deleted=0 and ubd.is_deleted=0 and u.is_deleted=0
+	 and u.id=#{userId}
+    </select>
 </mapper>

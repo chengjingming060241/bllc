@@ -7,6 +7,7 @@ import com.gizwits.boot.base.ResponseObject;
 import com.gizwits.boot.sys.entity.SysUser;
 import com.gizwits.boot.sys.service.SysUserExtService;
 import com.gizwits.boot.sys.service.SysUserService;
+import com.gizwits.lease.device.service.DeviceService;
 import com.gizwits.lease.stat.dto.StatDeviceTrendDto;
 import com.gizwits.lease.stat.service.StatDeviceTrendService;
 import com.gizwits.lease.stat.vo.StatTrendVo;
@@ -42,13 +43,14 @@ public class StatDeviceTrendController extends BaseController {
     @Autowired
     private SysUserExtService sysUserExtService;
 
-    @ApiOperation(value = "获取设备新增趋势图数据（productId选填）")
+    @Autowired
+    private DeviceService deviceService;
+
+    @ApiOperation(value = "获取设备新增趋势图数据（productId填）")
     @RequestMapping(value = "/newTrend", method = RequestMethod.POST)
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
     public ResponseObject<List<StatTrendVo>> newTrend(@RequestBody @Valid RequestObject<StatDeviceTrendDto> requestObject) {
-        SysUser currentUser = sysUserService.getCurrentUserOwner();
-        List<Integer> ids = sysUserService.resolveSysUserAllSubIds(currentUser);
-        List<StatTrendVo> list = statDeviceTrendService.getNewTrend(requestObject.getData(), currentUser, ids);
+        List<StatTrendVo> list = statDeviceTrendService.getNewTrend(requestObject.getData());
         return success(list);
     }
 
@@ -57,10 +59,16 @@ public class StatDeviceTrendController extends BaseController {
     @RequestMapping(value = "/activeTrend", method = RequestMethod.POST)
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
     public ResponseObject<List<StatTrendVo>> activeTrend(@RequestBody @Valid RequestObject<StatDeviceTrendDto> requestObject) {
-        SysUser currentUser = sysUserService.getCurrentUserOwner();
-        List<Integer> ids = sysUserService.resolveSysUserAllSubIds(currentUser);
-        List<StatTrendVo> list = statDeviceTrendService.getActiveTrend(requestObject.getData(), currentUser, ids);
+        List<StatTrendVo> list = statDeviceTrendService.getActiveTrend(requestObject.getData());
         return success(list);
+    }
+    //设备总趋势
+    @ApiOperation(value = "获取设备总数趋势图数据（productId选填）")
+    @RequestMapping(value = "/allTotalTrend", method = RequestMethod.POST)
+    @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
+    public ResponseObject<List<StatTrendVo>> allTotalTrend(@RequestBody @Valid RequestObject<StatDeviceTrendDto> requestObject) {
+
+        return success(statDeviceTrendService.allTotalTrend(requestObject.getData()));
     }
 
     //设备订单率趋势
@@ -88,9 +96,7 @@ public class StatDeviceTrendController extends BaseController {
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
     @PostMapping("/alertDeviceTrend")
     public ResponseObject<List<StatTrendVo>> getAlertDeviceTrend(@RequestBody @Valid RequestObject<StatDeviceTrendDto> requestObject) {
-        SysUser currentUser = sysUserService.getCurrentUserOwner();
-        List<Integer> ids = sysUserService.resolveSysUserAllSubIds(currentUser);
-        List<StatTrendVo> list = statDeviceTrendService.getAlertDeviceTrend(requestObject.getData(), currentUser, ids);
+        List<StatTrendVo> list = statDeviceTrendService.getAlertDeviceTrend(requestObject.getData());
         return success(list);
     }
 
@@ -98,9 +104,7 @@ public class StatDeviceTrendController extends BaseController {
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
     @PostMapping("/faultDeviceTrend")
     public ResponseObject<List<StatTrendVo>> getFaultDeviceTrend(@RequestBody @Valid RequestObject<StatDeviceTrendDto> requestObject) {
-        SysUser currentUser = sysUserService.getCurrentUserOwner();
-        List<Integer> ids = sysUserService.resolveSysUserAllSubIds(currentUser);
-        List<StatTrendVo> list = statDeviceTrendService.getFaultDeviceTrend(requestObject.getData(), currentUser, ids);
+        List<StatTrendVo> list = statDeviceTrendService.getFaultDeviceTrend(requestObject.getData());
         return success(list);
     }
 }

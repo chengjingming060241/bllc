@@ -20,24 +20,40 @@
 
     <select id="getNewTrend" resultMap="BaseResultMap">
         <if test="dto.productId!=null">
-            SELECT ctime,new_count FROM stat_device_trend
-            WHERE sys_user_id = #{sysUserId}
-            AND product_id = #{dto.productId}
+            SELECT ctime,new_count as newCount FROM stat_device_trend
+             <include refid="getNewTrendWhereSql"/>
         </if>
         <if test="dto.productId ==null">
-            SELECT ctime,sum(new_count) AS new_count FROM stat_device_trend
-            WHERE sys_user_id = #{sysUserId}
+            SELECT ctime,sum(new_count) AS newCount FROM stat_device_trend
+            <include refid="getNewTrendWhereSqlProductIdIsNull"/>
         </if>
-        <if test="dto.fromDate!=null and dto.toDate!=null">
-            And Date_format(ctime,'%Y-%m-%d') between Date_format(#{dto.fromDate},'%Y-%m-%d') and
-            Date_format(#{dto.toDate},'%Y-%m-%d')
-        </if>
-        <if test="dto.productId ==null">
+
+        <if test="productId ==null">
             GROUP BY date_format(ctime,'%Y-%m-%d')
         </if>
         ORDER BY ctime
     </select>
+    <sql id="getNewTrendWhereSqlProductIdIsNull">
+        <where>
+            <if test="fromDate!=null and toDate!=null">
+                And Date_format(ctime,'%Y-%m-%d') between Date_format(#{fromDate},'%Y-%m-%d') and
+                Date_format(#{toDate},'%Y-%m-%d')
+            </if>
+        </where>
 
+    </sql>
+    <sql id="getNewTrendWhereSql">
+         <where>
+             <if test="productId!=null">
+                 and product_id=#{productId}
+             </if>
+             <if test="fromDate!=null and toDate!=null">
+                 And Date_format(ctime,'%Y-%m-%d') between Date_format(#{fromDate},'%Y-%m-%d') and
+                 Date_format(#{toDate},'%Y-%m-%d')
+             </if>
+         </where>
+
+    </sql>
     <select id="getNewTrendByIds" resultMap="BaseResultMap">
         select * from (SELECT ctime,sum(new_count) AS new_count,sum(previous_deivce_total) as previous_deivce_total FROM stat_device_trend
         <include refid="widgetWhere"/>
@@ -46,20 +62,19 @@
     </select>
 
     <select id="getActiveTrend" resultMap="BaseResultMap">
-        <if test="dto.productId!=null">
-            SELECT ctime,active_count FROM stat_device_trend
-            WHERE sys_user_id = #{sysUserId}
-            AND product_id = #{dto.productId}
+        <if test="productId!=null">
+            SELECT ctime,active_count as activeCount FROM stat_device_trend
+            WHERE product_id = #{productId}
         </if>
-        <if test="dto.productId==null">
-            SELECT ctime,sum(active_count) as active_count FROM stat_device_trend
-            WHERE sys_user_id = #{sysUserId}
+        <if test="productId==null">
+            SELECT ctime,sum(active_count) as activeCount FROM stat_device_trend
+            WHERE 1=1
         </if>
-        <if test="dto.fromDate!=null and dto.toDate!=null">
-            And Date_format(ctime,'%Y-%m-%d') between Date_format(#{dto.fromDate},'%Y-%m-%d') and
-            Date_format(#{dto.toDate},'%Y-%m-%d')
+        <if test="fromDate!=null and toDate!=null">
+            And Date_format(ctime,'%Y-%m-%d') between Date_format(#{fromDate},'%Y-%m-%d') and
+            Date_format(#{toDate},'%Y-%m-%d')
         </if>
-        <if test="dto.productId ==null">
+        <if test="productId ==null">
             GROUP BY date_format(ctime,'%Y-%m-%d')
         </if>
         ORDER BY ctime
@@ -108,15 +123,41 @@
     </select>
 
     <select id="getFaultDeviceTrend" resultMap="BaseResultMap">
-        SELECT ctime, SUM(fault_count) AS fault_count FROM stat_device_trend
-        <include refid="widgetWhere"/>
+        <if test="productId!=null">
+            SELECT ctime,fault_count as faultCount FROM stat_device_trend
+            WHERE product_id = #{productId}
+        </if>
+        <if test="productId==null">
+            SELECT ctime,sum(fault_count) as faultCount FROM stat_device_trend
+            WHERE 1=1
+        </if>
+        <if test="fromDate!=null and toDate!=null">
+            And Date_format(ctime,'%Y-%m-%d') between Date_format(#{fromDate},'%Y-%m-%d') and
+            Date_format(#{toDate},'%Y-%m-%d')
+        </if>
+        <if test="productId ==null">
+            GROUP BY date_format(ctime,'%Y-%m-%d')
+        </if>
+        ORDER BY ctime
     </select>
 
     <select id="getAlertDeviceTrend" resultMap="BaseResultMap">
-       select * from ( SELECT ctime, SUM(alert_count) AS alert_count FROM stat_device_trend
-        <include refid="widgetWhere"/>
-        GROUP BY date_format(ctime,'%Y-%m-%d')) t
-        ORDER BY t.ctime
+        <if test="productId!=null">
+            SELECT ctime,alert_count as alertCount FROM stat_device_trend
+            WHERE product_id = #{productId}
+        </if>
+        <if test="productId==null">
+            SELECT ctime,sum(alert_count) as alertCount FROM stat_device_trend
+            WHERE 1=1
+        </if>
+        <if test="fromDate!=null and toDate!=null">
+            And Date_format(ctime,'%Y-%m-%d') between Date_format(#{fromDate},'%Y-%m-%d') and
+            Date_format(#{toDate},'%Y-%m-%d')
+        </if>
+        <if test="productId ==null">
+            GROUP BY date_format(ctime,'%Y-%m-%d')
+        </if>
+        ORDER BY ctime
     </select>
 
     <sql id="widgetWhere">
@@ -124,17 +165,44 @@
         <if test="dto.productId !=null and dto.productId != 0">
             AND product_id = #{dto.productId}
         </if>
-        <if test="null !=ids and ids.size>0">
-            AND sys_user_id IN
-            <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
-                #{item}
-            </foreach>
-        </if>
         <if test="dto.fromDate!=null and dto.toDate!=null">
             And Date_format(ctime,'%Y-%m-%d') between Date_format(#{dto.fromDate},'%Y-%m-%d') and
             Date_format(#{dto.toDate},'%Y-%m-%d')
         </if>
        </where>
 
+    </sql>
+
+    <select id="getTotalTrend" parameterType="com.gizwits.lease.stat.dto.StatDeviceTrendDto" resultMap="BaseResultMap">
+        <if test="productId!=null">
+            SELECT ctime,new_count FROM stat_device_trend
+            <include refid="getTotalTrendWhereSql"/>
+        </if>
+        <if test="dto.productId ==null">
+            SELECT ctime,sum(new_count) AS new_count FROM stat_device_trend
+             <include refid="getTotalTrendWhereSqlProductIdIsNull"/>
+            GROUP BY date_format(ctime,'%Y-%m-%d')
+        </if>
+
+        order by ctime
+    </select>
+    <sql id="getTotalTrendWhereSqlProductIdIsNull">
+        <where>
+            <if test="fromDate!=null and toDate!=null">
+                And Date_format(ctime,'%Y-%m-%d') between Date_format(#{fromDate},'%Y-%m-%d') and
+                Date_format(#{toDate},'%Y-%m-%d')
+            </if>
+        </where>
+    </sql>
+    <sql id="getTotalTrendWhereSql">
+         <where>
+             <if test="productId!=null">
+                 and product_id=#{productId}
+             </if>
+             <if test="fromDate!=null and toDate!=null">
+                 And Date_format(ctime,'%Y-%m-%d') between Date_format(#{fromDate},'%Y-%m-%d') and
+                 Date_format(#{toDate},'%Y-%m-%d')
+             </if>
+         </where>
     </sql>
 </mapper>

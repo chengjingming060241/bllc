@@ -30,10 +30,15 @@ public class QueryForUserListDTO {
     @Query(field = "nickname", operator = Query.Operator.like)
     private String nickname;
 
-    @ApiModelProperty("手机号码")
+    @ApiModelProperty("绑定手机号")
     @Mobile
     @Query(field = "mobile",operator = Query.Operator.like)
     private String mobile;
+
+    @ApiModelProperty("联系方式")
+    @Mobile
+    @Query(field = "username",operator = Query.Operator.like)
+    private String username;
 
     @ApiModelProperty("用户状态：1：正常，2：黑名单")
     @Query(field = "status")

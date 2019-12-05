@@ -2,6 +2,9 @@ package com.gizwits.lease.user.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.gizwits.lease.stat.dto.StatUserTrendDto;
+import com.gizwits.lease.stat.entity.StatUserTrend;
+import com.gizwits.lease.stat.vo.StatLocationVo;
 import com.gizwits.lease.stat.vo.StatUserWidgetVo;
 import com.gizwits.lease.user.dto.QueryForUserListDTO;
 import com.gizwits.lease.user.dto.UserForQueryDto;
@@ -100,5 +103,11 @@ public interface UserDao extends BaseMapper<User> {
 
     //=====================//
     StatUserWidgetVo getUserWidget(@Param("date") Date date);
+
+    List<StatLocationVo> ditribution();
+
+    List<StatLocationVo> ditributionByCity(@Param("province") String province);
+
+
     //========================//
 }

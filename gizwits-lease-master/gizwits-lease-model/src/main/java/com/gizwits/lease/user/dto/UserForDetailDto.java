@@ -77,6 +77,17 @@ public class UserForDetailDto {
     private Date lastLoginTime;
 
     private Integer status;
+    @ApiModelProperty("新风机购买时间")
+    @JsonFormat(pattern = Constants.DEFAULT_DATE_PATTERN, timezone = "GMT+8")
+    private Date firstBuyTime;
+
+    public Date getFirstBuyTime() {
+        return firstBuyTime;
+    }
+
+    public void setFirstBuyTime(Date firstBuyTime) {
+        this.firstBuyTime = firstBuyTime;
+    }
 
     public String getWxOpenId() {
         return wxOpenId;

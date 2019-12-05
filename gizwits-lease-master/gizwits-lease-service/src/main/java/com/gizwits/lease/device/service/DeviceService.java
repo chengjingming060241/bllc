@@ -27,8 +27,11 @@ import com.gizwits.lease.model.DeviceAddressModel;
 import com.gizwits.lease.order.entity.OrderBase;
 import com.gizwits.lease.product.entity.Product;
 import com.gizwits.lease.stat.dto.StatDeviceDto;
+import com.gizwits.lease.stat.dto.StatDeviceTrendDto;
 import com.gizwits.lease.stat.vo.StatAlarmWidgetVo;
 import com.gizwits.lease.stat.vo.StatDeviceWidgetVo;
+import com.gizwits.lease.stat.vo.StatLocationVo;
+import com.gizwits.lease.stat.vo.StatTrendVo;
 
 import java.util.List;
 import java.util.Map;
@@ -313,6 +316,19 @@ public interface DeviceService extends IService<Device> {
      * @return
      */
     StatAlarmWidgetVo getAlarmAndFaultWidget(StatDeviceDto statDeviceDto);
+    /***
+     *   设备地区分布，排行榜--省份
+     * @param statDeviceDto
+     * @return
+     */
+    List<StatLocationVo> ditributionByProvince(StatDeviceDto statDeviceDto);
+
+    /***
+     *   设备地区分布,排行榜--城市
+     * @param statDeviceDto
+     * @return
+     */
+    List<StatLocationVo> ditributionByCity(StatDeviceDto statDeviceDto);
 
     //Sunny END//
 }

@@ -28,16 +28,22 @@ public interface StatDeviceTrendService extends IService<StatDeviceTrend> {
     void setDataForDeviceTrendForOwnerId(Date today, Date yesterday, Integer ownerId);
 
     void setDataForStatDeviceTrend();
+    void statisticsDeviceTrend();
 
-    List<StatTrendVo> getNewTrend(StatDeviceTrendDto statDeviceTrendDto, SysUser currentUser, List<Integer> ids);
+    List<StatTrendVo> getNewTrend(StatDeviceTrendDto statDeviceTrendDto);
 
-    List<StatTrendVo> getActiveTrend(StatDeviceTrendDto statDeviceTrendDto, SysUser currentUser, List<Integer> ids);
+    List<StatTrendVo> getActiveTrend(StatDeviceTrendDto statDeviceTrendDto);
 
     List<StatTrendVo> getUserPercentTrend(StatDeviceTrendDto statDeviceTrendDto, SysUser currentUser, List<Integer> ids);
 
     List<StatTrendVo> getNewActivatedTrend(StatDeviceTrendDto statDeviceTrendDto, SysUser currentUser, List<Integer> ids);
 
-    List<StatTrendVo> getFaultDeviceTrend(StatDeviceTrendDto statDeviceTrendDto, SysUser currentUser, List<Integer> ids);
+    List<StatTrendVo> getFaultDeviceTrend(StatDeviceTrendDto statDeviceTrendDto);
 
-    List<StatTrendVo> getAlertDeviceTrend(StatDeviceTrendDto statDeviceTrendDto, SysUser currentUser, List<Integer> ids);
+    List<StatTrendVo> getAlertDeviceTrend(StatDeviceTrendDto statDeviceTrendDto);
+
+    /**
+    * 设备总数趋势
+     */
+    List<StatTrendVo> allTotalTrend(StatDeviceTrendDto statDeviceTrendDto);
 }

@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.gizwits.lease.device.entity.Device;
 
 import com.gizwits.lease.stat.vo.StatAlarmWidgetVo;
+import com.gizwits.lease.stat.vo.StatDeviceStatisticsVo;
 import com.gizwits.lease.stat.vo.StatDeviceWidgetVo;
+import com.gizwits.lease.stat.vo.StatLocationVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -106,5 +108,17 @@ public interface DeviceDao extends BaseMapper<Device> {
     StatDeviceWidgetVo selectTotalDeviceCount(@Param("productId") Integer productId, @Param("date") Date date);
 
     StatAlarmWidgetVo getAlarmAndFaultWidget(@Param("productId") Integer productId);
+    /**
+     * 设备分布，排行榜，省
+     */
+    List<StatLocationVo> ditributionByProvince(@Param("productId") Integer productId);
+    /**
+     * 设备分布，排行榜，市
+     */
+    List<StatLocationVo> ditributionByCity(@Param("productId") Integer productId,@Param("province") String province);
+    /**
+     * 根据日期统计设备趋势情况
+     */
+    StatDeviceStatisticsVo getDeviceStatictics(@Param("productId") Integer productId,@Param("date") Date date);
     //==================END=============================//
 }

@@ -332,4 +332,70 @@ WHERE
         </if>
 	) AS warn
     </select>
+
+    <select id="ditributionByProvince" parameterType="java.lang.Integer" resultType="com.gizwits.lease.stat.vo.StatLocationVo">
+        select d.province as province, count(d.province) as deviceCount from device d where d.is_deleted=0
+        <if test="productId!=null">
+            and d.product_id=#{productId}
+        </if>
+         GROUP BY d.province
+    </select>
+    <select id="ditributionByCity"  resultType="com.gizwits.lease.stat.vo.StatLocationVo">
+        select d.city as province, count(d.city) as deviceCount from device d where d.is_deleted=0
+        <if test="province!=null and province!=''">
+            and d.province=#{province}
+        </if>
+        <if test="productId!=null">
+            and d.product_id=#{productId}
+        </if>
+        GROUP BY d.city
+    </select>
+
+    <select id="getDeviceStatictics" resultType="com.gizwits.lease.stat.vo.StatDeviceStatisticsVo">
+SELECT
+	*
+FROM
+	( SELECT count( d.sno ) AS total FROM device d WHERE d.is_deleted = 0 AND d.product_id = #{productId} ) AS total
+	JOIN (
+SELECT
+	count( d1.sno ) AS addCount
+FROM
+	device d1
+WHERE
+	d1.is_deleted = 0
+	AND d1.product_id = #{productId}
+	AND date_format( d1.ctime, '%Y-%m-%d' ) = date_format(#{date}, '%Y-%m-%d' )
+	) AS today
+	JOIN (
+SELECT
+	count( d2.sno ) AS activeCount
+FROM
+	device d2
+WHERE
+	d2.is_deleted = 0
+	AND d2.product_id = #{productId}
+	AND d2.online_status = 1
+	AND d2.work_status = 3
+	) AS active
+	JOIN (
+SELECT
+	count( d3.sno ) AS faultCount
+FROM
+	device d3
+WHERE
+	d3.is_deleted = 0
+	AND d3.product_id = #{productId}
+	AND d3.work_status = 6
+	) AS fault
+	JOIN (
+SELECT
+	count( d4.sno ) AS alarmCount
+FROM
+	device d4
+WHERE
+	d4.is_deleted = 0
+	AND d4.product_id = #{productId}
+	AND d4.work_status = 8
+	) AS alarm
+    </select>
 </mapper>
