@@ -6,6 +6,7 @@ import com.gizwits.lease.message.entity.FeedbackUser;
 import com.baomidou.mybatisplus.service.IService;
 import com.gizwits.lease.message.entity.dto.FeedbackUserDto;
 import com.gizwits.lease.message.entity.dto.FeedbackQueryDto;
+import com.gizwits.lease.message.vo.FeedbackListVo;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public interface FeedbackUserService extends IService<FeedbackUser> {
      * @param pageable
      * @return
      */
-    Page<FeedbackUser> page(Pageable<FeedbackQueryDto> pageable);
+    Page<FeedbackListVo> page(Pageable<FeedbackQueryDto> pageable);
 
     Integer countByUserName(Integer userId);
 
