@@ -33,6 +33,10 @@ import com.gizwits.lease.config.CommonSystemConfig;
 import com.gizwits.lease.constant.SexType;
 import com.gizwits.lease.constant.ThirdPartyUserType;
 import com.gizwits.lease.constant.UserStatus;
+import com.gizwits.lease.device.dao.UserBindDeviceDao;
+import com.gizwits.lease.device.entity.UserBindDevice;
+import com.gizwits.lease.device.service.UserBindDeviceService;
+import com.gizwits.lease.device.vo.UserBindDeviceListVo;
 import com.gizwits.lease.enums.MoveType;
 import com.gizwits.lease.enums.ThirdPartyLoginType;
 import com.gizwits.lease.enums.UserInfoState;
@@ -97,6 +101,12 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
 
     @Autowired
     private SysUserService sysUserService;
+
+    @Autowired
+    private UserBindDeviceService userBindDeviceService;
+
+    @Autowired
+    private UserBindDeviceDao userBindDeviceDao;
 
 
     private static Map<MoveType, UserStatus> map = new HashMap<>();
@@ -445,7 +455,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
     @Override
     public Page<UserForListDto> pageForAffiliation(Pageable<QueryForUserListDTO> pageable) {
 
-        SysUser parentAdmin = sysUserService.getCurrentUserOwner();
+//        SysUser parentAdmin = sysUserService.getCurrentUserOwner();
         Page<UserForListDto> resultPage = new Page<>();
         Page<User> page = new Page<>();
         BeanUtils.copyProperties(pageable, page);
@@ -453,7 +463,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
         wrapper.eq("is_deleted", DeleteStatus.NOT_DELETED.getCode());
 
         // 1、超级管理员可以查看所有的C端用户
-        if (parentAdmin.getIsAdmin().equals(SysUserType.SUPERADMIN.getCode())) {
+//        if (parentAdmin.getIsAdmin().equals(SysUserType.SUPERADMIN.getCode())) {
             page = selectPage(page, wrapper);
             List<UserForListDto> list = page.getRecords().stream().map(item -> {
                 UserForListDto dto = new UserForListDto(item);
@@ -463,49 +473,49 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
             BeanUtils.copyProperties(page, resultPage);
             resultPage.setRecords(list);
             return resultPage;
-        }
+//        }
 
-        // 2、厂商以及其管理员可以查看其名下的所有C端用户
-        if (parentAdmin.getIsAdmin().equals(SysUserType.MANUFACTURER.getCode())) {
-            List<Integer> integers = sysUserService.resolveSysUserAllSubIds(parentAdmin);
-
-            wrapper.in("sys_user_id",integers);
-            page = selectPage(page, wrapper);
-            List<UserForListDto> list = page.getRecords().stream().map(item -> {
-                UserForListDto dto = new UserForListDto(item);
-                dto.setAccount(item.getMobile());
-                return dto;
-            }).collect(Collectors.toList());
-            BeanUtils.copyProperties(page, resultPage);
-            resultPage.setRecords(list);
-            return resultPage;
-        }
-        /**
-         *
-         * 3、经销商以及经销商管理员可以查看其自身还有其下级经销商的所有设备绑定的C端用户
-         * 4、运营商以及运营商管理员可以查看其自身还有其下级经销商的所有设备绑定的C端用户
-         */
-        if (parentAdmin.getIsAdmin().equals(SysUserType.AGENT.getCode()) || parentAdmin.getIsAdmin().equals(SysUserType.OPERATOR.getCode())) {
-            List<Integer> subIds = sysUserService.resolveSysUserAllSubIds(parentAdmin);
-//            QueryForUserListDTO query = pageable.getQuery();
-//            query.setOwnerIds(subIds);
-//            // TODO 需要优化的地方
-//            query.setOrderByField(pageable.getOrderByField());
-//            query.setAsc(pageable.isAsc() ? "Asc" : "DESC");
-//            List<User> users = userDao.listAffiliation(query, pageable.getOffsetCurrent(), pageable.getSize());
-            wrapper.in("sys_user_id",subIds);
-            page = selectPage(page, wrapper);
-            List<UserForListDto> list = page.getRecords().stream().map(item -> {
-                UserForListDto dto = new UserForListDto(item);
-                dto.setAccount(item.getMobile());
-                return dto;
-            }).collect(Collectors.toList());
-            BeanUtils.copyProperties(pageable, resultPage);
-            resultPage.setRecords(list);
-            resultPage.setTotal(userDao.countAffiliation(pageable.getQuery()));
-            return resultPage;
-        }
-        return resultPage;
+//        // 2、厂商以及其管理员可以查看其名下的所有C端用户
+//        if (parentAdmin.getIsAdmin().equals(SysUserType.MANUFACTURER.getCode())) {
+//            List<Integer> integers = sysUserService.resolveSysUserAllSubIds(parentAdmin);
+//
+//            wrapper.in("sys_user_id",integers);
+//            page = selectPage(page, wrapper);
+//            List<UserForListDto> list = page.getRecords().stream().map(item -> {
+//                UserForListDto dto = new UserForListDto(item);
+//                dto.setAccount(item.getMobile());
+//                return dto;
+//            }).collect(Collectors.toList());
+//            BeanUtils.copyProperties(page, resultPage);
+//            resultPage.setRecords(list);
+//            return resultPage;
+//        }
+//        /**
+//         *
+//         * 3、经销商以及经销商管理员可以查看其自身还有其下级经销商的所有设备绑定的C端用户
+//         * 4、运营商以及运营商管理员可以查看其自身还有其下级经销商的所有设备绑定的C端用户
+//         */
+//        if (parentAdmin.getIsAdmin().equals(SysUserType.AGENT.getCode()) || parentAdmin.getIsAdmin().equals(SysUserType.OPERATOR.getCode())) {
+//            List<Integer> subIds = sysUserService.resolveSysUserAllSubIds(parentAdmin);
+////            QueryForUserListDTO query = pageable.getQuery();
+////            query.setOwnerIds(subIds);
+////            // TODO 需要优化的地方
+////            query.setOrderByField(pageable.getOrderByField());
+////            query.setAsc(pageable.isAsc() ? "Asc" : "DESC");
+////            List<User> users = userDao.listAffiliation(query, pageable.getOffsetCurrent(), pageable.getSize());
+//            wrapper.in("sys_user_id",subIds);
+//            page = selectPage(page, wrapper);
+//            List<UserForListDto> list = page.getRecords().stream().map(item -> {
+//                UserForListDto dto = new UserForListDto(item);
+//                dto.setAccount(item.getMobile());
+//                return dto;
+//            }).collect(Collectors.toList());
+//            BeanUtils.copyProperties(pageable, resultPage);
+//            resultPage.setRecords(list);
+//            resultPage.setTotal(userDao.countAffiliation(pageable.getQuery()));
+//            return resultPage;
+//        }
+//        return resultPage;
     }
 
     @Override
@@ -535,52 +545,17 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
 
     @Override
     public UserForDetailDto detail(String openid) {
-        User dbUser;
-        UserWxExt dbUserWxExt;
-
-        dbUser = getUserByIdOrOpenidOrMobile(openid);
+        User dbUser= getUserByIdOrOpenidOrMobile(openid);
         if (dbUser == null) {
             LeaseException.throwSystemException(LeaseExceEnums.USER_DONT_EXISTS);
         }
-
-        EntityWrapper<UserWxExt> extEntityWrapper = new EntityWrapper<>();
-        extEntityWrapper.eq("user_openid", dbUser.getOpenid());
-        dbUserWxExt = userWxExtService.selectOne(extEntityWrapper);
-
-        if (dbUserWxExt != null) {
-            dbUser.setMoveInBlackTime(dbUserWxExt.getMoveInBlackTime());
-            dbUser.setMoveOutBlackTime(dbUserWxExt.getMoveOutBlackTime());
-            dbUser.setStatus(dbUserWxExt.getStatus());
-            dbUser.setOpenid(dbUserWxExt.getOpenid());
-        }
-        // 暂时将创建时间当作授权时间
-        dbUser.setAuthorizationTime(dbUser.getCtime());
-        //兼容支付宝用户信息
-        if (dbUser.getOpenid() == null) {
-            dbUser.setOpenid(dbUser.getAlipayUnionid());
-        }
-
         UserForDetailDto result = new UserForDetailDto(dbUser);
         result.setGenderDesc(SexType.getName(dbUser.getGender()));
-        result.setOpenid(dbUser.getOpenid());
         if (StringUtils.isBlank(dbUser.getProvince()) && StringUtils.isBlank(dbUser.getCity())) {
             result.setRegion("未知");
         } else {
             result.setRegion(dbUser.getProvince() + "/" + dbUser.getCity());
         }
-
-        double balance = 0;
-//        UserWallet balanceWallet = userWalletService.selectUserWallet(dbUser.getId(), WalletEnum.BALENCE.getCode());
-//        if (balanceWallet != null) {
-//            balance += balanceWallet.getMoney();
-//        }
-//        UserWallet discountWallet = userWalletService.selectUserWallet(dbUser.getId(), WalletEnum.DISCOUNT.getCode());
-//        if (discountWallet != null) {
-//            balance += discountWallet.getMoney();
-//        }
-        result.setBalance(balance);
-        result.setAccount(result.getMobile());
-
         return result;
     }
 
@@ -1726,6 +1701,64 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
                     .doubleValue());
         });
         return list;
+    }
+
+    @Override
+    public Boolean add(UserAddDto userAddDto) {
+        //判断手机号是否已使用
+        User user=selectOne(new EntityWrapper<User>().eq("mobile",userAddDto.getMobile()).eq("is_deleted",DeleteStatus.NOT_DELETED.getCode()));
+         if(!ParamUtil.isNullOrEmptyOrZero(user)){
+             LeaseException.throwSystemException(LeaseExceEnums.USER_PHONE_EXISTS);
+         }
+          user=new User();
+         user.setCtime(new Date());
+         user.setUsername(userAddDto.getUsername());
+         user.setMobile(userAddDto.getMobile());
+         user.setGender(userAddDto.getGender());
+         user.setPassword(PasswordUtil.generate(userAddDto.getPassword()));
+         user.setLastLoginTime(new Date());
+        return insert(user);
+    }
+
+    @Override
+    public Boolean delete(List<Integer> ids) {
+
+        List<Integer> errorIds=new ArrayList<>();
+        Date date=new Date();
+        for(Integer id:ids){
+            User user=selectById(id);
+            //判断是否存在
+            if(ParamUtil.isNullOrEmptyOrZero(user)){
+                errorIds.add(id);
+            }
+            //判断是否有设备
+            Integer count=userBindDeviceService.selectCount(new EntityWrapper<UserBindDevice>().eq("user_id",id).eq("is_deleted",DeleteStatus.NOT_DELETED.getCode()));
+           if(count>0){
+               errorIds.add(id);
+           }
+           user.setUtime(date);
+           user.setIsDeleted(DeleteStatus.DELETED.getCode());
+           updateById(user);
+        }
+        if(errorIds!=null&&errorIds.size()>0){
+            LeaseException.throwSystemException(LeaseExceEnums.DELETE_USER_ERROR);
+        }
+        return true;
+    }
+
+    @Override
+    public Page<UserBindDeviceListVo> bindDeviceList(Pageable pageable) {
+
+        Integer userId=(Integer)pageable.getQuery();
+        Integer current=(pageable.getCurrent()-1)*pageable.getSize();
+        Integer size=pageable.getSize();
+         Page<UserBindDeviceListVo> page=new Page<>();
+         List<UserBindDeviceListVo> list=new ArrayList<>();
+         list=userBindDeviceDao.findBindDeviceByUserId(userId,current,size);
+         Integer total =userBindDeviceDao.findBindDeviceByUserIdCount(userId);
+         page.setRecords(list);
+         page.setTotal(total);
+        return page;
     }
     //===================================//
 

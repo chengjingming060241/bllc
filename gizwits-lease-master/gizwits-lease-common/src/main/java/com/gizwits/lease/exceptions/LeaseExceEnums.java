@@ -302,6 +302,7 @@ public enum LeaseExceEnums {
     //14xxxx 操作提示
     DONOT_REPAET_OPERATION("1400001","请勿重复操作"),
     SUCCESSFUL_OPERATION("1400002","更新成功"),
+    DELETE_USER_ERROR("1400003","部分用户删除失败，可能不存在或已有设备"),
     ;
     private String code;
     private String message;
