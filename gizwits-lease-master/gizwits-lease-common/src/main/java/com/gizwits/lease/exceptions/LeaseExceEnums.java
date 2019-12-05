@@ -9,6 +9,8 @@ public enum LeaseExceEnums {
     USER_DONT_EXISTS("1000000", "用户不存在"),
     OPERATOR_DONT_EXISTS("1000001", "运营商不存在"),
     PRODUCT_DONT_EXISTS("1000002", "该产品不存在"),
+    PRODUCT_IS_EXISTS("10000021", "该产品已存在"),
+    PRODUCTCATEGORY_IS_EXISTS("10000022", "品类不存在"),
     USERNAME_EXISTS("1000003", "用户名已存在"),
     FROZEN_OPERATION("1000004", "冻结运营状态"),
     OPERATOR_IS_NOT_CHILDREN("1000005", "运营商非直接子用户"),
@@ -282,7 +284,7 @@ public enum LeaseExceEnums {
     WORK_ORDER_SCAN_FAIL_LAUNCH_DIFF("1100017", "设备已被分配到别的投放点"),
     WORK_ORDER_SCAN_FAIL_OWNER_DIFF("1100018", "设备已被分配到别的代理商或运营商"),
 
-    //12xxxxx 初装费
+    //
     INSTALL_FEE_NO_RULE("1200001", "此设备不需要支付初装费"),
     INSTALL_FEE_NEED("1200002", "请先支付初装费"),
     INSTALL_FEE_RULE_LINK_FAIL("1200003", ""),

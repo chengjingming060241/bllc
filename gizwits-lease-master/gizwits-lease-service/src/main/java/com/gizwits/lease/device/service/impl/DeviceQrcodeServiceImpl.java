@@ -15,10 +15,7 @@ import com.gizwits.boot.sys.service.SysUserService;
 import com.gizwits.boot.utils.ParamUtil;
 import com.gizwits.boot.utils.SysConfigUtils;
 import com.gizwits.lease.config.CommonSystemConfig;
-import com.gizwits.lease.constant.BooleanEnum;
-import com.gizwits.lease.constant.DeviceExcelTemplate;
-import com.gizwits.lease.constant.DeviceNormalStatus;
-import com.gizwits.lease.constant.DeviceStatus;
+import com.gizwits.lease.constant.*;
 import com.gizwits.lease.device.entity.Device;
 import com.gizwits.lease.device.entity.dto.DeviceExport;
 import com.gizwits.lease.device.entity.dto.DeviceExportResultDto;
@@ -114,7 +111,7 @@ public class DeviceQrcodeServiceImpl implements DeviceQrcodeService {
     }
 
     @Override
-    public List<DeviceExportResultDto> importExcel(List<DeviceExcelTemplate> validData) {
+    public List<DeviceExportResultDto> importExcel(List<DeviceStockTemplate> validData) {
         if (CollectionUtils.isEmpty(validData)) {
             LeaseException.throwSystemException(LeaseExceEnums.EXCEL_NO_DATA);
         }
@@ -123,7 +120,7 @@ public class DeviceQrcodeServiceImpl implements DeviceQrcodeService {
         List<String> failMacList = new LinkedList<>();
         List<Device> forUpdateList = new LinkedList<>();
         Date now = new Date();
-        for (DeviceExcelTemplate data : validData) {
+        for (DeviceStockTemplate data : validData) {
             // 防止导入时文件格式为数值，将科学计数法转为数值
             String mac = data.getMac();
             BigDecimal decimal = new BigDecimal(mac);
@@ -172,25 +169,25 @@ public class DeviceQrcodeServiceImpl implements DeviceQrcodeService {
 //        LeaseException.throwSystemException(LeaseExceEnums.IMPORT_FAIL, sb.toString());
     }
 
-    private boolean resolveDate(List<DeviceExcelTemplate> validData, DeviceExcelTemplate data) {
-        List<DeviceExcelTemplate> origin = new ArrayList<>();
+    private boolean resolveDate(List<DeviceStockTemplate> validData, DeviceStockTemplate data) {
+        List<DeviceStockTemplate> origin = new ArrayList<>();
         origin.addAll(validData);
         origin.remove(data);
         String dataMac = data.getMac();
-        for (DeviceExcelTemplate template : origin) {
+        for (DeviceStockTemplate template : origin) {
             String mac = template.getMac();
             BigDecimal decimal = new BigDecimal(mac);
             mac = decimal.toPlainString();
             template.setMac(mac);
-            if (template.getQrcode().equalsIgnoreCase(data.getQrcode()) || mac.equalsIgnoreCase(dataMac)) {
+            if (template.getMac().equalsIgnoreCase(data.getMac()) || mac.equalsIgnoreCase(dataMac)) {
                 return false;
             }
         }
         return true;
     }
 
-    private Device resolveOne(List<DeviceExportResultDto> resultDto, DeviceExcelTemplate data, Date now) {
-        String qrcode = data.getQrcode().trim();
+    private Device resolveOne(List<DeviceExportResultDto> resultDto, DeviceStockTemplate data, Date now) {
+        String qrcode = data.getSn1().trim();
         String mac = data.getMac().trim();
         Device device = deviceService.getDeviceByQrcode(qrcode);
         DeviceExportResultDto dto = new DeviceExportResultDto();

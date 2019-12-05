@@ -9,7 +9,7 @@ public class DeviceExcelTemplate {
     /** 设备mac */
     private String mac;
 
-    /** 二维码(url地址) */
+    /** 二维码(url地址)  */
     private String qrcode;
 
     public DeviceExcelTemplate() {

@@ -3,6 +3,7 @@ package com.gizwits.lease.device.service;
 import java.util.List;
 
 import com.gizwits.lease.constant.DeviceExcelTemplate;
+import com.gizwits.lease.constant.DeviceStockTemplate;
 import com.gizwits.lease.device.entity.Device;
 import com.gizwits.lease.device.entity.dto.DeviceExport;
 import com.gizwits.lease.device.entity.dto.DeviceExportResultDto;
@@ -34,7 +35,7 @@ public interface DeviceQrcodeService {
     /**
      * 导入数据
      */
-    List<DeviceExportResultDto> importExcel(List<DeviceExcelTemplate> needToImportData);
+    List<DeviceExportResultDto> importExcel(List<DeviceStockTemplate> needToImportData);
 
 //    boolean importDeviceExcel(List<DeviceExport> validData, Integer productId);
 

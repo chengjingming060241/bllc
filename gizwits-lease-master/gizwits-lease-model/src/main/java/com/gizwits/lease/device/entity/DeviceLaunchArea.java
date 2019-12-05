@@ -89,6 +89,7 @@ public class DeviceLaunchArea extends Model<DeviceLaunchArea> {
 	 */
 	@TableField("maintainer_id")
 	private Integer maintainerId;
+
 	/**
 	 * 投放点经度
 	 */
