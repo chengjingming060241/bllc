@@ -13,7 +13,7 @@ import java.util.List;
 public class PreProductDto {
 
 
-    /** 品类下拉列表 */
+    /** 产品下拉列表 */
     private List<ProductCategoryForPullDto> productCategories = new ArrayList<ProductCategoryForPullDto>();
 
     /** 厂商账号 */
