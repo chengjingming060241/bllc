@@ -398,4 +398,48 @@ WHERE
 	AND d4.work_status = 8
 	) AS alarm
     </select>
+
+    <select id="selectDevices" resultType="com.gizwits.lease.device.entity.Device" parameterType="com.gizwits.lease.device.entity.dto.DeviceQueryDto">
+         select d.* from device d where d.is_deleted=0
+         <include refid="selectDevicesWhereSql"/>
+         order by d.ctime desc,d.status desc
+        limit #{current},#{size}
+    </select>
+    <select id="selectDevicesCount" resultType="java.lang.Integer" parameterType="com.gizwits.lease.device.entity.dto.DeviceQueryDto">
+        select count(d.sno) from device d where d.is_deleted=0
+        <include refid="selectDevicesWhereSql"/>
+    </select>
+    <sql id="selectDevicesWhereSql">
+        <if test="productId!=null and productId!=''">
+            and d.product_id=#{productId}
+        </if>
+        <if test="name!=null and name!=''">
+            and d.name like concat('%',#{name},'%')
+        </if>
+        <if test="mac!=null and mac!=''">
+            and d.mac like concat('%',#{mac},'%')
+        </if>
+        <if test="sn1!=null and sn1!=''">
+            and d.sn1 like concat('%',#{sn1},'%')
+        </if>
+        <if test="workStatus!=null and workStatus==1">
+            and d.work_status not in(6,8)
+        </if>
+        <if test="workStatus!=null and workStatus==2">
+            and d.work_status=6
+        </if>
+        <if test="workStatus!=null and workStatus==3">
+            and d.work_status=8
+        </if>
+        <if test="onlineStatus!=null and onlineStatus==1">
+            and d.online_status=1
+        </if>
+        <if test="onlineStatus!=null and onlineStatus==2">
+            and d.online_status=2
+        </if>
+        <if test="fromDate!=null and toDate!=null">
+            And Date_format(d.ctime,'%Y-%m-%d') between Date_format(#{fromDate},'%Y-%m-%d') and
+            Date_format(#{toDate},'%Y-%m-%d')
+        </if>
+    </sql>
 </mapper>

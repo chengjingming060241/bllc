@@ -160,10 +160,6 @@ public class DeviceAlarmServiceImpl extends ServiceImpl<DeviceAlarmDao, DeviceAl
             }
             String status = AlarmStatus.getName(d.getStatus());
             d.setDeviceAlarmStatus(status);
-            if (!ParamUtil.isNullOrEmptyOrZero(d.getDeviceLaunchAreaId())) {
-                DeviceLaunchArea deviceLaunchArea = deviceLaunchAreaService.selectById(d.getDeviceLaunchAreaId());
-                if(deviceLaunchArea!=null)d.setMobile(deviceLaunchArea.getMobile());
-            }
         }
 
         return deviceAlramInfoDtos;
@@ -571,21 +567,16 @@ public class DeviceAlarmServiceImpl extends ServiceImpl<DeviceAlarmDao, DeviceAl
     }
 
     @Override
-    public Page getPage(DeviceAlarmQueryDto deviceAlarmQueryDto) {
-        List<String> deviceSno = new ArrayList<>();
-        deviceSno = getDeviceSnos(deviceAlarmQueryDto);
-        int count = 0;
-        Page<DeviceAlramInfoDto> page = new Page<>();
-        if (!ParamUtil.isNullOrEmptyOrZero(deviceSno)) {
-            deviceAlarmQueryDto.setSnos(deviceSno);
-            logger.info(" 设备序列号：" + deviceSno.toString() + "，设备序列号查询：" + deviceAlarmQueryDto.getDeviceSno());
-            List<DeviceAlramInfoDto> deviceAlramInfoDtos = listPage(deviceAlarmQueryDto);
-            count = countDeviceAlram(deviceAlarmQueryDto);
-            page.setRecords(deviceAlramInfoDtos);
-            page.setCurrent(deviceAlarmQueryDto.getCurrentPage());
-            page.setTotal(count);
-            page.setSize(deviceAlarmQueryDto.getPageSize());
-        }
+    public Page getPage(DeviceAlarmQueryDto queryDto) {
+
+        Page<DeviceAlarm> page = new Page<>();
+           List<DeviceAlarm> list=deviceAlarmDao.selectDeviceAlamrOrFault(queryDto);
+           if(ParamUtil.isNullOrEmptyOrZero(list)){
+               return page;
+           }
+           Integer total=deviceAlarmDao.selectDeviceAlamrOrFaultCount(queryDto);
+           page.setRecords(list);
+           page.setTotal(total);
         return page;
     }
 
@@ -679,5 +670,10 @@ public class DeviceAlarmServiceImpl extends ServiceImpl<DeviceAlarmDao, DeviceAl
         Pageable<DeviceAlarmListPageQueryDto> pageable = null;
 
         return getDeviceAlramInfoById(pageable,id);
+    }
+
+    @Override
+    public Boolean delete(List<Integer> ids) {
+        return deleteBatchIds(ids);
     }
 }

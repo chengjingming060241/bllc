@@ -155,4 +155,45 @@
 		<include refid="appWhereSql"></include>
 	</select>
 
+
+    <select id="selectDeviceAlamrOrFault" resultType="com.gizwits.lease.device.entity.DeviceAlarm" parameterType="com.gizwits.lease.device.entity.dto.DeviceAlarmQueryDto">
+         select * from device_alarm
+        <if test="productId!=null and productId!=''">
+            left join product p on p.gizwits_product_key=da.product_key
+        </if>
+        where alarm_type=#{type}
+        <include refid="alamrOrFaultWhereSql"/>
+        order by ctime desc,status desc
+        limit #{currentPage},#{pageSize}
+    </select>
+    <select id="selectDeviceAlamrOrFaultCount" resultType="java.lang.Integer" parameterType="com.gizwits.lease.device.entity.dto.DeviceAlarmQueryDto">
+        select count(da.*) from device_alarm da
+         <if test="productId!=null and productId!=''">
+             left join product p on p.gizwits_product_key=da.product_key
+         </if>
+        where da.alarm_type=#{type}
+        <include refid="alamrOrFaultWhereSql"/>
+    </select>
+    <sql id="alamrOrFaultWhereSql">
+        <if test="productId!=null and productId!=''">
+            and p.product_id=#{productId}
+        </if>
+        <if test="sno!=null">
+            and da.sno=#{sno}
+        </if>
+        <if test="deviceMac!=null and deviceMac!=''">
+            and da.mac like  concat('%',#{deviceMac},'%')
+        </if>
+        <if test="status!=null">
+            and da.status={status}
+        </if>
+        <if test="content!=null and content!=''">
+            and da.content like  concat('%',#{content},'%')
+        </if>
+        <if test="fromDate!=null and toDate!=null">
+            And Date_format(da.ctime,'%Y-%m-%d') between Date_format(#{fromDate},'%Y-%m-%d') and
+            Date_format(#{toDate},'%Y-%m-%d')
+        </if>
+    </sql>
+
 </mapper>

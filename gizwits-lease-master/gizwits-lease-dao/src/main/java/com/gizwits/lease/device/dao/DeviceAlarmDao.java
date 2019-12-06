@@ -39,4 +39,9 @@ public interface DeviceAlarmDao extends BaseMapper<DeviceAlarm> {
 
     Integer getRecord(@Param("sysUserId") Integer sysUserId,@Param("productId") Integer productId,@Param("start") Date start,@Param("end")Date end);
 
+    //=================================//
+    List<DeviceAlarm> selectDeviceAlamrOrFault(DeviceAlarmQueryDto queryDto);
+    Integer selectDeviceAlamrOrFaultCount(DeviceAlarmQueryDto queryDto);
+
+    //==================================//
 }

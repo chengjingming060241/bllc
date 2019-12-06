@@ -330,7 +330,7 @@ public class ExportController extends BaseController {
     }
 
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
-    @ApiOperation(value = "告警设备列表导出", consumes = "application/json")
+    @ApiOperation(value = "告警(故障）设备列表导出", consumes = "application/json")
     @PostMapping("/device/deviceAlarm/export")
     public void deviceAlarm(@RequestBody @Valid RequestObject<ExportHelper<DeviceAlarmQueryDto, Integer>> requestObject, HttpServletResponse response) {
         ExportHelper<DeviceAlarmQueryDto, Integer> helper = requestObject.getData();
@@ -339,23 +339,20 @@ public class ExportController extends BaseController {
         query.setPageSize(getDefaultExportSize());
         query.setIds(helper.getIds());
         List<DeviceAlramInfoDto> result = deviceAlarmService.listPage(query);
-        export("告警设备列表", helper, result, response);
+        String fileName=query.getType()==0?"告警设备列表":"故障设备列表";
+        export(fileName, helper, result, response);
     }
 
-//    @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
-//    @ApiOperation(value = "设备列表导出", consumes = "application/json")
-//    @PostMapping("/device/device/export")
-//    public void device(@RequestBody @Valid RequestObject<ExportHelper<DeviceQueryDto, String>> requestObject, HttpServletResponse response) {
-//        ExportHelper<DeviceQueryDto, String> helper = requestObject.getData();
-//        Pageable<DeviceQueryDto> pageable = getPageable();
-//        pageable.setQuery(Objects.isNull(helper.getQuery()) ? new DeviceQueryDto() : helper.getQuery());
-//        pageable.getQuery().setIds(helper.getIds());
-//        pageable.getQuery().setIsDeleted(DeleteStatus.NOT_DELETED.getCode());
-//        pageable.getQuery().setAccessableOwnerIds(sysUserService.resolveSysUserAllSubAdminIds(sysUserService.getCurrentUserOwner()));
-//        pageable.getQuery().setOperatorAccountId(null);
-//        Page<DeviceShowDto> result = deviceService.listPage(pageable);
-//        export("设备列表", helper, result.getRecords(), response);
-//    }
+    @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
+    @ApiOperation(value = "设备列表导出", consumes = "application/json")
+    @PostMapping("/device/device/export")
+    public void device(@RequestBody @Valid RequestObject<ExportHelper<DeviceQueryDto, String>> requestObject, HttpServletResponse response) {
+        ExportHelper<DeviceQueryDto, String> helper = requestObject.getData();
+        Pageable<DeviceQueryDto> pageable = getPageable();
+        pageable.setQuery(Objects.isNull(helper.getQuery()) ? new DeviceQueryDto() : helper.getQuery());
+        Page<DeviceShowDto> result = deviceService.listPage(pageable);
+        export("设备列表", helper, result.getRecords(), response);
+    }
 
 
 

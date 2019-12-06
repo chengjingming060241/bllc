@@ -151,4 +151,6 @@ public interface DeviceAlarmService extends IService<DeviceAlarm> {
     Page<DeviceAlarmListVo>  deviceAlarmListManager(Pageable<String> pageable);
 
     DeviceAlarmDetailDto getDeviceAlramInfoById(Integer id);
+
+    Boolean delete(List<Integer> ids);
 }

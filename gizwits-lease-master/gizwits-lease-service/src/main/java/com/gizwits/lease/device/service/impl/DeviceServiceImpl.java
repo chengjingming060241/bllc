@@ -68,6 +68,7 @@ import com.gizwits.lease.user.service.UserWeixinService;
 import com.gizwits.lease.util.*;
 
 import groovy.util.IFileNameFinder;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang.RandomStringUtils;
@@ -160,6 +161,9 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceDao, Device> implements
 
     @Autowired
     private ProductCategoryService productCategoryService;
+
+    @Autowired
+    private UserBindDeviceService userBindDeviceService;
 
 
 
@@ -832,36 +836,46 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceDao, Device> implements
 //            result.setWorkStatus(device.getFaultStatus());
 //        }
 
+        result.setImei(device.getiMEI());
+        result.setSn1(device.getsN1());
+        result.setStatus(device.getStatus());
         result.setProductKey(product.getGizwitsProductKey());
         result.setLock(device.getLock());
         result.setOnlineStatusDesc(DeviceStatus.getName(result.getOnlineStatus()));
+        //获取经销商
+        if(device.getAgentId()!=null) {
+            Agent agent = agentService.getAgentBySysAccountId(device.getAgentId());
+            if (!ParamUtil.isNullOrEmptyOrZero(agent)) {
+                result.setBelongOperatorName(agent.getName());
+            }
+        }
 //        result.setServiceMode(resolveServiceMode(device.getServiceId()));
         //查看设备的所有收费模式
-        List<Integer> modeIds = deviceToProductServiceModeService.resolveServiceModeIdBySno(id);
-        if (!ParamUtil.isNullOrEmptyOrZero(modeIds)) {
-            List<ProductServiceDetailForDeviceDto> serviceDetailForDeviceDtos = new ArrayList<>();
-            for (Integer modeId : modeIds) {
-                serviceDetailForDeviceDtos.add(resolveServiceMode(modeId));
-            }
-            result.setServiceMode(serviceDetailForDeviceDtos);
-        }
-        result.setLaunchArea(resolveLaunchArea(device.getLaunchAreaId()));
+//        List<Integer> modeIds = deviceToProductServiceModeService.resolveServiceModeIdBySno(id);
+//        if (!ParamUtil.isNullOrEmptyOrZero(modeIds)) {
+//            List<ProductServiceDetailForDeviceDto> serviceDetailForDeviceDtos = new ArrayList<>();
+//            for (Integer modeId : modeIds) {
+//                serviceDetailForDeviceDtos.add(resolveServiceMode(modeId));
+//            }
+//            result.setServiceMode(serviceDetailForDeviceDtos);
+//        }
+//        result.setLaunchArea(resolveLaunchArea(device.getLaunchAreaId()));
 //        result.setCanModifyLaunchArea(deviceLaunchAreaAssignService.canModify(device.getLaunchAreaId()));
-        result.setBelongOperatorName(resolveOwner(device.getOwnerId()));
-        result.setControlCommands(getDeviceControlCommandWithNowStatus(product, device.getMac()));
+//        result.setBelongOperatorName(resolveOwner(device.getOwnerId()));
+//        result.setControlCommands(getDeviceControlCommandWithNowStatus(product, device.getMac()));
 
 
 
-        //查看是否有权限修改
-        SysUser userOwner = sysUserService.getCurrentUserOwner();
-        //查看是否能够添加多个收费模式
-        result.setCanAddMoreServiceMode(sysUserService.resolveAddMoreServiceMode(userOwner));
-        if (Objects.equals(device.getOwnerId(), userOwner.getId())) {
-            result.setCanModify(true);
-            result.setCanModifyLaunchArea(true);
-//            result.setCanModifyServiceMode(true);
-        }
-        result.setCanModifyServiceMode(true);
+//        //查看是否有权限修改
+//        SysUser userOwner = sysUserService.getCurrentUserOwner();
+//        //查看是否能够添加多个收费模式
+//        result.setCanAddMoreServiceMode(sysUserService.resolveAddMoreServiceMode(userOwner));
+//        if (Objects.equals(device.getOwnerId(), userOwner.getId())) {
+//            result.setCanModify(true);
+//            result.setCanModifyLaunchArea(true);
+////            result.setCanModifyServiceMode(true);
+//        }
+//        result.setCanModifyServiceMode(true);
         return result;
     }
 
@@ -1294,72 +1308,22 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceDao, Device> implements
 
     @Override
     public Page<DeviceShowDto> listPage(Pageable<DeviceQueryDto> pageable) {
+        DeviceQueryDto queryDto=pageable.getQuery()==null?new DeviceQueryDto():pageable.getQuery();
 
-        Page<Device> page = new Page<>();
-        BeanUtils.copyProperties(pageable, page);
-        DeviceQueryDto queryDto = pageable.getQuery();
-        if (null != queryDto.getWorkStatus()) {
-            handleQueryWorkStatus(queryDto);
-        }
-
-        Wrapper<Device> wrapper = new EntityWrapper<>();
-
-        //修改时间
-        if (pageable.getQuery().getUpTimeStart()!=null && pageable.getQuery().getUpTimeEnd()!=null){
-            wrapper.between("ctime",pageable.getQuery().getUpTimeStart(),pageable.getQuery().getUpTimeEnd());
-        }
-        wrapper.orderBy("ctime", false);  //根据更新时间排序
-
-        Page<Device> page1 = selectPage(page,
-                QueryResolverUtils.parse(pageable.getQuery(), wrapper));
-        List<Device> devices = page1.getRecords();
+        Integer current=(pageable.getCurrent()-1)*pageable.getSize();
+        Integer size=pageable.getSize();
+        queryDto.setCurrent(current);
+        queryDto.setSize(size);
         Page<DeviceShowDto> result = new Page<>();
-        BeanUtils.copyProperties(page1, result);
+        List<Device> devices=deviceDao.selectDevices(queryDto);
+        if(ParamUtil.isNullOrEmptyOrZero(devices)){
+            return result;
+        }
+        Integer count=deviceDao.selectDevicesCount(queryDto);
         List<DeviceShowDto> list = getDeviceShowDtos(devices);
         result.setRecords(list);
+        result.setTotal(count);
         return result;
-    }
-
-    @Override
-    public Page<DeviceShowDto> listPage2(Pageable<DeviceQueryDto> pageable) {
-
-        Page<Device> page = new Page<>();
-        BeanUtils.copyProperties(pageable, page);
-        DeviceQueryDto queryDto = pageable.getQuery();
-        if (!ParamUtil.isNullOrEmptyOrZero(queryDto.getWorkStatus())) {
-            handleQueryWorkStatus(queryDto);
-        }
-
-        Wrapper<Device> wrapper = new EntityWrapper<>();
-        wrapper.eq("is_deleted", DeleteStatus.NOT_DELETED.getCode()).orderBy("last_online_time", false);
-
-        Page<Device> page1 = selectPage(page,
-                QueryResolverUtils.parse(pageable.getQuery(), wrapper));
-        List<Device> devices = page1.getRecords();
-        Page<DeviceShowDto> result = new Page<>();
-        BeanUtils.copyProperties(page1, result);
-        List<DeviceShowDto> list = getDeviceShowDtos2(devices);
-        result.setRecords(list);
-        return result;
-    }
-
-    /**
-     * 因为GDMS只有正常，故障，报警三种状态，所以在查询的时候需要转化成fault_status状态查询
-     *
-     * @param queryDto
-     */
-    private void handleQueryWorkStatus(DeviceQueryDto queryDto) {
-        if (queryDto.getWorkStatus().equals(DeviceStatus.LOCKED.getCode())) {
-            queryDto.setLock(true);
-            queryDto.setWorkStatus(null);
-        } else if (queryDto.getWorkStatus().equals(DeviceStatus.FAULT.getCode()) || queryDto.getWorkStatus().equals(DeviceStatus.ALERT.getCode()) || queryDto.getWorkStatus().equals(DeviceStatus.NORMAL.getCode())) {
-            queryDto.setLock(false);
-            queryDto.setFaultStatus(queryDto.getWorkStatus());
-            queryDto.setWorkStatus(null);
-        } else {
-            queryDto.setLock(false);
-            queryDto.setFaultStatus(DeviceStatus.NORMAL.getCode());
-        }
     }
 
     private List<DeviceShowDto> getDeviceShowDtos(List<Device> devices) {
@@ -1396,7 +1360,7 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceDao, Device> implements
         if (pageable.getQuery() == null) {
             pageable.setQuery(new DeviceQueryDto());
         }
-        pageable.getQuery().setDeviceLaunchAreaIdList(deviceLaunchAreaIdList);
+//        pageable.getQuery().setDeviceLaunchAreaIdList(deviceLaunchAreaIdList);
 
         Page<Device> page = new Page<>();
         BeanUtils.copyProperties(pageable, page);
@@ -1536,51 +1500,22 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceDao, Device> implements
     public String deleteDevice(List<String> snos) {
         List<String> fails = new LinkedList<>();
         StringBuilder sb = new StringBuilder();
+        Date date=new Date();
         List<Device> devices = selectList(new EntityWrapper<Device>().in("sno", snos).eq("is_deleted", DeleteStatus.NOT_DELETED.getCode()));
         for (Device device : devices) {
-            //判断是否拥有删除此设备的权限
-            if (manufacturerService.selectOne(new EntityWrapper<Manufacturer>().eq("sys_account_id", device.getOwnerId()).eq("is_deleted", DeleteStatus.NOT_DELETED.getCode())) != null) {
-                //判断设备是否有使用中订单
-                OrderBase usingOrder = orderBaseService.getDeviceLastOrderByStatus(device.getSno(), OrderStatus.USING.getCode());
-                if (!ParamUtil.isNullOrEmptyOrZero(usingOrder)) {
-                    fails.add(device.getMac());
-                    continue;
-                }
-                device.setUtime(new Date());
-                device.setIsDeleted(DeleteStatus.DELETED.getCode());
-                updateById(device);
-
-                //删除收费模式与设备的对应关系，现在一个设备可以对应多个收费模式
-                DeviceToProductServiceMode deviceToProductServiceMode = new DeviceToProductServiceMode();
-                deviceToProductServiceMode.setUtime(new Date());
-                deviceToProductServiceMode.setIsDeleted(DeleteStatus.DELETED.getCode());
-                EntityWrapper<DeviceToProductServiceMode> entity = new EntityWrapper<>();
-                entity.eq("sno", device.getSno());
-                deviceToProductServiceModeService.update(deviceToProductServiceMode, entity);
-                // 清除设备缓存日志
-                Product product = productService.getProductByDeviceSno(device.getSno());
-                if (!ParamUtil.isNullOrEmptyOrZero(product)) {
-                    redisService.deleteDeviceCurrentStatus(product.getGizwitsProductKey(), device.getMac());
-                }
-            } else {
-                fails.add(device.getMac());
-
+           //判断设备是否被app用户绑定
+            UserBindDevice userBindDevice=userBindDeviceService.selectOne(new EntityWrapper<UserBindDevice>().eq("mac",device.getMac()).eq("is_deleted",0));
+            if(!ParamUtil.isNullOrEmptyOrZero(userBindDevice)){
+                //存在就解绑
+                userBindDevice.setUtime(date);
+                userBindDevice.setIsDeleted(DeleteStatus.DELETED.getCode());
+                userBindDeviceService.updateById(userBindDevice);
             }
+            device.setUtime(date);
+            device.setIsDeleted(DeleteStatus.DELETED.getCode());
+            updateById(device);
         }
-        switch (fails.size()) {
-            case 0:
-                sb.append("删除成功");
-                break;
-            case 1:
-                sb.append("设备mac[" + fails.get(0) + "]已有归属/有使用中订单，请先解绑设备/结束订单并重试。");
-                break;
-            case 2:
-                sb.append("设备mac[" + fails.get(0) + "],[" + fails.get(1) + "]已有归属/有使用中订单，请先解绑设备/结束订单并重试。");
-                break;
-            default:
-                sb.append("设备mac[" + fails.get(0) + "],[" + fails.get(1) + "]已有归属/有使用中订单，请先解绑设备/结束订单并重试。");
-                break;
-        }
+        sb.append("删除成功");
         return sb.toString();
     }
 
@@ -2090,6 +2025,16 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceDao, Device> implements
         });
         Collections.sort(vo);
         return vo;
+    }
+
+    @Override
+    public User getBindUser(String sno) {
+        Device device=selectById(sno);
+        if(ParamUtil.isNullOrEmptyOrZero(device)){
+            LeaseException.throwSystemException(LeaseExceEnums.DEVICE_DONT_EXISTS);
+        }
+        User user=userService.getBindUser(device.getMac());
+        return user;
     }
 
 //===============================END==============================================//

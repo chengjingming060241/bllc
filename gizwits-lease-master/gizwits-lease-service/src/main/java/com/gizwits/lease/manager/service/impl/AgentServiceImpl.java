@@ -396,7 +396,7 @@ public class AgentServiceImpl extends ServiceImpl<AgentDao, Agent> implements Ag
                 //判断该代理商下是否有设备
                 List<Integer> ownerIds = sysUserService.resolveSysUserAllSubIds(sysUserService.getSysUserOwner(agentAccount));
                 DeviceQueryDto query = new DeviceQueryDto();
-                query.setAccessableOwnerIds(ownerIds);
+//                query.setAccessableOwnerIds(ownerIds);
                 int count = deviceService.selectCount(QueryResolverUtils.parse(query, new EntityWrapper<>()));
                 return count > 0 ? StatusType.OPERATING.getCode() : StatusType.NEED_TO_ASSIGN.getCode();
             }

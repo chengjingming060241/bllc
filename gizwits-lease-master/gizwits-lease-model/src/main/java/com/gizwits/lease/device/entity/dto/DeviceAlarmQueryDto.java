@@ -1,9 +1,11 @@
 package com.gizwits.lease.device.entity.dto;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 
 /**
  * 故障信息查询条件Dto
@@ -13,15 +15,19 @@ public class DeviceAlarmQueryDto implements Serializable{
 
     private String deviceMac;
     private String deviceName;
-    private String deviceLaunchArea;
-    private String deviceSno;
-    private String  deviceAlramName;
     private Integer status;
     private Integer type;
     private Integer productId;
 
+    private String content;//内容
+
+    private Date fromDate;
+    private Date toDate;
+
     private Integer pageSize;
     private Integer currentPage;
+
+    private String sno;
 
     @JsonIgnore
     private Integer start;
@@ -33,6 +39,38 @@ public class DeviceAlarmQueryDto implements Serializable{
 
     @JsonIgnore
     private List<Integer> ids;
+
+    public String getSno() {
+        return sno;
+    }
+
+    public Date getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(Date fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public Date getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(Date toDate) {
+        this.toDate = toDate;
+    }
+
+    public void setSno(String sno) {
+        this.sno = sno;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 
     public Integer getType() {
         return type;
@@ -58,25 +96,6 @@ public class DeviceAlarmQueryDto implements Serializable{
         this.deviceName = deviceName;
     }
 
-    public String getDeviceLaunchArea() {
-        return deviceLaunchArea;
-    }
-
-    public void setDeviceLaunchArea(String deviceLaunchArea) {
-        this.deviceLaunchArea = deviceLaunchArea;
-    }
-
-    public String getDeviceSno() {return deviceSno;}
-
-    public void setDeviceSno(String deviceSno) {this.deviceSno = deviceSno;}
-
-    public String getDeviceAlramName() {
-        return deviceAlramName;
-    }
-
-    public void setDeviceAlramName(String deviceAlramName) {
-        this.deviceAlramName = deviceAlramName;
-    }
 
     public Integer getStatus() {
         return status;

@@ -3,6 +3,7 @@ package com.gizwits.lease.device.dao;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.gizwits.lease.device.entity.Device;
 
+import com.gizwits.lease.device.entity.dto.DeviceQueryDto;
 import com.gizwits.lease.stat.vo.StatAlarmWidgetVo;
 import com.gizwits.lease.stat.vo.StatDeviceStatisticsVo;
 import com.gizwits.lease.stat.vo.StatDeviceWidgetVo;
@@ -120,5 +121,11 @@ public interface DeviceDao extends BaseMapper<Device> {
      * 根据日期统计设备趋势情况
      */
     StatDeviceStatisticsVo getDeviceStatictics(@Param("productId") Integer productId,@Param("date") Date date);
+
+    /**
+     * 设备列表
+     */
+    List<Device> selectDevices(DeviceQueryDto deviceQueryDto);
+    Integer selectDevicesCount(DeviceQueryDto deviceQueryDto);
     //==================END=============================//
 }

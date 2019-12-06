@@ -116,18 +116,18 @@ public class DeviceGroupController extends BaseController {
     @Version(uri = "/deviceList",version = "1.1")
     public ResponseObject<Page<DeviceShowDto>> deviceList2(@RequestBody @Valid RequestObject<Pageable<DeviceGroupForDeviceListQueryDto>> requestObject) {
         Pageable<DeviceQueryDto> pageable = new Pageable<>();
-        BeanUtils.copyProperties(requestObject.getData(), pageable, "query");
-        pageable.setQuery(new DeviceQueryDto());
-        //group_id为空的数据，即未分组的设备
-        //pageable.getQuery().setDeviceGroupId(-1);
-        if (Objects.nonNull(requestObject.getData().getQuery())) {
-            pageable.getQuery().setProductId(requestObject.getData().getQuery().getProductId());
-            pageable.getQuery().setIgnoreOrigin(requestObject.getData().getQuery().getIgnoreOrigin());
-        }
-        pageable.getQuery().setExcludeIds(deviceGroupService.resolveDeviceAlreadyInGroup());
-        // pageable.getQuery().setAccessableOwnerIds(sysUserService.resolveAccessableUserIds(sysUserService.getCurrentUser(), false, true));
-        // 分组的目的就是分组后统一分配，所以只列出属于自己的设备，只有属于自己的才能被自己分配
-        pageable.getQuery().setAccessableOwnerIds(Collections.singletonList(sysUserService.getCurrentUserOwner().getId()));
+//        BeanUtils.copyProperties(requestObject.getData(), pageable, "query");
+//        pageable.setQuery(new DeviceQueryDto());
+//        //group_id为空的数据，即未分组的设备
+//        //pageable.getQuery().setDeviceGroupId(-1);
+//        if (Objects.nonNull(requestObject.getData().getQuery())) {
+//            pageable.getQuery().setProductId(requestObject.getData().getQuery().getProductId());
+//            pageable.getQuery().setIgnoreOrigin(requestObject.getData().getQuery().getIgnoreOrigin());
+//        }
+//        pageable.getQuery().setExcludeIds(deviceGroupService.resolveDeviceAlreadyInGroup());
+//        // pageable.getQuery().setAccessableOwnerIds(sysUserService.resolveAccessableUserIds(sysUserService.getCurrentUser(), false, true));
+//        // 分组的目的就是分组后统一分配，所以只列出属于自己的设备，只有属于自己的才能被自己分配
+//        pageable.getQuery().setAccessableOwnerIds(Collections.singletonList(sysUserService.getCurrentUserOwner().getId()));
         return success(deviceService.listPage(pageable));
     }
 
