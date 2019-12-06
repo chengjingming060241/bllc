@@ -555,28 +555,21 @@ public class AgentServiceImpl extends ServiceImpl<AgentDao, Agent> implements Ag
             return null;
         }
         else {
-
             SysUser current = sysUserService.getCurrentUserOwner();
             Agent agent = new Agent();
+            BeanUtils.copyProperties(data, agent);
+            agent.setSysUserId(current.getId());
+            agent.setSysUserName(current.getNickName());
             agent.setCtime(now);
             agent.setUtime(now);
-            agent.setSysUserId(current.getId());
-            agent.setSysUserName(current.getUsername());
-            agent.setStatus(0);
-
-            agent.setProvince(data.getProvince());
-            agent.setCity(data.getCity());
-            agent.setArea(data.getArea());
-            agent.setAddress(data.getAddress());
-            agent.setName(name);
-
             agent.setIsDeleted(BooleanEnum.FALSE.getCode());
+            LOGGER.info("添加代理商【{}】", data.getName());
             return agent;
         }
     }
 
     private Agent getDeviceLaunchAreaByName(String name){
-        return selectOne(new EntityWrapper<Agent>().eq("name", name));
+        return selectOne(new EntityWrapper<Agent>().eq("name", name).eq("is_deleted", DeleteStatus.NOT_DELETED.getCode()));
     }
 
 }

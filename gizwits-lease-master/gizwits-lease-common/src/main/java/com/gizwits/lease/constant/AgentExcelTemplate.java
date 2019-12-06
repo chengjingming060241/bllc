@@ -10,6 +10,11 @@ public class AgentExcelTemplate {
      * 仓库名称
      */
     private String name;
+
+    /**
+     * 状态：1、正常/2、警告/3、冻结
+     */
+    private Integer status;
     /**
      * 省
      */
@@ -35,12 +40,22 @@ public class AgentExcelTemplate {
     public AgentExcelTemplate() {
     }
 
-    public AgentExcelTemplate(String name, String province, String city, String area, String address) {
+    public AgentExcelTemplate(String name, String status, String province, String city, String area, String address) {
         this.name = name;
         this.province = (province == null?"":province);
         this.city = city;
         this.area = area;
         this.address = address;
+        Number num = Float.parseFloat(status) * 10;
+        this.status = num.intValue()/10;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public String getName() {

@@ -31,6 +31,7 @@ import com.gizwits.lease.device.service.*;
 import com.gizwits.lease.exceptions.ExcelException;
 import com.gizwits.lease.exceptions.LeaseExceEnums;
 import com.gizwits.lease.exceptions.LeaseException;
+import com.gizwits.lease.manager.dto.AgentExportResultDto;
 import com.gizwits.lease.manager.dto.AgentForListDto;
 import com.gizwits.lease.manager.dto.AgentForQueryDto;
 
@@ -179,7 +180,6 @@ public class ExportController extends BaseController {
     public ResponseObject< List<ProductExportResultDto>> uploadProductCategory(@RequestParam("file") MultipartFile file,
                                                                                @RequestParam(value = "categoryId",required = false) Integer categoryId) throws Exception {
         List<List<Object>> originData = ImportExcelUtils.parse(file.getInputStream(), file.getOriginalFilename());
-
         return success(productQrcodeService.importExcel(convertProduct(originData),categoryId));
 
     }
@@ -202,15 +202,9 @@ public class ExportController extends BaseController {
     @PostMapping("/agent/upload")
     @DefaultVersion
     @RequestLock
-    public ResponseObject< List<DeviceExportResultDto>> uploadAgent(@RequestParam("file") MultipartFile file,
-                                                               @RequestParam(value = "productId",required = false) Integer productId) throws Exception {
+    public ResponseObject< List<AgentExportResultDto>> upload(@RequestParam("file") MultipartFile file) throws Exception {
         List<List<Object>> originData = ImportExcelUtils.parse(file.getInputStream(), file.getOriginalFilename());
-        SysUser currentUserOwner = sysUserService.getCurrentUserOwner();
-        if(currentUserOwner.getIsAdmin().equals(SysUserType.MANUFACTURER.getCode())) {
-            return success(deviceQrcodeService.importExcel(convertStock(originData)));
-        }else{
-            return success(deviceQrcodeService.importDeviceExcelForAssign(convert2(originData)));
-        }
+        return success(agentService.importExcel(convertAgent(originData)));
     }
 
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
@@ -453,6 +447,20 @@ public class ExportController extends BaseController {
         } catch (ExcelException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private List<AgentExcelTemplate> convertAgent(List<List<Object>> originData) {
+        if (CollectionUtils.isEmpty(originData)) {
+            LeaseException.throwSystemException(LeaseExceEnums.EXCEL_NO_DATA);
+        }
+        return originData.stream().filter(this::isValidAgent).map(list ->
+                new AgentExcelTemplate(String.valueOf(list.get(0)), String.valueOf(list.get(1)),String.valueOf(list.get(2))
+                        ,String.valueOf(list.get(3)),String.valueOf(list.get(4)),String.valueOf(list.get(5)))).collect(Collectors.toList());
+    }
+
+    private boolean isValidAgent(List<Object> list) {
+        return CollectionUtils.isNotEmpty(list) && list.size() == 6 && Objects.nonNull(list.get(0))
+                && Objects.nonNull(list.get(1)) && Objects.nonNull(list.get(3))&& Objects.nonNull(list.get(4))&& Objects.nonNull(list.get(5));
     }
 
     private List<DeviceLaunchAreaExcelTemplate> convertLaunchArea(List<List<Object>> originData) {

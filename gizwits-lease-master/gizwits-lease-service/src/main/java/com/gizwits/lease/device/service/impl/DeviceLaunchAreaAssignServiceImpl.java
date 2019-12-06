@@ -3,6 +3,7 @@ package com.gizwits.lease.device.service.impl;
 import java.util.*;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.gizwits.boot.enums.DeleteStatus;
 import com.gizwits.boot.sys.entity.SysUser;
 import com.gizwits.boot.sys.service.SysUserService;
 import com.gizwits.lease.common.perm.CommonRoleResolver;
@@ -188,6 +189,6 @@ public class DeviceLaunchAreaAssignServiceImpl implements DeviceLaunchAreaAssign
     }
 
     private DeviceLaunchArea getDeviceLaunchAreaByName(String name){
-        return deviceLaunchAreaService.selectOne(new EntityWrapper<DeviceLaunchArea>().eq("name", name));
+        return deviceLaunchAreaService.selectOne(new EntityWrapper<DeviceLaunchArea>().eq("name", name).eq("is_deleted", DeleteStatus.NOT_DELETED.getCode()));
     }
 }

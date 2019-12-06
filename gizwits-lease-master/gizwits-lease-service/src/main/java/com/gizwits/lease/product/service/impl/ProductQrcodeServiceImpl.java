@@ -170,7 +170,7 @@ public class ProductQrcodeServiceImpl implements ProductQrcodeService {
     }
 
     private ProductCategory getProductCategoryByName(String name){
-        return productCategoryService.selectOne(new EntityWrapper<ProductCategory>().eq("name", name));
+        return productCategoryService.selectOne(new EntityWrapper<ProductCategory>().eq("name", name).eq("is_deleted", DeleteStatus.NOT_DELETED.getCode()));
     }
 
 }
