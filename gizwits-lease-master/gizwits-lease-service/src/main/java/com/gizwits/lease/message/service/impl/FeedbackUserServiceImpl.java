@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.gizwits.boot.dto.Pageable;
+import com.gizwits.boot.enums.DeleteStatus;
 import com.gizwits.boot.exceptions.SysExceptionEnum;
 import com.gizwits.boot.exceptions.SystemException;
 import com.gizwits.boot.sys.entity.SysUser;
@@ -19,6 +20,7 @@ import com.gizwits.lease.exceptions.LeaseExceEnums;
 import com.gizwits.lease.exceptions.LeaseException;
 import com.gizwits.lease.message.dao.FeedbackUserDao;
 import com.gizwits.lease.message.entity.FeedbackUser;
+import com.gizwits.lease.message.entity.dto.FeedBackHandleDto;
 import com.gizwits.lease.message.entity.dto.FeedbackQueryDto;
 import com.gizwits.lease.message.entity.dto.FeedbackUserDto;
 import com.gizwits.lease.message.service.FeedbackUserService;
@@ -38,10 +40,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * <p>
@@ -210,5 +209,38 @@ public class FeedbackUserServiceImpl extends ServiceImpl<FeedbackUserDao, Feedba
         return insert(feedbackUser);
     }
 
+    @Override
+    public Boolean delete(List<Integer> ids) {
 
+        Date date=new Date();
+        for(Integer id:ids){
+            FeedbackUser feedbackUser=selectById(id);
+            if(!ParamUtil.isNullOrEmptyOrZero(feedbackUser)&&feedbackUser.getIsDeleted()==0){
+                feedbackUser.setUtime(date);
+                feedbackUser.setIsDeleted(DeleteStatus.DELETED.getCode());
+                updateById(feedbackUser);
+            }
+            }
+        return true;
+    }
+
+    @Override
+    public Boolean handle(FeedBackHandleDto dto) {
+        if(dto.getIds()==null){
+            LeaseException.throwSystemException(LeaseExceEnums.PARAMS_ERROR);
+        }
+        String remark=dto.getRemark();
+        //一键查询，去掉不存在的
+        List<FeedbackUser> list=selectList(new EntityWrapper<FeedbackUser>().in("id",dto.getIds()).eq("is_deleted",DeleteStatus.NOT_DELETED.getCode()));
+        if(ParamUtil.isNullOrEmptyOrZero(list)){
+            return true;
+        }
+        Date date=new Date();
+        list.stream().forEach(item->{
+            item.setUtime(date);
+            item.setRemark(remark);
+        });
+        //一键更新
+        return updateBatchById(list);
+    }
 }

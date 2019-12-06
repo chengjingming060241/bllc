@@ -58,7 +58,7 @@ import java.util.List;
  */
 @RestController
 @EnableSwagger2
-@Api(description = "设备故障接口")
+@Api(description = "设备故障(警告)接口")
 @RequestMapping("/device/deviceAlarm")
 public class DeviceAlarmController extends BaseController {
     protected final static Logger logger = LoggerFactory.getLogger("DEVICE_LOGGER");
@@ -138,6 +138,13 @@ public class DeviceAlarmController extends BaseController {
         DeviceAlarm deviceAlarm = requestObject.getData();
         deviceAlarmService.sendDeviceAlarmMessage(deviceAlarm);
         return success();
+    }
+    @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
+    @ApiOperation(value = "删除", notes = "删除", consumes = "application/json")
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public ResponseObject delete(@RequestBody @Valid RequestObject<List<Integer>> requestObject) {
+
+        return success(deviceAlarmService.delete(requestObject.getData()));
     }
 
 

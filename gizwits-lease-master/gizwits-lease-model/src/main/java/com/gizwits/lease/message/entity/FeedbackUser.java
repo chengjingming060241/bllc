@@ -106,6 +106,18 @@ public class FeedbackUser extends Model<FeedbackUser> {
      */
     @TableField("is_deleted")
 	private Integer isDeleted;
+    /**
+     * 处理备注
+     */
+    private String remark;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     public Integer getType() {
         return type;

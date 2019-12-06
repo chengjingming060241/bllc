@@ -108,6 +108,6 @@ public interface UserDao extends BaseMapper<User> {
 
     List<StatLocationVo> ditributionByCity(@Param("province") String province);
 
-
+   User getBindUser(@Param("mac") String mac);
     //========================//
 }

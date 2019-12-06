@@ -90,7 +90,17 @@ public class DeviceAlarm extends Model<DeviceAlarm> {
 	@TableField("remark")
 	private String remark;
 
-	public String getRemark() {
+	private String content;
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getRemark() {
 		return remark;
 	}
 

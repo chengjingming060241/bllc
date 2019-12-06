@@ -6,6 +6,7 @@ import com.gizwits.boot.base.RequestObject;
 import com.gizwits.boot.base.ResponseObject;
 import com.gizwits.boot.dto.Pageable;
 import com.gizwits.lease.message.entity.FeedbackUser;
+import com.gizwits.lease.message.entity.dto.FeedBackHandleDto;
 import com.gizwits.lease.message.entity.dto.FeedbackUserDto;
 import com.gizwits.lease.message.entity.dto.FeedbackQueryDto;
 import com.gizwits.lease.message.service.FeedbackUserService;
@@ -26,6 +27,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -76,6 +78,18 @@ public class FeedbackUserController extends BaseController {
             }
         }
         return success(feedbackUser);
+    }
+    @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
+    @ApiOperation(value = "删除", notes = "删除", consumes = "application/json")
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public ResponseObject delete(@RequestBody RequestObject<List<Integer>> requestObject) {
+        return success(feedbackUserService.delete(requestObject.getData()));
+    }
+    @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
+    @ApiOperation(value = "处理", notes = "处理", consumes = "application/json")
+    @RequestMapping(value = "/handle", method = RequestMethod.POST)
+    public ResponseObject handle(@RequestBody RequestObject<FeedBackHandleDto> requestObject) {
+        return success(feedbackUserService.handle(requestObject.getData()));
     }
 
 }

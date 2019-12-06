@@ -25,6 +25,9 @@ public class DeviceForDetailDto {
 
     private String name;
 
+    private String sn1;
+    private String imei;
+
     @JsonFormat(pattern = Constants.DEFAULT_DATE_PATTERN, timezone = "GMT+8")
     private Date ctime;
 
@@ -60,6 +63,8 @@ public class DeviceForDetailDto {
     private String phone;
 
     private String productKey;
+
+    private Integer status;//是否串货
 
     List<ProductServiceDetailForDeviceDto> serviceMode;
 
@@ -119,6 +124,29 @@ public class DeviceForDetailDto {
     /**是否可以修改设备*/
     private Boolean canModify = false ;
 
+    public String getSn1() {
+        return sn1;
+    }
+
+    public void setSn1(String sn1) {
+        this.sn1 = sn1;
+    }
+
+    public String getImei() {
+        return imei;
+    }
+
+    public void setImei(String imei) {
+        this.imei = imei;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 
     /** 控制指令 */
     private List<ProductCommandForDeviceDetailDto> controlCommands = new ArrayList<>();

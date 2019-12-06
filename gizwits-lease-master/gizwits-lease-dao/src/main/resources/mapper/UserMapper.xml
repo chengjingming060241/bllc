@@ -390,4 +390,9 @@ JOIN
     </select>
 
 
+    <select id="getBindUser" parameterType="java.lang.String" resultType="com.gizwits.lease.user.entity.User">
+        select u.* from user u left join user_bind_device ubd on u.id=ubd.user_id
+        where u.is_deleted=0 and ubd.is_deleted=0 and ubd.mac=#{mac}
+    </select>
+
 </mapper>

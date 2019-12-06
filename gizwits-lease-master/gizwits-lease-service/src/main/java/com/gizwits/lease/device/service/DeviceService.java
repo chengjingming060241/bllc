@@ -32,6 +32,7 @@ import com.gizwits.lease.stat.vo.StatAlarmWidgetVo;
 import com.gizwits.lease.stat.vo.StatDeviceWidgetVo;
 import com.gizwits.lease.stat.vo.StatLocationVo;
 import com.gizwits.lease.stat.vo.StatTrendVo;
+import com.gizwits.lease.user.entity.User;
 
 import java.util.List;
 import java.util.Map;
@@ -199,9 +200,6 @@ public interface DeviceService extends IService<Device> {
      */
     Page<DeviceShowDto> listPage(Pageable<DeviceQueryDto> pageable);
 
-
-    Page<DeviceShowDto> listPage2(Pageable<DeviceQueryDto> pageable);
-
     /**
      * 管理端查询设备列表
      */
@@ -329,6 +327,9 @@ public interface DeviceService extends IService<Device> {
      * @return
      */
     List<StatLocationVo> ditributionByCity(StatDeviceDto statDeviceDto);
-
+    /**
+     * 获取设备的绑定用户
+     */
+    User getBindUser(String sno);
     //Sunny END//
 }

@@ -67,24 +67,9 @@ public class DeviceController extends BaseController {
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
     @ApiOperation(value = "设备列表", notes = "设备列表", consumes = "application/json")
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    @DefaultVersion(display = {"mac", "sno", "name", "product", "belongOperatorName", "launchArea", "serviceMode", "workStatusDesc", "onlineStatus", "activateStatusDesc"})
+    @DefaultVersion(display = {"mac", "sn1", "name", "product", "workStatusDesc", "onlineStatus", "activateStatusDesc"})
     public ResponseObject<Page<DeviceShowDto>> list(@RequestBody @Valid RequestObject<Pageable<DeviceQueryDto>> requestObject) {
-        Pageable<DeviceQueryDto> pageable = requestObject.getData();
-        if (Objects.isNull(pageable.getQuery())) {
-            pageable.setQuery(new DeviceQueryDto());
-        }
-        Integer creatorId = pageable.getQuery().getOperatorAccountId();
-        if (Objects.isNull(creatorId)) {
-            creatorId = pageable.getQuery().getCreatorId();
-        }
-        if (Objects.nonNull(creatorId)) {
-            pageable.getQuery().setAccessableOwnerIds(sysUserService.resolveSysUserAllSubAdminIds(sysUserService.selectById(creatorId)));
-        } else {
-            pageable.getQuery().setAccessableOwnerIds(sysUserService.resolveSysUserAllSubAdminIds(sysUserService.getCurrentUserOwner()));
-        }
-
-        //防止前台查询已删除的数据
-        pageable.getQuery().setIsDeleted(DeleteStatus.NOT_DELETED.getCode());
+          Pageable pageable=requestObject.getData();
         return success(deviceService.listPage(pageable));
     }
 
@@ -230,5 +215,11 @@ public class DeviceController extends BaseController {
     public ResponseObject addMoreMode(@RequestBody @Valid RequestObject<DeviceAssignMoreModeDto> requestObject) {
         deviceToProductServiceModeService.batchInsertOrUpdate(requestObject.getData());
         return success();
+    }
+    @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
+    @ApiOperation(value = "获取设备的绑定用户", notes = "获取设备的绑定用户", consumes = "application/json")
+    @PostMapping("/getBindUser")
+    public ResponseObject getBindUser(@RequestBody @Valid RequestObject<String> requestObject) {
+        return success(deviceService.getBindUser(requestObject.getData()));
     }
 }

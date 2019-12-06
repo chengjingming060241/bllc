@@ -34,6 +34,7 @@ import com.gizwits.lease.constant.SexType;
 import com.gizwits.lease.constant.ThirdPartyUserType;
 import com.gizwits.lease.constant.UserStatus;
 import com.gizwits.lease.device.dao.UserBindDeviceDao;
+import com.gizwits.lease.device.entity.Device;
 import com.gizwits.lease.device.entity.UserBindDevice;
 import com.gizwits.lease.device.service.UserBindDeviceService;
 import com.gizwits.lease.device.vo.UserBindDeviceListVo;
@@ -107,6 +108,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
 
     @Autowired
     private UserBindDeviceDao userBindDeviceDao;
+
 
 
     private static Map<MoveType, UserStatus> map = new HashMap<>();
@@ -1760,6 +1762,12 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
          page.setTotal(total);
         return page;
     }
-    //===================================//
+
+    @Override
+    public User getBindUser(String mac) {
+        return userDao.getBindUser(mac);
+    }
+
+//===================================//
 
 }

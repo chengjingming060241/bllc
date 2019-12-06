@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.service.IService;
 import com.gizwits.boot.dto.JwtAuthenticationDto;
 import com.gizwits.boot.dto.Pageable;
 import com.gizwits.boot.sys.entity.SysUserExt;
+import com.gizwits.lease.device.entity.UserBindDevice;
 import com.gizwits.lease.device.vo.UserBindDeviceListVo;
 import com.gizwits.lease.stat.vo.StatLocationVo;
 import com.gizwits.lease.stat.vo.StatUserWidgetVo;
@@ -261,5 +262,8 @@ public interface UserService extends IService<User> {
      * 获取用户绑定的设备
      */
     Page<UserBindDeviceListVo> bindDeviceList(Pageable pageable);
+
+    User getBindUser(String mac);
+
 //=================END=====================//
 }
