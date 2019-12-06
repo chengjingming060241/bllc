@@ -31,6 +31,7 @@ import com.gizwits.lease.device.service.*;
 import com.gizwits.lease.exceptions.ExcelException;
 import com.gizwits.lease.exceptions.LeaseExceEnums;
 import com.gizwits.lease.exceptions.LeaseException;
+import com.gizwits.lease.manager.dto.AgentExportResultDto;
 import com.gizwits.lease.manager.dto.AgentForListDto;
 import com.gizwits.lease.manager.dto.AgentForQueryDto;
 
@@ -49,6 +50,7 @@ import com.gizwits.lease.refund.service.RefundApplyService;
 import com.gizwits.lease.user.dto.UserForListDto;
 import com.gizwits.lease.user.dto.UserForQueryDto;
 import com.gizwits.lease.user.service.UserService;
+import com.gizwits.lease.util.PoiExcelUtils;
 import com.gizwits.lease.utils.ImportExcelUtils;
 import com.gizwits.lease.utils.JxlExcelUtils;
 import com.gizwits.lease.wallet.dto.UserWalletChargeListDto;
@@ -103,9 +105,6 @@ public class ExportController extends BaseController {
     private DeviceLaunchAreaService deviceLaunchAreaService;
 
     @Autowired
-    private ProductServiceModeService productServiceModeService;
-
-    @Autowired
     private OrderBaseService orderBaseService;
 
     @Autowired
@@ -115,13 +114,7 @@ public class ExportController extends BaseController {
     private ProductCategoryService productCategoryService;
 
     @Autowired
-    private UserWalletChargeOrderService userWalletChargeOrderService;
-
-    @Autowired
     private AgentService agentService;
-
-    @Autowired
-    private RefundApplyService refundApplyService;
 
     @Autowired
     private DeviceStockService deviceStockService;
@@ -131,9 +124,6 @@ public class ExportController extends BaseController {
 
     @Autowired
     private DeviceLaunchAreaAssignService deviceLaunchAreaAssignService;
-
-
-
 
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
     @ApiOperation(value = "产品品类列表导出", consumes = "application/json")
@@ -179,7 +169,6 @@ public class ExportController extends BaseController {
     public ResponseObject< List<ProductExportResultDto>> uploadProductCategory(@RequestParam("file") MultipartFile file,
                                                                                @RequestParam(value = "categoryId",required = false) Integer categoryId) throws Exception {
         List<List<Object>> originData = ImportExcelUtils.parse(file.getInputStream(), file.getOriginalFilename());
-
         return success(productQrcodeService.importExcel(convertProduct(originData),categoryId));
 
     }
@@ -202,15 +191,9 @@ public class ExportController extends BaseController {
     @PostMapping("/agent/upload")
     @DefaultVersion
     @RequestLock
-    public ResponseObject< List<DeviceExportResultDto>> uploadAgent(@RequestParam("file") MultipartFile file,
-                                                               @RequestParam(value = "productId",required = false) Integer productId) throws Exception {
+    public ResponseObject< List<AgentExportResultDto>> upload(@RequestParam("file") MultipartFile file) throws Exception {
         List<List<Object>> originData = ImportExcelUtils.parse(file.getInputStream(), file.getOriginalFilename());
-        SysUser currentUserOwner = sysUserService.getCurrentUserOwner();
-        if(currentUserOwner.getIsAdmin().equals(SysUserType.MANUFACTURER.getCode())) {
-            return success(deviceQrcodeService.importExcel(convertStock(originData)));
-        }else{
-            return success(deviceQrcodeService.importDeviceExcelForAssign(convert2(originData)));
-        }
+        return success(agentService.importExcel(convertAgent(originData)));
     }
 
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
@@ -444,12 +427,26 @@ public class ExportController extends BaseController {
     }
 
     private void export(String filename, ExportHelper<?, ?> helper, List<?> data, HttpServletResponse response) {
-        //PoiExcelUtils.exportExcel(filename, null, helper.getTitles(), helper.getProperties(), data, response);
+//        PoiExcelUtils.exportExcel(filename, null, helper.getTitles(), helper.getProperties(), data, response);
         try {
             JxlExcelUtils.listToExcel(data, helper.getTitles(), helper.getProperties(), filename, response);
         } catch (ExcelException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private List<AgentExcelTemplate> convertAgent(List<List<Object>> originData) {
+        if (CollectionUtils.isEmpty(originData)) {
+            LeaseException.throwSystemException(LeaseExceEnums.EXCEL_NO_DATA);
+        }
+        return originData.stream().filter(this::isValidAgent).map(list ->
+                new AgentExcelTemplate(String.valueOf(list.get(0)), String.valueOf(list.get(1)),String.valueOf(list.get(2))
+                        ,String.valueOf(list.get(3)),String.valueOf(list.get(4)),String.valueOf(list.get(5)))).collect(Collectors.toList());
+    }
+
+    private boolean isValidAgent(List<Object> list) {
+        return CollectionUtils.isNotEmpty(list) && list.size() == 6 && Objects.nonNull(list.get(0))
+                && Objects.nonNull(list.get(1)) && Objects.nonNull(list.get(3))&& Objects.nonNull(list.get(4))&& Objects.nonNull(list.get(5));
     }
 
     private List<DeviceLaunchAreaExcelTemplate> convertLaunchArea(List<List<Object>> originData) {
@@ -479,18 +476,18 @@ public class ExportController extends BaseController {
     }
 
 
-    private List<DeviceStockTemplate> convertStock(List<List<Object>> originData) {
-        if (CollectionUtils.isEmpty(originData)) {
-            LeaseException.throwSystemException(LeaseExceEnums.EXCEL_NO_DATA);
-        }
-        return originData.stream().filter(this::isValidStock).map(list -> new DeviceStockTemplate(String.valueOf(list.get(0)), String.valueOf(list.get(1))
-                ,String.valueOf(list.get(2)),String.valueOf(list.get(3)))).collect(Collectors.toList());
-    }
-
-    private boolean isValidStock(List<Object> list) {
-        return CollectionUtils.isNotEmpty(list) && list.size() == 4 && Objects.nonNull(list.get(0))
-                && Objects.nonNull(list.get(1))&& Objects.nonNull(list.get(2))&& Objects.nonNull(list.get(3));
-    }
+//    private List<DeviceStockTemplate> convertStock(List<List<Object>> originData) {
+//        if (CollectionUtils.isEmpty(originData)) {
+//            LeaseException.throwSystemException(LeaseExceEnums.EXCEL_NO_DATA);
+//        }
+//        return originData.stream().filter(this::isValidStock).map(list -> new DeviceStockTemplate(String.valueOf(list.get(0)), String.valueOf(list.get(1))
+//                ,String.valueOf(list.get(2)),String.valueOf(list.get(3)))).collect(Collectors.toList());
+//    }
+//
+//    private boolean isValidStock(List<Object> list) {
+//        return CollectionUtils.isNotEmpty(list) && list.size() == 4 && Objects.nonNull(list.get(0))
+//                && Objects.nonNull(list.get(1))&& Objects.nonNull(list.get(2))&& Objects.nonNull(list.get(3));
+//    }
 
 
     private int getDefaultExportSize() {

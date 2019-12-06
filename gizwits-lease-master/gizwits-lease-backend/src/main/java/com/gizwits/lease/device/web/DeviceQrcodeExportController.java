@@ -176,12 +176,13 @@ public class DeviceQrcodeExportController extends BaseController {
             LeaseException.throwSystemException(LeaseExceEnums.EXCEL_NO_DATA);
         }
         return originData.stream().filter(this::isValidAgent).map(list ->
-                new AgentExcelTemplate(String.valueOf(list.get(0)), String.valueOf(list.get(1)),String.valueOf(list.get(2)),String.valueOf(list.get(3)),String.valueOf(list.get(4)))).collect(Collectors.toList());
+                new AgentExcelTemplate(String.valueOf(list.get(0)), String.valueOf(list.get(1)),String.valueOf(list.get(2))
+                        ,String.valueOf(list.get(3)),String.valueOf(list.get(4)),String.valueOf(list.get(5)))).collect(Collectors.toList());
     }
 
     private boolean isValidAgent(List<Object> list) {
-        return CollectionUtils.isNotEmpty(list) && list.size() == 5 && Objects.nonNull(list.get(0))
-                && Objects.nonNull(list.get(2)) && Objects.nonNull(list.get(3))&& Objects.nonNull(list.get(4));
+         return CollectionUtils.isNotEmpty(list) && list.size() == 6 && Objects.nonNull(list.get(0))
+                && Objects.nonNull(list.get(1)) && Objects.nonNull(list.get(3))&& Objects.nonNull(list.get(4))&& Objects.nonNull(list.get(5));
     }
 
 //    @Version(uri = "/upload",version = "1.1")
