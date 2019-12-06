@@ -50,6 +50,7 @@ import com.gizwits.lease.refund.service.RefundApplyService;
 import com.gizwits.lease.user.dto.UserForListDto;
 import com.gizwits.lease.user.dto.UserForQueryDto;
 import com.gizwits.lease.user.service.UserService;
+import com.gizwits.lease.util.PoiExcelUtils;
 import com.gizwits.lease.utils.ImportExcelUtils;
 import com.gizwits.lease.utils.JxlExcelUtils;
 import com.gizwits.lease.wallet.dto.UserWalletChargeListDto;
@@ -104,9 +105,6 @@ public class ExportController extends BaseController {
     private DeviceLaunchAreaService deviceLaunchAreaService;
 
     @Autowired
-    private ProductServiceModeService productServiceModeService;
-
-    @Autowired
     private OrderBaseService orderBaseService;
 
     @Autowired
@@ -116,13 +114,7 @@ public class ExportController extends BaseController {
     private ProductCategoryService productCategoryService;
 
     @Autowired
-    private UserWalletChargeOrderService userWalletChargeOrderService;
-
-    @Autowired
     private AgentService agentService;
-
-    @Autowired
-    private RefundApplyService refundApplyService;
 
     @Autowired
     private DeviceStockService deviceStockService;
@@ -132,9 +124,6 @@ public class ExportController extends BaseController {
 
     @Autowired
     private DeviceLaunchAreaAssignService deviceLaunchAreaAssignService;
-
-
-
 
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
     @ApiOperation(value = "产品品类列表导出", consumes = "application/json")
@@ -441,7 +430,7 @@ public class ExportController extends BaseController {
     }
 
     private void export(String filename, ExportHelper<?, ?> helper, List<?> data, HttpServletResponse response) {
-        //PoiExcelUtils.exportExcel(filename, null, helper.getTitles(), helper.getProperties(), data, response);
+//        PoiExcelUtils.exportExcel(filename, null, helper.getTitles(), helper.getProperties(), data, response);
         try {
             JxlExcelUtils.listToExcel(data, helper.getTitles(), helper.getProperties(), filename, response);
         } catch (ExcelException e) {
@@ -490,18 +479,18 @@ public class ExportController extends BaseController {
     }
 
 
-    private List<DeviceStockTemplate> convertStock(List<List<Object>> originData) {
-        if (CollectionUtils.isEmpty(originData)) {
-            LeaseException.throwSystemException(LeaseExceEnums.EXCEL_NO_DATA);
-        }
-        return originData.stream().filter(this::isValidStock).map(list -> new DeviceStockTemplate(String.valueOf(list.get(0)), String.valueOf(list.get(1))
-                ,String.valueOf(list.get(2)),String.valueOf(list.get(3)))).collect(Collectors.toList());
-    }
-
-    private boolean isValidStock(List<Object> list) {
-        return CollectionUtils.isNotEmpty(list) && list.size() == 4 && Objects.nonNull(list.get(0))
-                && Objects.nonNull(list.get(1))&& Objects.nonNull(list.get(2))&& Objects.nonNull(list.get(3));
-    }
+//    private List<DeviceStockTemplate> convertStock(List<List<Object>> originData) {
+//        if (CollectionUtils.isEmpty(originData)) {
+//            LeaseException.throwSystemException(LeaseExceEnums.EXCEL_NO_DATA);
+//        }
+//        return originData.stream().filter(this::isValidStock).map(list -> new DeviceStockTemplate(String.valueOf(list.get(0)), String.valueOf(list.get(1))
+//                ,String.valueOf(list.get(2)),String.valueOf(list.get(3)))).collect(Collectors.toList());
+//    }
+//
+//    private boolean isValidStock(List<Object> list) {
+//        return CollectionUtils.isNotEmpty(list) && list.size() == 4 && Objects.nonNull(list.get(0))
+//                && Objects.nonNull(list.get(1))&& Objects.nonNull(list.get(2))&& Objects.nonNull(list.get(3));
+//    }
 
 
     private int getDefaultExportSize() {
