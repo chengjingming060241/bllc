@@ -67,7 +67,7 @@ public class TmallLinkController extends BaseController {
     @ApiImplicitParam(paramType = "header" , name = Constants.TOKEN_HEADER_NAME)
     @ApiOperation(value = "详情更新", notes = "更新" , consumes = "application/json")
     @PostMapping("/update")
-    public ResponseObject<TmallLinkForDetailDto> update(RequestObject<TmallLinkForUpdateDto> requestObject){
+    public ResponseObject<TmallLinkForDetailDto> update(@RequestBody @Valid RequestObject<TmallLinkForUpdateDto> requestObject){
         TmallLinkForUpdateDto dto = requestObject.getData();
         return success(tmallLinkService.update(dto));
     }
@@ -75,7 +75,7 @@ public class TmallLinkController extends BaseController {
     @ApiImplicitParam(paramType = "header",name = Constants.TOKEN_HEADER_NAME)
     @ApiOperation(value = "批量删除" ,notes = "删除" ,consumes = "application/json")
     @PostMapping("/delete")
-    public ResponseObject<String> delete(RequestObject<List<Integer>> requestObject){
+    public ResponseObject<String> delete(@RequestBody RequestObject<List<Integer>> requestObject){
         return success(tmallLinkService.delete(requestObject.getData()));
     }
 

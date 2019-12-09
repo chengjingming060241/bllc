@@ -77,4 +77,15 @@ public class TmallLinkForListDto {
     public void setUtime(Date utime) {
         this.utime = utime;
     }
+
+    @Override
+    public String toString() {
+        return "TmallLinkForListDto{" +
+                "id=" + id +
+                ", linkName='" + linkName + '\'' +
+                ", categoryName='" + categoryName + '\'' +
+                ", linkUrl='" + linkUrl + '\'' +
+                ", utime=" + utime +
+                '}';
+    }
 }
