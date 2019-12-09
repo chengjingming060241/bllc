@@ -1,6 +1,7 @@
 package com.gizwits.boot.dto;
 
 import com.gizwits.boot.validators.Mobile;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -30,9 +31,13 @@ public class  SysUserForAddDto {
     @Length(min = 6, max = 18)
     private String password;
 
-    /** 用户名 */
+    @ApiModelProperty("昵称")
     @Length(max = 20, message = "超过最大长度")
     private String nickName;
+
+    @ApiModelProperty("真实姓名")
+    @Length(max = 20, message = "超过最大长度")
+    private String realName;
 
     /** 手机号 */
     @NotBlank
@@ -47,11 +52,11 @@ public class  SysUserForAddDto {
 
     private Integer isAdmin;
 
-    /**仓库id*/
+    @ApiModelProperty("仓库id")
     private Integer launchAreaId;
 
-    /** 角色 */
     @NotEmpty
+    @ApiModelProperty("角色")
     private List<Integer> roleIds = new ArrayList<>();
 
     /**
@@ -63,6 +68,14 @@ public class  SysUserForAddDto {
      * 系统图标
      */
     private String sysLogo;
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
 
     public Integer getLaunchAreaId() {
         return launchAreaId;

@@ -1,6 +1,7 @@
 package com.gizwits.lease.tmallLink.dto;
 
 import com.gizwits.lease.product.dto.ProductDataPointForUpdateDto;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -20,16 +21,17 @@ public class TmallLinkForUpdateDto {
     private Integer id;
 
     @NotBlank
-    private String name;
+    @ApiModelProperty("链接名称")
+    private String linkName;
 
     @NotNull
+    @ApiModelProperty("产品id")
     private Integer categoryId;
 
     @NotBlank
-    private String categoryName;
+    @ApiModelProperty("链接地址")
+    private String linkUrl;
 
-
-    private List<ProductDataPointForUpdateDto> dataPoints = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -39,12 +41,20 @@ public class TmallLinkForUpdateDto {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getLinkName() {
+        return linkName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLinkName(String linkName) {
+        this.linkName = linkName;
+    }
+
+    public String getLinkUrl() {
+        return linkUrl;
+    }
+
+    public void setLinkUrl(String linkUrl) {
+        this.linkUrl = linkUrl;
     }
 
     public Integer getCategoryId() {
@@ -55,19 +65,5 @@ public class TmallLinkForUpdateDto {
         this.categoryId = categoryId;
     }
 
-    public String getCategoryName() {
-        return categoryName;
-    }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
-
-    public List<ProductDataPointForUpdateDto> getDataPoints() {
-        return dataPoints;
-    }
-
-    public void setDataPoints(List<ProductDataPointForUpdateDto> dataPoints) {
-        this.dataPoints = dataPoints;
-    }
 }

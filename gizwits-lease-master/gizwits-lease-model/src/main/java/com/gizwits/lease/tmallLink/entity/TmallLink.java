@@ -29,9 +29,13 @@ public class TmallLink extends Model<TmallLink> {
     @TableField("link_name")
     private String linkName;
 
-    /**产品型号*/
+    /**产品id*/
     @TableField("category_id")
     private String categoryId;
+
+    /**产品型号*/
+    @TableField("category_name")
+    private String categoryName;
 
     /**链接地址*/
     @TableField("link_url")
@@ -45,7 +49,6 @@ public class TmallLink extends Model<TmallLink> {
     @TableField("sys_user_name")
     private String sysUserName;
 
-
     /**描述*/
     private String remark;
 
@@ -53,6 +56,13 @@ public class TmallLink extends Model<TmallLink> {
     @TableField("is_deleted")
     private Integer isDeleted;
 
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
 
     public Integer getId() {
         return id;

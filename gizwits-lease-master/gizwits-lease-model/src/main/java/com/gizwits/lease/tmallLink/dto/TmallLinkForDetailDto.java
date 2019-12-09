@@ -15,20 +15,25 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Dto - 产品详情
+ * Dto - 链接详情
  *
- * @author lilh
- * @date 2017/7/20 10:54
  */
 public class TmallLinkForDetailDto {
 
     private Integer id;
 
-    private String name;
+    /**链接名称*/
+    private String linkName;
 
-    private Integer categoryId;
+    /**产品id*/
+    private String categoryId;
 
+    /**产品型号*/
     private String categoryName;
+
+    /**链接地址*/
+    private String linkUrl;
+
 
     @JsonFormat(pattern = Constants.DEFAULT_DATE_PATTERN, timezone = "GMT+8")
     private Date ctime;
@@ -36,22 +41,9 @@ public class TmallLinkForDetailDto {
     @JsonFormat(pattern = Constants.DEFAULT_DATE_PATTERN, timezone = "GMT+8")
     private Date utime;
 
-    /**
-     * 描述
-     */
-    private String remark;
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
 
     // --- 用于更新的下拉列表
-    /** 品牌下拉列表 */
+    /** 产品下拉列表 */
     private List<ProductCategoryForPullDto> productCategories = new ArrayList<>();
 
 
@@ -62,6 +54,30 @@ public class TmallLinkForDetailDto {
         BeanUtils.copyProperties(tmallLink, this);
     }
 
+    public String getLinkName() {
+        return linkName;
+    }
+
+    public void setLinkName(String linkName) {
+        this.linkName = linkName;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getLinkUrl() {
+        return linkUrl;
+    }
+
+    public void setLinkUrl(String linkUrl) {
+        this.linkUrl = linkUrl;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -70,21 +86,6 @@ public class TmallLinkForDetailDto {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
-    }
 
     public String getCategoryName() {
         return categoryName;

@@ -23,8 +23,8 @@ public class TmallLinkForListDto {
     @ApiModelProperty("链接名称")
     private String linkName;
 
-    @ApiModelProperty("产品型号")
-    private String categoryId;
+    @ApiModelProperty("产品名称")
+    private String categoryName;
 
     @ApiModelProperty("链接地址")
     private String linkUrl;
@@ -46,12 +46,12 @@ public class TmallLinkForListDto {
         this.linkName = linkName;
     }
 
-    public String getCategoryId() {
-        return categoryId;
+    public String getCategoryName() {
+        return categoryName;
     }
 
-    public void setCategoryId(String categoryId) {
-        this.categoryId = categoryId;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     public String getLinkUrl() {

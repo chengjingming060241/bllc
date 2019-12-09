@@ -9,24 +9,22 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * QueryDto - 产品查询dto
+ * QueryDto - 天猫链接查询dto
  *
- * @author lilh
- * @date 2017/7/5 15:15
  */
 public class TmallLinkQueryDto {
 
-    @Query(field = "category_id")
-    private Integer productCategoryId;
+    @Query(field = "link_name",operator = Query.Operator.like)
+    private String linkName;
 
-    @Query(field = "name", operator = Query.Operator.like)
-    private String productName;
+    @Query(field = "category_name", operator = Query.Operator.like)
+    private String categoryName;
 
-    @Query(field = "utime", operator = Query.Operator.ge)
+    @Query(field = "ctime", operator = Query.Operator.ge)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date startUpdateTime;
 
-    @Query(field = "utime", operator = Query.Operator.le)
+    @Query(field = "ctime", operator = Query.Operator.le)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date endUpdateTime;
 
@@ -38,33 +36,20 @@ public class TmallLinkQueryDto {
     @Query(field = "is_deleted")
     private Integer isDeleted;
 
-    @JsonIgnore
-    @Query(field = "category_type")
-    private Integer categoryType;
-
-
-    public Integer getCategoryType() {
-        return categoryType;
+    public String getLinkName() {
+        return linkName;
     }
 
-    public void setCategoryType(Integer categoryType) {
-        this.categoryType = categoryType;
+    public void setLinkName(String linkName) {
+        this.linkName = linkName;
     }
 
-    public Integer getProductCategoryId() {
-        return productCategoryId;
+    public String getCategoryName() {
+        return categoryName;
     }
 
-    public void setProductCategoryId(Integer productCategoryId) {
-        this.productCategoryId = productCategoryId;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     public Date getStartUpdateTime() {

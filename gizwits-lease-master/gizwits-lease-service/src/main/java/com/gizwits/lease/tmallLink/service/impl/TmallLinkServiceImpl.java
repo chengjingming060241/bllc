@@ -11,6 +11,7 @@ import com.gizwits.boot.utils.ParamUtil;
 import com.gizwits.boot.utils.QueryResolverUtils;
 import com.gizwits.lease.exceptions.LeaseExceEnums;
 import com.gizwits.lease.exceptions.LeaseException;
+import com.gizwits.lease.product.service.ProductCategoryService;
 import com.gizwits.lease.tmallLink.dao.TmallLinkDao;
 import com.gizwits.lease.tmallLink.dto.*;
 import com.gizwits.lease.tmallLink.entity.TmallLink;
@@ -30,6 +31,9 @@ public class TmallLinkServiceImpl extends ServiceImpl<TmallLinkDao, TmallLink> i
     @Autowired
     private SysUserService sysUserService;
 
+    @Autowired
+    private ProductCategoryService productCategoryService;
+
 
     @Override
     public boolean add(TmallLinkForAddDto dto) {
@@ -41,6 +45,7 @@ public class TmallLinkServiceImpl extends ServiceImpl<TmallLinkDao, TmallLink> i
         tmallLink.setSysUserName(currentUserOwner.getNickName());
         tmallLink.setCtime(date);
         tmallLink.setUtime(date);
+        tmallLink.setCategoryName(productCategoryService.selectById(dto.getCategoryId()).getCategoryType());
         LOGGER.info("添加天猫链接【{}】", dto.getLinkName());
         return insert(tmallLink);
     }
@@ -50,7 +55,7 @@ public class TmallLinkServiceImpl extends ServiceImpl<TmallLinkDao, TmallLink> i
     public Page<TmallLinkForListDto> page(Pageable<TmallLinkQueryDto> pageable) {
         Page<TmallLink> page = new Page<>();
         BeanUtils.copyProperties(pageable, page);
-        Page<TmallLink> selectPage = selectPage(page, QueryResolverUtils.parse(pageable.getQuery(),new EntityWrapper<TmallLink>()));
+        Page<TmallLink> selectPage = selectPage(page, QueryResolverUtils.parse(pageable.getQuery(),new EntityWrapper<>()));
         Page<TmallLinkForListDto> result = new Page<>();
         BeanUtils.copyProperties(selectPage, result);
         result.setRecords(new ArrayList<>(selectPage.getRecords().size()));
@@ -80,6 +85,7 @@ public class TmallLinkServiceImpl extends ServiceImpl<TmallLinkDao, TmallLink> i
         }
         BeanUtils.copyProperties(dto, tmallLink);
         tmallLink.setUtime(new Date());
+        tmallLink.setCategoryName(productCategoryService.selectById(dto.getCategoryId()).getCategoryType());
         updateById(tmallLink);
         LOGGER.info("修改天猫链接成功,操作员："+currentUserOwner.getRealName());
         return detail(dto.getId());
