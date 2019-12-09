@@ -9,6 +9,7 @@ import com.gizwits.boot.base.ResponseObject;
 import com.gizwits.boot.dto.Pageable;
 import com.gizwits.boot.enums.DeleteStatus;
 import com.gizwits.lease.message.entity.AdvertisementDisplay;
+import com.gizwits.lease.message.entity.dto.AdvertisementQueryDto;
 import com.gizwits.lease.message.service.AdvertisementDisplayService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -47,10 +48,11 @@ public class AdvertisementDisplayController extends BaseController{
                               @RequestParam(value = "url",required = false)String url,
                               @RequestParam(value = "name",required = false)String name,
                               @RequestParam(value = "sort",required = false)Integer sort,
+                              @RequestParam(value = "type",required = false)Integer type,
                               @RequestParam(value = "id",required = false)Integer id){
 
 
-        return success(advertisementDisplayService.addOrUpdate(file,showTime,url,name,sort,id));
+        return success(advertisementDisplayService.addOrUpdate(file,showTime,url,name,sort,id,type));
     }
 
 
@@ -65,7 +67,7 @@ public class AdvertisementDisplayController extends BaseController{
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
     @ApiOperation(value = "列表", notes = "列表", consumes = "application/json")
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    public ResponseObject<Page<AdvertisementDisplay>> list(@RequestBody @Valid RequestObject<Pageable> requestObject) {
+    public ResponseObject<Page<AdvertisementDisplay>> list(@RequestBody @Valid RequestObject<Pageable<AdvertisementQueryDto>> requestObject) {
 
         return success(advertisementDisplayService.list(requestObject.getData()));
     }

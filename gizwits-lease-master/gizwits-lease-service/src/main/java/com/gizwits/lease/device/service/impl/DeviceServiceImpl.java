@@ -813,7 +813,7 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceDao, Device> implements
     @Override
     public DeviceForDetailDto detail1(String id) {
         DeviceForDetailDto detailDto = detail(id);
-        detailDto.setWorkStatusDesc(getDeviceWorkStatus(selectById(id)));
+//        detailDto.setWorkStatusDesc(getDeviceWorkStatus(selectById(id)));
         return detailDto;
     }
 

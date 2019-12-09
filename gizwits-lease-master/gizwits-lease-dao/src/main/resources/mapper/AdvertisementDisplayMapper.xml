@@ -17,4 +17,30 @@
 		<result column="sort" property="sort" />
 	</resultMap>
 
+
+    <select id="selectAdvertPage" parameterType="com.gizwits.lease.message.entity.dto.AdvertisementQueryDto" resultType="com.gizwits.lease.message.entity.AdvertisementDisplay">
+        select * from advertisement_display where is_deleted=0
+        <include refid="whereSql"/>
+        order by ctime
+        limit #{current},#{size}
+    </select>
+    <select id="selectAdvertPageCount" parameterType="com.gizwits.lease.message.entity.dto.AdvertisementQueryDto" resultType="java.lang.Integer">
+        select count(id) from advertisement_display where is_deleted=0
+        <include refid="whereSql"/>
+    </select>
+    <sql id="whereSql">
+        <if test="type!=null">
+            and type=#{type}
+        </if>
+        <if test="name!=null and name!=''">
+            and name like concat('%',#{name},'%')
+        </if>
+        <if test="url!=null and url!=''">
+            and url=like concat('%',#{url},'%')
+        </if>
+        <if test="fromDate!=null and toDate!=null">
+            And Date_format(ctime,'%Y-%m-%d') between Date_format(#{fromDate},'%Y-%m-%d') and
+            Date_format(#{toDate},'%Y-%m-%d')
+        </if>
+    </sql>
 </mapper>

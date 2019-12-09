@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.gizwits.boot.dto.Pageable;
 import com.gizwits.lease.message.entity.AdvertisementDisplay;
 import com.baomidou.mybatisplus.service.IService;
+import com.gizwits.lease.message.entity.dto.AdvertisementQueryDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
  */
 public interface AdvertisementDisplayService extends IService<AdvertisementDisplay> {
 
-    boolean addOrUpdate (MultipartFile file, Integer showTime,String url,String name,Integer sort,Integer id);
+    boolean addOrUpdate (MultipartFile file, Integer showTime,String url,String name,Integer sort,Integer id,Integer type);
 
     AdvertisementDisplay detail(Integer id);
 
@@ -28,5 +29,5 @@ public interface AdvertisementDisplayService extends IService<AdvertisementDispl
 
     AdvertisementDisplay getById(Integer id);
 
-    Page<AdvertisementDisplay> list(Pageable pageable);
+    Page<AdvertisementDisplay> list(Pageable<AdvertisementQueryDto> pageable);
 }

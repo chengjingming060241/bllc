@@ -143,7 +143,13 @@ public class NotiService implements InitializingBean, ApplicationListener<Applic
 
         executor.execute(() -> {
             while (true) {
-                pushEventProcess(client.receiveMessage());
+                try {
+                    pushEventProcess(client.receiveMessage());
+                }catch (Exception e){
+                    log.error("snoti捕获未知异常：{}",e.getMessage());
+                    e.printStackTrace();
+                }
+
             }
         });
     }

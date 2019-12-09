@@ -305,6 +305,7 @@ public enum LeaseExceEnums {
     DONOT_REPAET_OPERATION("1400001","请勿重复操作"),
     SUCCESSFUL_OPERATION("1400002","更新成功"),
     DELETE_USER_ERROR("1400003","部分用户删除失败，可能不存在或已有设备"),
+    ADVERTISEMENT_NOT_EXIST("1400004","广告不存在"),
     ;
     private String code;
     private String message;

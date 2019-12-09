@@ -19,6 +19,7 @@ import com.gizwits.lease.manager.entity.Manufacturer;
 import com.gizwits.lease.manager.service.ManufacturerService;
 import com.gizwits.lease.message.entity.AdvertisementDisplay;
 import com.gizwits.lease.message.dao.AdvertisementDisplayDao;
+import com.gizwits.lease.message.entity.dto.AdvertisementQueryDto;
 import com.gizwits.lease.message.service.AdvertisementDisplayService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
@@ -31,10 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -56,10 +54,13 @@ public class AdvertisementDisplayServiceImpl extends ServiceImpl<AdvertisementDi
     @Autowired
     private ManufacturerService manufacturerService;
 
+    @Autowired
+    private AdvertisementDisplayDao advertisementDisplayDao;
+
 
     @Override
-    public boolean addOrUpdate(MultipartFile file, Integer showTime, String url, String name, Integer sort,Integer id) {
-        SysUser user = sysUserService.getCurrentUserOwner();
+    public boolean addOrUpdate(MultipartFile file, Integer showTime, String url, String name, Integer sort,Integer id,Integer type) {
+        SysUser user = sysUserService.getCurrentUser();
         AdvertisementDisplay display = null;
         if (!ParamUtil.isNullOrEmptyOrZero(id)) {
            display = selectOne(new EntityWrapper<AdvertisementDisplay>().eq("id", id).eq("sys_user_id", user.getId()).eq("is_deleted", 0));
@@ -71,14 +72,14 @@ public class AdvertisementDisplayServiceImpl extends ServiceImpl<AdvertisementDi
             display = new AdvertisementDisplay();
             display.setCtime(new Date());
         }
-        //限制排序字段
-        Pattern pattern = Pattern.compile("^[0-9]+$");
-        Matcher matcher = pattern.matcher(sort+"");
-        Matcher matcher1 = pattern.matcher(showTime+"");
-        if (!matcher.matches()|| !matcher1.matches()|| sort<=0 || showTime<=0){
-            LeaseException.throwSystemException(LeaseExceEnums.PARAM_ILLAGEL);
-        }
-//        MessageCodeConfig messageCodeConfig = SysConfigUtils.get(MessageCodeConfig.class);
+//        //限制排序字段
+//        Pattern pattern = Pattern.compile("^[0-9]+$");
+//        Matcher matcher = pattern.matcher(sort+"");
+//        Matcher matcher1 = pattern.matcher(showTime+"");
+//        if (!matcher.matches()|| !matcher1.matches()|| sort<=0 || showTime<=0){
+//            LeaseException.throwSystemException(LeaseExceEnums.PARAM_ILLAGEL);
+//        }
+
         if(file != null) {
             String filename = file.getOriginalFilename();
             //判断是否为限制文件类型
@@ -118,6 +119,7 @@ public class AdvertisementDisplayServiceImpl extends ServiceImpl<AdvertisementDi
         display.setShowTime(showTime);
         display.setUrl(url);
         display.setName(name);
+        display.setType(type);
         display.setSort(sort);
         return insertOrUpdate(display);
     }
@@ -127,15 +129,18 @@ public class AdvertisementDisplayServiceImpl extends ServiceImpl<AdvertisementDi
         AdvertisementDisplay display = selectOne(new EntityWrapper<AdvertisementDisplay>().eq("id", id).eq("is_deleted", 0));
         if (!ParamUtil.isNullOrEmptyOrZero(display)) {
             String pictureUrl = display.getPicture();
-            if (StringUtils.isNotBlank(pictureUrl)) {
-                String[] picUrls = pictureUrl.split(";");
-                if (picUrls.length > 0) {
-                    for (int i = 0; i < picUrls.length; i++) {
-                        picUrls[i] = "/feedback/picture/" + picUrls[i];
-                    }
-                    display.setPicture(String.join(";", picUrls));
-                }
-            }
+//            if (StringUtils.isNotBlank(pictureUrl)) {
+//                String[] picUrls = pictureUrl.split(";");
+//                if (picUrls.length > 0) {
+//                    for (int i = 0; i < picUrls.length; i++) {
+//                        picUrls[i] = "/feedback/picture/" + picUrls[i];
+//                    }
+//                    display.setPicture(String.join(";", picUrls));
+//                }
+//            }
+        }else{
+
+            LeaseException.throwSystemException(LeaseExceEnums.ADVERTISEMENT_NOT_EXIST);
         }
         return display;
     }
@@ -185,11 +190,20 @@ public class AdvertisementDisplayServiceImpl extends ServiceImpl<AdvertisementDi
     }
 
     @Override
-    public Page<AdvertisementDisplay> list(Pageable pageable) {
-        SysUser sysUser = sysUserService.getCurrentUserOwner();
-        Page<AdvertisementDisplay> page = new Page<>();
-        BeanUtils.copyProperties(pageable, page);
-        return selectPage(page, QueryResolverUtils.parse(pageable, new EntityWrapper<AdvertisementDisplay>().eq("sys_user_id",sysUser.getId()).eq("is_deleted", 0).orderBy("sort", true)));
+    public Page<AdvertisementDisplay> list(Pageable<AdvertisementQueryDto> pageable) {
+        AdvertisementQueryDto queryDto=pageable.getQuery();
+        queryDto.setCurrent((pageable.getCurrent()-1)*pageable.getSize());
+        queryDto.setSize(pageable.getSize());
+        Page<AdvertisementDisplay> page=new Page<>();
+        List<AdvertisementDisplay> list=new ArrayList<>();
+        list=advertisementDisplayDao.selectAdvertPage(queryDto);
+        if(ParamUtil.isNullOrEmptyOrZero(list)){
+            return page;
+        }
+        Integer total=advertisementDisplayDao.selectAdvertPageCount(queryDto);
+        page.setRecords(list);
+        page.setTotal(total);
+        return page;
     }
 
 }

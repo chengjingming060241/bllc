@@ -70,9 +70,21 @@ public class AdvertisementDisplay extends Model<AdvertisementDisplay> {
      * 排序字段
      */
 	private Integer sort;
+    /**
+     * 展示区域，1设备列表，2滤材
+     */
+	private Integer type;
 
 
-	public Integer getId() {
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public Integer getId() {
 		return id;
 	}
 
