@@ -31,12 +31,7 @@ public class UserResetPasswordDto implements Serializable{
     @Pattern(regexp = "^[0-9a-zA-Z\\-_%`~!@#\\u0024\\u005E&\\u002A\\u0028\\u0029\\u002B=]+$", message = "参数格式错误")
     @Length(min = 6, max = 18)
     private String newPassword;
-    /**图形验证码*/
 
-    private String pictureCode;
-    /**图形验证码id*/
-
-    private String pictureId;
 
     public String getMobile() {
         return mobile;
@@ -62,15 +57,4 @@ public class UserResetPasswordDto implements Serializable{
         this.newPassword = newPassword;
     }
 
-    public String getPictureCode() {
-        return pictureCode;
-    }
-
-    public void setPictureCode(String pictureCode) {
-        this.pictureCode = pictureCode;
-    }
-
-    public String getPictureId() { return pictureId; }
-
-    public void setPictureId(String pictureId) { this.pictureId = pictureId; }
 }

@@ -126,20 +126,6 @@ public interface UserService extends IService<User> {
     void thirdBindByToken(UserForThirdBindDto dto);
 
     /**
-     * 第三方绑定（登陆前）
-     * @param dto
-     */
-    JwtAuthenticationDto thirdBindByMobile(UserForThirdBindDto dto);
-
-    /**
-     * 第三方解绑
-     */
-    void thirdUnbind(UserForThirdUnbindDto dto);
-
-//    @Transactional
-//    JwtAuthenticationDto thirdRegister2(UserForThirdRegisterDto dto);
-
-    /**
      * 短信验证码（注册）
      * @param mobile
      * @return
@@ -264,6 +250,10 @@ public interface UserService extends IService<User> {
     Page<UserBindDeviceListVo> bindDeviceList(Pageable pageable);
 
     User getBindUser(String mac);
+    /**
+     * 发送验证码
+     */
+    Boolean sendCode(SendCodeDto sendCodeDto);
 
 //=================END=====================//
 }

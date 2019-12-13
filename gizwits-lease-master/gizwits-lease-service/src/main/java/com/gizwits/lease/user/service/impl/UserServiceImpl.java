@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.gizwits.boot.api.SmsApi;
 import com.gizwits.boot.base.Constants;
+import com.gizwits.boot.common.MessageCodeConfig;
 import com.gizwits.boot.dto.JwtAuthenticationDto;
 import com.gizwits.boot.dto.Pageable;
 import com.gizwits.boot.enums.DeleteStatus;
@@ -19,13 +20,7 @@ import com.gizwits.boot.sys.entity.SysUser;
 import com.gizwits.boot.sys.entity.SysUserExt;
 import com.gizwits.boot.sys.service.SysUserExtService;
 import com.gizwits.boot.sys.service.SysUserService;
-import com.gizwits.boot.utils.CommonEventPublisherUtils;
-import com.gizwits.boot.utils.IdGenerator;
-import com.gizwits.boot.utils.ParamUtil;
-import com.gizwits.boot.utils.PasswordUtil;
-import com.gizwits.boot.utils.QueryResolverUtils;
-import com.gizwits.boot.utils.SysConfigUtils;
-import com.gizwits.boot.utils.WebUtils;
+import com.gizwits.boot.utils.*;
 import com.gizwits.lease.china.entity.china.dto.AreaDto;
 import com.gizwits.lease.china.entity.china.dto.UnifiedAddressDto;
 import com.gizwits.lease.china.service.ChinaAreaService;
@@ -57,6 +52,7 @@ import com.gizwits.lease.user.service.UserChargeCardService;
 import com.gizwits.lease.user.service.UserService;
 import com.gizwits.lease.user.service.UserWxExtService;
 import com.gizwits.lease.util.*;
+import com.gizwits.lease.util.DateUtil;
 import com.gizwits.lease.wallet.service.UserWalletService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.map.HashedMap;
@@ -628,12 +624,26 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
     public TokenDto login(UserLoginDto userLoginDto) {
         String mobile = userLoginDto.getMobile();
         logger.info("登录手机号：" + mobile);
-        User user = getUserByMobile(mobile);
+
+        if(userLoginDto.getCode()!=null){
+            String code=redisService.getMobileCode("loginOrRegister"+mobile);
+            if(ParamUtil.isNullOrEmptyOrZero(code)){
+                LeaseException.throwSystemException(LeaseExceEnums.MOBILE_CODE_ERROR_OR_EXPIRE);
+            }
+            if(!code.equals(userLoginDto.getCode())) {
+                throw new SystemException(SysExceptionEnum.MESSAGE_ERROR.getCode(), SysExceptionEnum.MESSAGE_ERROR.getMessage());
+            }
+            }
+        User user = selectOne(new EntityWrapper<User>().eq("username", mobile).eq("is_deleted", DeleteStatus.NOT_DELETED.getCode()));
         if (Objects.isNull(user)) {
-            LeaseException.throwSystemException(LeaseExceEnums.PHONE_NOT_REGISTER);
+            //没有用户就注册个账号
+              user=register(mobile);
         }
-        if (!PasswordUtil.verify(userLoginDto.getPassword(), user.getPassword())) {
-            LeaseException.throwSystemException(LeaseExceEnums.PHONE_OR_PASSWORD_ERROR);
+        if(userLoginDto.getPassword()!=null&&userLoginDto.getCode()==null){
+
+            if (user.getPassword()==null||!PasswordUtil.verify(userLoginDto.getPassword(), user.getPassword())) {
+                LeaseException.throwSystemException(LeaseExceEnums.PHONE_OR_PASSWORD_ERROR);
+            }
         }
         String accessToken = UUID.randomUUID().toString();
         redisService.cacheAppUser(accessToken, user);
@@ -642,6 +652,15 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
         return tokenDto;
     }
 
+    private User register(String mobile){
+         User user=new User();
+         user.setMobile(mobile);
+         user.setUsername(mobile);
+         user.setCtime(new Date());
+         user.setLastLoginTime(new Date());
+         insert(user);
+         return user;
+    }
     @Override
     public TokenDto login2(UserLoginDto userLoginDto) {
         String mobile = userLoginDto.getMobile();
@@ -1120,17 +1139,12 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
     public void forgetPwd(UserResetPasswordDto userForgetPasswordDto) {
         String mobile = userForgetPasswordDto.getMobile();
         User user = getUserByMobile(mobile);
-
-        //验证图形
-        if (!ParamUtil.isNullOrEmptyOrZero(userForgetPasswordDto.getPictureId())) {
-            String pictrue = redisService.getPictureCode(userForgetPasswordDto.getPictureId());
-            if (!Objects.equals(pictrue.toUpperCase(), userForgetPasswordDto.getPictureCode().toUpperCase())) {
-                LeaseException.throwSystemException(LeaseExceEnums.PICTURE_CODE_ERROR);
-            }
+        //验证验证码
+        String code=redisService.getMobileCode("password"+mobile);
+        if(ParamUtil.isNullOrEmptyOrZero(code)){
+            LeaseException.throwSystemException(LeaseExceEnums.MOBILE_CODE_ERROR_OR_EXPIRE);
         }
-//        if (!Objects.equals(userForgetPasswordDto.getMessage(), user.getCode())) {
-        if (!Objects.equals(userForgetPasswordDto.getMessage(), redisService.getForgetMessageCode(mobile))) {
-
+        if (!Objects.equals(userForgetPasswordDto.getMessage(), code)) {
             throw new SystemException(SysExceptionEnum.MESSAGE_ERROR.getCode(), SysExceptionEnum.MESSAGE_ERROR.getMessage());
         }
         user.setPassword(PasswordUtil.generate(userForgetPasswordDto.getNewPassword()));
@@ -1139,16 +1153,19 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
     }
 
     @Override
-    public void resetPwd(UserForUpdatePwdDto userForUpdatePwdDto) {
+    public void resetPwd(UserForUpdatePwdDto dto) {
         User user = getCurrentUser();
-        if (!PasswordUtil.verify(userForUpdatePwdDto.getOldPassword(), user.getPassword())) {
-            throw new SystemException(SysExceptionEnum.ILLEGAL_USER.getCode(), SysExceptionEnum.ILLEGAL_USER.getMessage());
+        String code=redisService.getMobileCode("password"+user.getMobile());
+        if(ParamUtil.isNullOrEmptyOrZero(code)){
+            LeaseException.throwSystemException(LeaseExceEnums.MOBILE_CODE_ERROR_OR_EXPIRE);
         }
-        User forUpdate = new User();
-        forUpdate.setId(user.getId());
-        forUpdate.setPassword(PasswordUtil.generate(userForUpdatePwdDto.getNewPassword()));
-        forUpdate.setUtime(new Date());
-        updateById(forUpdate);
+        if(!code.equals(dto.getNewPassword())){
+            throw new SystemException(SysExceptionEnum.MESSAGE_ERROR.getCode(), SysExceptionEnum.MESSAGE_ERROR.getMessage());
+        }
+        user.setId(user.getId());
+        user.setPassword(PasswordUtil.generate(dto.getNewPassword()));
+        user.setUtime(new Date());
+        updateById(user);
     }
 
     @Override
@@ -1308,25 +1325,6 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
         thirdBind(userFromDb, dto);
     }
 
-    @Override
-    public JwtAuthenticationDto thirdBindByMobile(UserForThirdBindDto dto) {
-        // 绑定需要手机号、验证码
-        if (StringUtils.isBlank(dto.getMobile()) || StringUtils.isBlank(dto.getMessage())) {
-            LeaseException.throwSystemException(LeaseExceEnums.PARAMS_ERROR);
-        }
-        User userFromDb = getUserByMobile(dto.getMobile());
-        // 校验验证码
-        if (!Objects.equals(dto.getMessage(), redisService.getBindMessageCode(dto.getMobile()))) {
-            throw new SystemException(SysExceptionEnum.MESSAGE_ERROR.getCode(), SysExceptionEnum.MESSAGE_ERROR.getMessage());
-        }
-
-        thirdBind(userFromDb, dto);
-
-        // 第三方绑定后自动登录
-        String accessToken = UUID.randomUUID().toString();
-        redisService.cacheAppUser(accessToken, selectById(userFromDb.getId()));
-        return new JwtAuthenticationDto(accessToken);
-    }
 
     @Override
     public void messageCodeForBind(String mobile) {
@@ -1429,48 +1427,6 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
         return new JwtAuthenticationDto(accessToken);
     }
 
-    @Override
-    public void thirdUnbind(UserForThirdUnbindDto dto) {
-        User user = getCurrentUser();
-        Integer thirdType = dto.getThirdType();
-        ThirdPartyLoginType thirdPartyLoginType = ThirdPartyLoginType.get(thirdType);
-        if (thirdPartyLoginType == null) {
-            LeaseException.throwSystemException(LeaseExceEnums.PARAMS_ERROR);
-        }
-        logger.info("第三方解绑类型：" + thirdPartyLoginType.getName());
-        switch (thirdPartyLoginType) {
-            case WX:
-                //判断用户是否已通过公众号扫码过
-                User wxUser = selectOne(new EntityWrapper<User>().eq("openid", user.getOpenid()).eq("is_deleted", DeleteStatus.DELETED.getCode()));
-                if (!ParamUtil.isNullOrEmptyOrZero(wxUser)) {
-                    //释放已删除的微信公众号用户
-                    wxUser.setIsDeleted(DeleteStatus.NOT_DELETED.getCode());
-                    wxUser.setUtime(new Date());
-                    updateById(wxUser);
-                }
-                UserWxExt userWxExt = userWxExtService.selectOne(new EntityWrapper<UserWxExt>().eq("user_openid", user.getOpenid()));
-                if (!ParamUtil.isNullOrEmptyOrZero(userWxExt)) {
-                    if (userWxExt.getIsDeleted().equals(DeleteStatus.NOT_DELETED.getCode()) && ParamUtil.isNullOrEmptyOrZero(wxUser)) {
-                        userWxExtService.deleteById(userWxExt.getId());
-                    } else if (userWxExt.getIsDeleted().equals(DeleteStatus.DELETED.getCode()) && !ParamUtil.isNullOrEmptyOrZero(wxUser)) {
-                        userWxExt.setUtime(new Date());
-                        userWxExt.setIsDeleted(DeleteStatus.NOT_DELETED.getCode());
-                        userWxExtService.updateById(userWxExt);
-                    }
-
-                }
-                user.setOpenid(null);
-                user.setWxNickname(null);
-                break;
-            case TENCENT:
-                user.setTencentUnionid(null);
-                user.setTencentNickname(null);
-                break;
-        }
-        user.setUtime(new Date());
-        updateAllColumnById(user);
-    }
-
     /**
      * 修改用户手机号
      *
@@ -1478,31 +1434,24 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
      * @return
      */
     public boolean updateUserMobile(UserForUpdateMobileDto mobileDto) {
+        if(mobileDto.getNewMobile()==null||mobileDto.getNewCode()==null||mobileDto.getPassword()==null){
+            LeaseException.throwSystemException(LeaseExceEnums.PARAMS_ERROR);
+        }
         checkMobileExist(mobileDto.getNewMobile());
 
         User user = getCurrentUser();
-        //验证旧手机号
-        if (!Objects.equals(user.getMobile(), mobileDto.getOldMobile())) {
-            LeaseException.throwSystemException(LeaseExceEnums.PARAMS_ERROR);
+        String code=redisService.getMobileCode("password"+user.getMobile());
+        if(ParamUtil.isNullOrEmptyOrZero(code)){
+            LeaseException.throwSystemException(LeaseExceEnums.MOBILE_CODE_ERROR_OR_EXPIRE);
         }
-
-        //验证图形
-        if (!ParamUtil.isNullOrEmptyOrZero(mobileDto.getPictureId())) {
-            String pictrue = redisService.getPictureCode(mobileDto.getPictureId());
-            if (!Objects.equals(pictrue.toUpperCase(), mobileDto.getPictureCode().toUpperCase())) {
-                LeaseException.throwSystemException(LeaseExceEnums.PICTURE_CODE_ERROR);
-            }
-        }
-
         //验证验证码
-        if (!Objects.equals(mobileDto.getNewCode(), redisService.getRegisterMessageCode(mobileDto.getNewMobile()))) {
+        if (!Objects.equals(mobileDto.getNewCode(), code)) {
             throw new SystemException(SysExceptionEnum.MESSAGE_ERROR.getCode(), SysExceptionEnum.MESSAGE_ERROR.getMessage());
         }
-        User forUpdate = new User();
-        forUpdate.setId(user.getId());
-        forUpdate.setMobile(mobileDto.getNewMobile());
-        forUpdate.setUtime(new Date());
-        return updateById(forUpdate);
+        user.setMobile(mobileDto.getNewMobile());
+        user.setPassword(PasswordUtil.generate(mobileDto.getPassword()));
+        user.setUtime(new Date());
+        return updateById(user);
     }
 
     @Override
@@ -1768,6 +1717,31 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
         return userDao.getBindUser(mac);
     }
 
-//===================================//
+    @Override
+    public Boolean sendCode(SendCodeDto sendCodeDto) {
+        if(sendCodeDto.getMobile()==null||sendCodeDto.getType()==null){
+            LeaseException.throwSystemException(LeaseExceEnums.PARAMS_ERROR);
+        }
+        String mobile=StringUtil.decode("mobile_"+sendCodeDto.getMobile());
+        if(mobile.length()<11){
+            LeaseException.throwSystemException(LeaseExceEnums.PHONE_ERROR);
+        }
+         mobile=mobile.substring(mobile.length()-11,mobile.length());
+        logger.info("发送手机号：{}",mobile);
+        if(!MobileCheckUtils.isChinaPhoneLegal(mobile)){
+             LeaseException.throwSystemException(LeaseExceEnums.PHONE_ERROR);
+        }
+//        String appKey = SysConfigUtils.get(MessageCodeConfig.class).getMessageApiKey();
+        String appKey ="a714a43e8a14dfe5252a6b55cd966506";
+//        String templateId = SysConfigUtils.get(MessageCodeConfig.class).getMessageCodeTemplateId();
+        String templateId="3327468";
+        String templateValue = "";
+        Map<String, String> mapParam = new HashMap<>();
+        String message = SmsApi.tplSendSms(appKey, templateId, mobile, templateValue, mapParam);
+        logger.info("code:{}",message);
+        redisService.cacheMobileCode(sendCodeDto.getType()+mobile,message);
+        return true;
+    }
+    //===================================//
 
 }

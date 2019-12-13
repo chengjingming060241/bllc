@@ -34,6 +34,7 @@ public class AppApplication extends SpringBootServletInitializer {
         app.addListeners(new ApplicationListenerReady());
         app.setBannerMode(Banner.Mode.OFF);
         app.run(args);
+        logger.info("app服务启动成功！");
     }
 
     @Override

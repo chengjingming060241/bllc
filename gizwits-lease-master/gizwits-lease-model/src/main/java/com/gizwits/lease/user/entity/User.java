@@ -178,8 +178,18 @@ public class User extends Model<User> {
 
 	@TableField("is_deleted")
 	private Integer isDeleted;
+    @TableField("first_buy_time")
+	private Date firstBuyTime;
 
-	public static long getSerialVersionUID() {
+    public Date getFirstBuyTime() {
+        return firstBuyTime;
+    }
+
+    public void setFirstBuyTime(Date firstBuyTime) {
+        this.firstBuyTime = firstBuyTime;
+    }
+
+    public static long getSerialVersionUID() {
 		return serialVersionUID;
 	}
 

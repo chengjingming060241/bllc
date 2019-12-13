@@ -18,7 +18,7 @@ public class UserLoginDto implements Serializable{
     @NotBlank(message ="请输入手机号码!")
     @Mobile
     private String mobile ;
-    @NotBlank(message ="请输入密码!")
+
     @Pattern(regexp = "^[0-9a-zA-Z\\-_%`~!@#\\u0024\\u005E&\\u002A\\u0028\\u0029\\u002B=]+$", message = "参数格式错误")
     @Length(min = 6, max = 18)
     private String password ;
@@ -27,6 +27,16 @@ public class UserLoginDto implements Serializable{
 
     @ApiModelProperty("产品的appId")
     private String appId;
+    @ApiModelProperty("验证码")
+    private String code;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public String getOpenid() {
         return openid;

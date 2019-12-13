@@ -10,7 +10,7 @@ import javax.validation.constraints.Pattern;
  */
 public class UserForUpdatePwdDto {
     /** 原密码 */
-    @NotBlank
+//    @NotBlank
     /*@Pattern(regexp = "^[0-9a-zA-Z\\-_%`~!@#\\u0024\\u005E&\\u002A\\u0028\\u0029\\u002B=]+$", message = "参数格式错误")
     @Length(min = 6, max = 18)*/
     private String oldPassword;
@@ -20,6 +20,16 @@ public class UserForUpdatePwdDto {
     @Pattern(regexp = "^[0-9a-zA-Z\\-_%`~!@#\\u0024\\u005E&\\u002A\\u0028\\u0029\\u002B=]+$", message = "参数格式错误")
     @Length(min = 6, max = 18)
     private String newPassword;
+
+    private String message;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     public String getOldPassword() {
         return oldPassword;

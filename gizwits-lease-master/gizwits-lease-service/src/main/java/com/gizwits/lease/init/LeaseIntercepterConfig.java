@@ -65,6 +65,7 @@ public class LeaseIntercepterConfig  extends WebMvcConfigurerAdapter{
         whiteAuthUri.add("/app/manage/user/messageAuthenticationCode");
         whiteAuthUri.add("/app/manage/user/forgetPwd");
         whiteAuthUri.add("/app/message/advertisementDisplay/detail");
+        whiteAuthUri.add("/app/user/sendCode");
         String[] strings = new String[whiteAuthUri.size()];
         whiteAuthUri.toArray(strings);
 

@@ -17,12 +17,7 @@ public class UserForUpdateMobileDto {
     private String newMobile;
     @NotNull
     private String newCode;
-    /**图形验证码*/
 
-    private String pictureCode;
-    /**图形验证码id*/
-
-    private String pictureId;
 
     public String getNewMobile() {
         return newMobile;
@@ -56,15 +51,4 @@ public class UserForUpdateMobileDto {
         this.password = password;
     }
 
-    public String getPictureCode() {
-        return pictureCode;
-    }
-
-    public void setPictureCode(String pictureCode) {
-        this.pictureCode = pictureCode;
-    }
-
-    public String getPictureId() { return pictureId; }
-
-    public void setPictureId(String pictureId) { this.pictureId = pictureId; }
 }
