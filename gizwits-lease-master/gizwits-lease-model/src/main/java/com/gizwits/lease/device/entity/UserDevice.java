@@ -92,6 +92,17 @@ public class UserDevice extends Model<UserDevice> {
     @TableLogic
     private Integer isDeleted = 0;
 
+    @TableField("room_name")
+    private String roomName;
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+
     public UserDevice(Date ctime) {
         this.ctime = ctime;
     }

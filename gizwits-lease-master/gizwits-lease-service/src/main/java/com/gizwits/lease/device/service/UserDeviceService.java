@@ -21,9 +21,9 @@ import java.util.List;
  */
 public interface UserDeviceService extends IService<UserDevice> {
 
-    UserDevice add(UserBindDeviceDto deviceDto);
+    Boolean add(UserBindDeviceDto deviceDto);
 
-    UserDevice deleteBind(UserBindDeviceDto deviceDto);
+    Boolean deleteBind(List<String> macs);
 
     Page<UserDevice> userList(Pageable<DeviceSnoDto> pageable);
 

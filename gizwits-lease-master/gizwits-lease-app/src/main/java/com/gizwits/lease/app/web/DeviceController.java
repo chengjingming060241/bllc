@@ -1,9 +1,11 @@
 package com.gizwits.lease.app.web;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import com.gizwits.boot.base.BaseController;
 import com.gizwits.boot.base.Constants;
 import com.gizwits.boot.base.RequestObject;
 import com.gizwits.boot.base.ResponseObject;
+import com.gizwits.boot.dto.Pageable;
 import com.gizwits.boot.utils.ParamUtil;
 import com.gizwits.lease.common.version.DefaultVersion;
 import com.gizwits.lease.common.version.Version;
@@ -128,7 +130,7 @@ public class DeviceController extends BaseController {
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
     @ApiOperation(value = "解绑设备", consumes = "application/json")
     @PostMapping("/unBinddevice")
-    public ResponseObject unBindDevice(@RequestBody RequestObject<UserBindDeviceDto> requestObject) {
+    public ResponseObject unBindDevice(@RequestBody RequestObject<List<String>> requestObject) {
 
         return success(userDeviceService.deleteBind(requestObject.getData()));
     }
@@ -142,17 +144,11 @@ public class DeviceController extends BaseController {
         return success();
     }
 
-   /* @ApiOperation(value = "查询用户已绑定的设备列表")
-    @ApiImplicitParam(paramType = "header",name = Constants.TOKEN_HEADER_NAME)
-    @PostMapping(value = "/device/list")
-    public ResponseObject<Page<UserDeviceDto>> getUserDeviceList(@RequestBody @Valid RequestObject<Pageable<UserDeviceQueryDto>> requestObject){
-        User user = userService.getCurrentUser();
-        Pageable<UserDeviceQueryDto> pageable = requestObject.getData();
-        if (ParamUtil.isNullOrEmptyOrZero(pageable.getQuery())){
-            UserDeviceQueryDto deviceQueryDto = new UserDeviceQueryDto();
-            deviceQueryDto.setUserId(user.getId());
-            pageable.setQuery(deviceQueryDto);
-        }
-        return success(userBindDeviceService.getUserDeviceList(requestObject.getData()));
-    }*/
+//    @ApiOperation(value = "查询用户已绑定的设备列表")
+//    @ApiImplicitParam(paramType = "header",name = Constants.TOKEN_HEADER_NAME)
+//    @PostMapping(value = "/device/list")
+//    public ResponseObject<Page<UserDeviceDto>> getUserDeviceList(@RequestBody @Valid RequestObject<Pageable<UserDeviceQueryDto>> requestObject){
+//
+//        return success(userDeviceService.getUserDeviceList(requestObject.getData()));
+//    }
 }

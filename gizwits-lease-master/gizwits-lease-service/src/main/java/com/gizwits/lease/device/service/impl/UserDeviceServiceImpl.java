@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -53,55 +54,45 @@ public class UserDeviceServiceImpl extends ServiceImpl<UserDeviceDao, UserDevice
      * @return
      */
     @Override
-    public UserDevice add(UserBindDeviceDto deviceDto) {
-        User user = userService.getUserByIdOrOpenidOrMobile(deviceDto.getUserId() + "");
-        if (ParamUtil.isNullOrEmptyOrZero(user)) {
-            LeaseException.throwSystemException(LeaseExceEnums.USER_DONT_EXISTS);
+    public Boolean add(UserBindDeviceDto deviceDto) {
+        User user=userService.getCurrentUser();
+        Device device=deviceService.getDeviceByMac(deviceDto.getMac());
+        if(ParamUtil.isNullOrEmptyOrZero(device)){
+            LeaseException.throwSystemException(LeaseExceEnums.DEVICE_DONT_EXISTS);
         }
         UserDevice userDevice = selectOne(new EntityWrapper<UserDevice>().eq("mac", deviceDto.getMac()).eq("user_id", user.getId()));
         if (ParamUtil.isNullOrEmptyOrZero(userDevice)) {
             userDevice = new UserDevice();
             userDevice.setCtime(new Date());
         }else {
-            return userDevice;
+            return true;
         }
         userDevice.setUtime(new Date());
         userDevice.setIsBind(1);
         userDevice.setUserId(user.getId());
-        int managerCount = selectCount(new EntityWrapper<UserDevice>().eq("mac", deviceDto.getMac())
-                .eq("is_manager", 1));
-        // 有管理员时，其他人绑定就是普通用户，没有管理员时，当前绑定人自动成为管理员
-        userDevice.setIsManager(managerCount > 0 ? 0 : 1);
-        Device device = deviceService.getDeviceByMac(deviceDto.getMac());
-        if (ParamUtil.isNullOrEmptyOrZero(device)){
-            LeaseException.throwSystemException(LeaseExceEnums.DEVICE_DONT_EXISTS);
-        }
         userDevice.setSno(device.getSno());
         userDevice.setMac(device.getMac());
         userDevice.setMobile(user.getMobile());
-        insert(userDevice);
-        return userDevice;
+        return insert(userDevice);
     }
 
     /**
      * 解绑设备与用户的关系
-     * @param deviceDto
+     * @param macs
      * @return
      */
     @Override
-    public UserDevice deleteBind(UserBindDeviceDto deviceDto) {
-        User user = userService.getUserByIdOrOpenidOrMobile(deviceDto.getUserId() + "");
-        if (ParamUtil.isNullOrEmptyOrZero(user)) {
-            LeaseException.throwSystemException(LeaseExceEnums.USER_DONT_EXISTS);
+    public Boolean deleteBind(List<String> macs) {
+        User user = userService.getCurrentUser();
+        if(ParamUtil.isNullOrEmptyOrZero(macs)){
+            LeaseException.throwSystemException(LeaseExceEnums.PARAMS_ERROR);
         }
-        UserDevice userDevice = selectOne(new EntityWrapper<UserDevice>().eq("mac", deviceDto.getMac()).eq("user_id", user.getId()));
-        if (ParamUtil.isNullOrEmptyOrZero(userDevice)) {
-            LeaseException.throwSystemException(LeaseExceEnums.ENTITY_NOT_EXISTS);
-        }
+
+        UserDevice userDevice=new UserDevice();
         userDevice.setUtime(new Date());
+        userDevice.setIsDeleted(1);
         userDevice.setIsBind(0);
-        updateById(userDevice);
-        return userDevice;
+        return update(userDevice,new EntityWrapper<UserDevice>().in("mac",macs).eq("is_deleted",0));
     }
 
     /**
