@@ -1,20 +1,21 @@
 package com.gizwits.lease.device.entity.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 
+@Data
 public class UserDeviceQueryDto {
 
-    @ApiModelProperty("用户ID")
-    @NotNull(message = "userId may not be null")
+
+    private Integer roomId;
+
+    @JsonIgnore
+    private Integer current;
+    @JsonIgnore
+    private Integer size;
+    @JsonIgnore
     private Integer userId;
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
 }

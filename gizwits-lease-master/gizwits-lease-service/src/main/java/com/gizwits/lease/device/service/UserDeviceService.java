@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.gizwits.boot.dto.Pageable;
 import com.gizwits.lease.device.entity.UserDevice;
 import com.baomidou.mybatisplus.service.IService;
-import com.gizwits.lease.device.entity.dto.DeviceSnoDto;
-import com.gizwits.lease.device.entity.dto.UserBindDeviceDto;
-import com.gizwits.lease.device.entity.dto.UserDeviceDto;
-import com.gizwits.lease.device.entity.dto.UserDeviceQueryDto;
+import com.gizwits.lease.device.entity.dto.*;
 
 import java.util.List;
 
@@ -28,4 +25,8 @@ public interface UserDeviceService extends IService<UserDevice> {
     Page<UserDevice> userList(Pageable<DeviceSnoDto> pageable);
 
     Page<UserDeviceDto> deviceList(Pageable<UserDeviceQueryDto> pageable);
+
+    Page getUserDeviceList(Pageable<UserDeviceQueryDto> pageable);
+
+    Boolean deviceMove(AppDeviceMoveDto dto);
 }

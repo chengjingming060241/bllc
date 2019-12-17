@@ -92,15 +92,15 @@ public class UserDevice extends Model<UserDevice> {
     @TableLogic
     private Integer isDeleted = 0;
 
-    @TableField("room_name")
-    private String roomName;
+    @TableField("room_id")
+    private Integer roomId;
 
-    public String getRoomName() {
-        return roomName;
+    public Integer getRoomId() {
+        return roomId;
     }
 
-    public void setRoomName(String roomName) {
-        this.roomName = roomName;
+    public void setRoomId(Integer roomId) {
+        this.roomId = roomId;
     }
 
     public UserDevice(Date ctime) {

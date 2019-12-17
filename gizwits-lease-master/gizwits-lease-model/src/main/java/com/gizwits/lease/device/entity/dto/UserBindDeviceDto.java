@@ -13,6 +13,16 @@ public class UserBindDeviceDto implements Serializable{
     private String mac;
     private Integer userId;
 
+    private String roomName;
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+
     public String getMac() { return mac; }
 
     public void setMac(String mac) { this.mac = mac; }

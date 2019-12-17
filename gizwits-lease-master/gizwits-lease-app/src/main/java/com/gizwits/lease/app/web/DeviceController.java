@@ -20,14 +20,11 @@ import com.gizwits.lease.product.dto.AppProductDataPointDto;
 import com.gizwits.lease.product.entity.ProductDataPoint;
 import com.gizwits.lease.product.service.ProductDataPointService;
 import com.gizwits.lease.product.service.ProductService;
+import com.gizwits.lease.user.service.UserRoomService;
 import com.gizwits.lease.user.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -60,6 +57,9 @@ public class DeviceController extends BaseController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserRoomService userRoomService;
 
     @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
     @ApiOperation(value = "发送控制指令", consumes = "application/json")
@@ -143,12 +143,29 @@ public class DeviceController extends BaseController {
         deviceService.updateDeviceLocation(requestObject.getData());
         return success();
     }
+    @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
+    @ApiOperation(value = "获取用户设备房间", consumes = "application/json")
+    @GetMapping("/deviceRoom")
+    public ResponseObject deviceRoom() {
 
-//    @ApiOperation(value = "查询用户已绑定的设备列表")
-//    @ApiImplicitParam(paramType = "header",name = Constants.TOKEN_HEADER_NAME)
-//    @PostMapping(value = "/device/list")
-//    public ResponseObject<Page<UserDeviceDto>> getUserDeviceList(@RequestBody @Valid RequestObject<Pageable<UserDeviceQueryDto>> requestObject){
-//
-//        return success(userDeviceService.getUserDeviceList(requestObject.getData()));
-//    }
+        return success(userRoomService.getUserRoom());
+    }
+    @ApiOperation(value = "查询用户已绑定的设备列表")
+    @ApiImplicitParam(paramType = "header",name = Constants.TOKEN_HEADER_NAME)
+    @PostMapping(value = "/device/list")
+    public ResponseObject<Page> getUserDeviceList(@RequestBody @Valid RequestObject<Pageable<UserDeviceQueryDto>> requestObject){
+        return success(userDeviceService.getUserDeviceList(requestObject.getData()));
+    }
+    @ApiOperation(value = "设备重命名(可批量)")
+    @ApiImplicitParam(paramType = "header",name = Constants.TOKEN_HEADER_NAME)
+    @PostMapping(value = "/updateDeviceName")
+    public ResponseObject updateDeviceName(@RequestBody @Valid RequestObject<AppUpdateDeviceNameDto> requestObject){
+        return success(deviceService.updateDeviceName(requestObject.getData()));
+    }
+    @ApiOperation(value = "设备移动(可批量)")
+    @ApiImplicitParam(paramType = "header",name = Constants.TOKEN_HEADER_NAME)
+    @PostMapping(value = "/deviceMove")
+    public ResponseObject deviceMove(@RequestBody @Valid RequestObject<AppDeviceMoveDto> requestObject){
+        return success(userDeviceService.deviceMove(requestObject.getData()));
+    }
 }

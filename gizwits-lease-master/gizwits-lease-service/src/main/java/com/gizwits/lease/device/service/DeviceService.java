@@ -331,5 +331,9 @@ public interface DeviceService extends IService<Device> {
      * 获取设备的绑定用户
      */
     User getBindUser(String sno);
+    /**
+     * app更新设备名称，可批量
+     */
+    Boolean updateDeviceName(AppUpdateDeviceNameDto dto);
     //Sunny END//
 }

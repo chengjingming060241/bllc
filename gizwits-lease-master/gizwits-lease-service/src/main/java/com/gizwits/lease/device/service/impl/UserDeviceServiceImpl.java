@@ -9,23 +9,23 @@ import com.gizwits.lease.constant.DeviceOnlineStatus;
 import com.gizwits.lease.constant.DeviceStatus;
 import com.gizwits.lease.device.entity.Device;
 import com.gizwits.lease.device.entity.UserBindDevice;
-import com.gizwits.lease.device.entity.dto.DeviceSnoDto;
-import com.gizwits.lease.device.entity.dto.UserBindDeviceDto;
+import com.gizwits.lease.device.entity.dto.*;
 import com.gizwits.lease.device.entity.UserDevice;
 import com.gizwits.lease.device.dao.UserDeviceDao;
-import com.gizwits.lease.device.entity.dto.UserDeviceDto;
-import com.gizwits.lease.device.entity.dto.UserDeviceQueryDto;
 import com.gizwits.lease.device.service.DeviceService;
 import com.gizwits.lease.device.service.UserDeviceService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.gizwits.lease.exceptions.LeaseExceEnums;
 import com.gizwits.lease.exceptions.LeaseException;
 import com.gizwits.lease.user.entity.User;
+import com.gizwits.lease.user.entity.UserRoom;
+import com.gizwits.lease.user.service.UserRoomService;
 import com.gizwits.lease.user.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,6 +47,12 @@ public class UserDeviceServiceImpl extends ServiceImpl<UserDeviceDao, UserDevice
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserRoomService userRoomService;
+
+    @Autowired
+    private UserDeviceDao userDeviceDao;
+
     /**
      * 绑定设备与用户的关系
      *
@@ -59,6 +65,18 @@ public class UserDeviceServiceImpl extends ServiceImpl<UserDeviceDao, UserDevice
         Device device=deviceService.getDeviceByMac(deviceDto.getMac());
         if(ParamUtil.isNullOrEmptyOrZero(device)){
             LeaseException.throwSystemException(LeaseExceEnums.DEVICE_DONT_EXISTS);
+        }
+        UserRoom userRoom=new UserRoom();
+        String roomName=deviceDto.getRoomName()==null?"默认房间":deviceDto.getRoomName();
+        if(!roomName.equals("默认房间")){
+             userRoom = userRoomService.selectOne(new EntityWrapper<UserRoom>().eq("name", roomName).eq("is_deleted", 0));
+            if (ParamUtil.isNullOrEmptyOrZero(userRoom)) {
+                userRoom = new UserRoom();
+                userRoom.setCtime(new Date());
+                userRoom.setName(roomName);
+                userRoom.setUserId(user.getId());
+                userRoomService.insert(userRoom);
+            }
         }
         UserDevice userDevice = selectOne(new EntityWrapper<UserDevice>().eq("mac", deviceDto.getMac()).eq("user_id", user.getId()));
         if (ParamUtil.isNullOrEmptyOrZero(userDevice)) {
@@ -73,6 +91,7 @@ public class UserDeviceServiceImpl extends ServiceImpl<UserDeviceDao, UserDevice
         userDevice.setSno(device.getSno());
         userDevice.setMac(device.getMac());
         userDevice.setMobile(user.getMobile());
+        userDevice.setRoomId(roomName.equals("默认房间")?null:userRoom.getId());
         return insert(userDevice);
     }
 
@@ -135,5 +154,41 @@ public class UserDeviceServiceImpl extends ServiceImpl<UserDeviceDao, UserDevice
         return result;
     }
 
+    @Override
+    public Page getUserDeviceList(Pageable<UserDeviceQueryDto> pageable) {
+        User user=userService.getCurrentUser();
+        UserDeviceQueryDto queryDto=pageable.getQuery()==null?new UserDeviceQueryDto():pageable.getQuery();
+        queryDto.setCurrent((pageable.getCurrent()-1)*pageable.getSize());
+        queryDto.setSize(pageable.getSize());
+        queryDto.setUserId(user.getId());
+        Page<Device> page=new Page<>();
+        List<Device> list=new ArrayList<>();
+         list=userDeviceDao.selectDeviceByUserId(queryDto);
+         if(ParamUtil.isNullOrEmptyOrZero(list)){
+             return page;
+         }
+         Integer total=userDeviceDao.selectDeviceByUserIdCount(queryDto);
+         page.setRecords(list);
+         page.setTotal(total);
+        return page;
+    }
 
+    @Override
+    public Boolean deviceMove(AppDeviceMoveDto dto) {
+        User user=userService.getCurrentUser();
+        List<String> macs=dto.getMacs();
+        if(ParamUtil.isNullOrEmptyOrZero(macs)){
+            return false;
+        }
+        Date date=new Date();
+       macs.stream().forEach(mac->{
+           UserDevice userDevice=selectOne(new EntityWrapper<UserDevice>().eq("user_id",user.getId()).eq("mac",mac).eq("is_deleted",0));
+           if(!ParamUtil.isNullOrEmptyOrZero(userDevice)) {
+               userDevice.setUtime(date);
+               userDevice.setRoomId(dto.getRoomId() == 0 ? null : dto.getRoomId());
+               updateAllColumnById(userDevice);
+           }
+       });
+       return true;
+    }
 }

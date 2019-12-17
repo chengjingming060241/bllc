@@ -2037,5 +2037,16 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceDao, Device> implements
         return user;
     }
 
+    @Override
+    public Boolean updateDeviceName(AppUpdateDeviceNameDto dto) {
+         List<String> macs=dto.getMacs();
+         if(ParamUtil.isNullOrEmptyOrZero(macs)){
+             return false;
+         }
+         Device device=new Device();
+         device.setUtime(new Date());
+         device.setName(dto.getName());
+        return update(device,new EntityWrapper<Device>().in("mac",macs).eq("is_deleted",0));
+    }
 //===============================END==============================================//
 }

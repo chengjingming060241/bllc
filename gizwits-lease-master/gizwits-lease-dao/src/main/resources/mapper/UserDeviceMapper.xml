@@ -17,4 +17,20 @@
 		<result column="is_manager" property="isManager"/>
 	</resultMap>
 
+    <select id="selectDeviceByUserId" resultType="com.gizwits.lease.device.entity.Device" parameterType="com.gizwits.lease.device.entity.dto.UserDeviceQueryDto">
+        select d.* from device d left join user_device ud on d.mac=ud.mac
+        where d.is_deleted=0 and ud.is_deleted=0 and ud.user_id=#{userId}
+        <if test="roomId!=null">
+            ud.room_id=#{roomId}
+        </if>
+        limit #{current},#{size}
+  </select>
+    <select id="selectDeviceByUserIdCount" resultType="java.lang.Integer" parameterType="com.gizwits.lease.device.entity.dto.UserDeviceQueryDto">
+        select count(d.sno) from device d left join user_device ud on d.mac=ud.mac
+        where d.is_deleted=0 and ud.is_deleted=0 and ud.user_id=#{userId}
+        <if test="roomId!=null">
+            ud.room_id=#{roomId}
+        </if>
+
+    </select>
 </mapper>
