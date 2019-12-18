@@ -41,4 +41,14 @@
 		WHERE p.`id` = d.`product_id`
 		AND d.`sno` = #{sno} and d.is_deleted=0 and p.is_deleted=0
 	</select>
+
+    <select id="getProduct" resultType="com.gizwits.lease.product.entity.Product" parameterType="com.gizwits.lease.product.dto.AppProductQueryDto">
+         select * from product where is_deleted=0
+         <if test="categoryId!=null">
+             and category_id=#{categoryId}
+         </if>
+        <if test="productName!=null and productName!=''">
+            and name like concat('%',#{productName},'%')
+        </if>
+    </select>
 </mapper>

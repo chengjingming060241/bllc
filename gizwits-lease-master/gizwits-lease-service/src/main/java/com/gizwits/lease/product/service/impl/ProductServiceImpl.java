@@ -473,4 +473,9 @@ public class ProductServiceImpl extends ServiceImpl<ProductDao, Product> impleme
 
         return result;
     }
+
+    @Override
+    public List<Product> getProduct(AppProductQueryDto queryDto) {
+        return productDao.getProduct(queryDto);
+    }
 }

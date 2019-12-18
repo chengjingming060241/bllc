@@ -1,6 +1,7 @@
 package com.gizwits.lease.product.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.gizwits.lease.product.dto.AppProductQueryDto;
 import com.gizwits.lease.product.entity.Product;
 import org.apache.ibatis.annotations.Param;
 
@@ -19,4 +20,6 @@ public interface ProductDao extends BaseMapper<Product> {
     List<Product> findAllUseableProduct();
 
     Product getProductBySno(@Param("sno") String sno);
+
+    List<Product> getProduct(AppProductQueryDto queryDto);
 }

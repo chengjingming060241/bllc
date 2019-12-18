@@ -83,4 +83,6 @@ public interface ProductService extends IService<Product> {
 
 
     Integer resolveManufacturerAccount(SysUser current);
+
+    List<Product> getProduct(AppProductQueryDto queryDto);
 }
