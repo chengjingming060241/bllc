@@ -121,7 +121,7 @@ public class FeedbackUserServiceImpl extends ServiceImpl<FeedbackUserDao, Feedba
     }
 
     @Override
-    public boolean saveUserFeedback(List<MultipartFile> fileList, String sno, String phone, String content, Integer origin) {
+    public boolean saveUserFeedback(List<MultipartFile> fileList, String sno, String phone, String content, Integer type) {
         User user = userService.getCurrentUser();
         int count = countByUserName(user.getId());
         if (count > 10) {
@@ -163,20 +163,7 @@ public class FeedbackUserServiceImpl extends ServiceImpl<FeedbackUserDao, Feedba
             content = "默认的问题反馈内容";
         }
         feedbackUser.setContent(content);
-        if (ParamUtil.isNullOrEmptyOrZero(origin)) {
-            origin = FeedBackUserType.USER.getCode();
-        }
-        feedbackUser.setOrigin(origin);
-        if (org.apache.commons.lang.StringUtils.isNotEmpty(sno)) {
-            Device device = deviceService.selectById(sno);
-            if (device != null) {
-                feedbackUser.setSno(device.getSno());
-                feedbackUser.setMac(device.getMac());
-            }
-        } else {
-            feedbackUser.setSno("设备号");
-            feedbackUser.setMac("mac");
-        }
+       feedbackUser.setType(type);
         feedbackUser.setCtime(new Date());
         if (!ParamUtil.isNullOrEmptyOrZero(phone)) {
             if (!MobileCheckUtils.isChinaPhoneLegal(phone)) {
@@ -188,22 +175,6 @@ public class FeedbackUserServiceImpl extends ServiceImpl<FeedbackUserDao, Feedba
             feedbackUser.setUserId(user.getId());
             feedbackUser.setAvatar(user.getAvatar());
             feedbackUser.setNickName(user.getNickname());
-            if (!ParamUtil.isNullOrEmptyOrZero(user.getSysUserId())) {
-                feedbackUser.setRecipientId(user.getSysUserId());
-                SysUser sysUser = sysUserService.selectById(user.getSysUserId());
-                feedbackUser.setRecipientName(sysUser.getUsername());
-            }
-        }
-        if (ParamUtil.isNullOrEmptyOrZero(feedbackUser.getRecipientId())) {
-            UserWxExt userWxtExt = userWxExtService.getByOpenid(user.getOpenid());
-            if (Objects.nonNull(userWxtExt)) {
-                SysUserExt sysUserExt = sysUserExtService.selectOne(new EntityWrapper<SysUserExt>().eq("wx_id", userWxtExt.getWxId()));
-                if (Objects.nonNull(sysUserExt)) {
-                    SysUser sysUser = sysUserService.selectById(sysUserExt.getSysUserId());
-                    feedbackUser.setRecipientName(sysUser.getUsername());
-                    feedbackUser.setRecipientId(sysUser.getId());
-                }
-            }
         }
 
         return insert(feedbackUser);

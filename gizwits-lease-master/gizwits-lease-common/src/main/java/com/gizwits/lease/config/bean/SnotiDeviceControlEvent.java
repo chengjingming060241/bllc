@@ -1,5 +1,6 @@
 package com.gizwits.lease.config.bean;
 
+import com.gizwits.lease.device.entity.dto.ControlDto;
 import org.springframework.context.ApplicationEvent;
 
 /**
@@ -9,14 +10,14 @@ import org.springframework.context.ApplicationEvent;
  */
 public class SnotiDeviceControlEvent extends ApplicationEvent {
 
-    private SnotiDeviceControlDTO snotiDeviceControlDTO;
+    private ControlDto controlDto;
 
-    public SnotiDeviceControlEvent(SnotiDeviceControlDTO source) {
+    public SnotiDeviceControlEvent(ControlDto source) {
         super(source);
-        this.snotiDeviceControlDTO = source;
+        this.controlDto = source;
     }
 
-    public SnotiDeviceControlDTO getSnotiDeviceControlDTO() {
-        return snotiDeviceControlDTO;
+    public ControlDto getSnotiDeviceControlDTO() {
+        return controlDto;
     }
 }

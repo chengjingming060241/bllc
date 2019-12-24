@@ -306,6 +306,10 @@ public enum LeaseExceEnums {
     SUCCESSFUL_OPERATION("1400002","更新成功"),
     DELETE_USER_ERROR("1400003","部分用户删除失败，可能不存在或已有设备"),
     ADVERTISEMENT_NOT_EXIST("1400004","广告不存在"),
+    DEVICE_PLAN_PARAM_ERROR("1400005","定时内容参数不合法"),
+    PLAN_REPEAT_ERROR("1400006","定时内容重复"),
+    PLAN_NOT_EXIST("1400007","定时计划不存在"),
+    USER_ROOM_NOT_EXIST("1400008","用户房间不存在"),
     ;
     private String code;
     private String message;

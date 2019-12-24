@@ -33,7 +33,7 @@ public interface FeedbackUserService extends IService<FeedbackUser> {
 
     void insertFeedbackUser(FeedbackUserDto feedbackDto);
 
-    boolean saveUserFeedback(List<MultipartFile> fileList, String sno, String phone, String content, Integer origin);
+    boolean saveUserFeedback(List<MultipartFile> fileList, String sno, String phone, String content, Integer type);
 
     Boolean delete(List<Integer> ids);
     /**

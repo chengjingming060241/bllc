@@ -22,6 +22,7 @@ import com.gizwits.lease.user.dto.UserLoginDto;
 import com.gizwits.lease.user.dto.UserUpdateDto;
 import com.gizwits.lease.user.entity.User;
 import com.gizwits.lease.enums.MoveType;
+import com.gizwits.lease.user.entity.UserFamily;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -254,6 +255,12 @@ public interface UserService extends IService<User> {
      * 发送验证码
      */
     Boolean sendCode(SendCodeDto sendCodeDto);
+    /**
+     * APP获取登陆用户的家庭
+     */
+    UserFamilyDto getUserFamily();
+
+    Boolean updateUserFamily(UserFamilyUpdateDto dto);
 
 //=================END=====================//
 }

@@ -442,4 +442,9 @@ WHERE
             Date_format(#{toDate},'%Y-%m-%d')
         </if>
     </sql>
+
+    <select id="getUserRoomDevice" parameterType="java.lang.Integer" resultType="com.gizwits.lease.device.entity.Device">
+        select d.* from device d left join user_device ud on d.mac=ud.mac
+        where d.is_deleted=0 and ud.is_deleted=0 and ud.room_id=#{roomId}
+    </select>
 </mapper>

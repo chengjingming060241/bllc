@@ -47,8 +47,10 @@ import com.gizwits.lease.stat.vo.StatUserWidgetVo;
 import com.gizwits.lease.user.dao.UserDao;
 import com.gizwits.lease.user.dto.*;
 import com.gizwits.lease.user.entity.User;
+import com.gizwits.lease.user.entity.UserFamily;
 import com.gizwits.lease.user.entity.UserWxExt;
 import com.gizwits.lease.user.service.UserChargeCardService;
+import com.gizwits.lease.user.service.UserFamilyService;
 import com.gizwits.lease.user.service.UserService;
 import com.gizwits.lease.user.service.UserWxExtService;
 import com.gizwits.lease.util.*;
@@ -101,6 +103,9 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
 
     @Autowired
     private UserBindDeviceService userBindDeviceService;
+
+    @Autowired
+    private UserFamilyService userFamilyService;
 
     @Autowired
     private UserBindDeviceDao userBindDeviceDao;
@@ -1742,6 +1747,32 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
         redisService.cacheMobileCode(sendCodeDto.getType()+mobile,message);
         return true;
     }
+
+    @Override
+    public UserFamilyDto getUserFamily() {
+        User user=getCurrentUser();
+        UserFamily userFamily=userFamilyService.selectOne(new EntityWrapper<UserFamily>().eq("user_id",user.getId()));
+        UserFamilyDto dto=new UserFamilyDto();
+        if(!ParamUtil.isNullOrEmptyOrZero(userFamily)){
+            BeanUtils.copyProperties(userFamily,dto);
+            Integer count=userBindDeviceService.selectCount(new EntityWrapper<UserBindDevice>().eq("user_id",user.getId()).eq("is_deleted",0));
+          dto.setDeviceCount(count);
+         }
+        return dto;
+    }
+
+    @Override
+    public Boolean updateUserFamily(UserFamilyUpdateDto dto) {
+        User user=getCurrentUser();
+        UserFamily userFamily=userFamilyService.selectOne(new EntityWrapper<UserFamily>().eq("user_id",user.getId()));
+         if(ParamUtil.isNullOrEmptyOrZero(userFamily)){
+             userFamily=new UserFamily();
+             userFamily.setCtime(new Date());
+         }
+        BeanUtils.copyProperties(dto,userFamily);
+        return userFamilyService.insertOrUpdate(userFamily);
+    }
+
     //===================================//
 
 }

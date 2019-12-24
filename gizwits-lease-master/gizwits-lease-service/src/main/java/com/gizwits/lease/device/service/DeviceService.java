@@ -335,5 +335,13 @@ public interface DeviceService extends IService<Device> {
      * app更新设备名称，可批量
      */
     Boolean updateDeviceName(AppUpdateDeviceNameDto dto);
+    /**
+     * 根据房间id获取房间下设备
+     */
+    List<Device> getUserRoomDevices(Integer roomId);
+    /**
+     * job 发送定时任务
+     */
+    void sendPlanToDevices();
     //Sunny END//
 }

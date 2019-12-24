@@ -32,8 +32,8 @@ public class FeedBackController extends BaseController {
                                  @RequestParam(value = "sno",required = false) String sno ,
                                  @RequestParam(value = "phone",required = false) String phone,
                                  @RequestParam(value = "content", required = true) String content,
-                                 @RequestParam("origin")Integer origin) {
-        feedbackUserService.saveUserFeedback(files, sno, phone, content, origin);
+                                 @RequestParam("type")Integer type) {
+        feedbackUserService.saveUserFeedback(files, sno, phone, content, type);
         return success();
     }
 }

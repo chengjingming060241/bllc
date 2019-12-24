@@ -143,13 +143,6 @@ public class DeviceController extends BaseController {
         deviceService.updateDeviceLocation(requestObject.getData());
         return success();
     }
-    @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
-    @ApiOperation(value = "获取用户设备房间", consumes = "application/json")
-    @GetMapping("/deviceRoom")
-    public ResponseObject deviceRoom() {
-
-        return success(userRoomService.getUserRoom());
-    }
     @ApiOperation(value = "查询用户已绑定的设备列表")
     @ApiImplicitParam(paramType = "header",name = Constants.TOKEN_HEADER_NAME)
     @PostMapping(value = "/device/list")

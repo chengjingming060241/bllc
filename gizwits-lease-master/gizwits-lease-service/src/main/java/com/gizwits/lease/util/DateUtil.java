@@ -25,7 +25,17 @@ public class DateUtil {
     public static final int RECURSIVE_STRIP_LEADING_ZERO_FIELD_STYLE = STRIP_LEADING_ZERO_FIELD_STYLE | RECURSIVE_STRIP_FLAG; // 0x01 | 0x04
 
     public static final int DEFAULT_STYLE = 0x00;
-
+    private static final Map<Integer,String> weekMap=new HashMap<Integer,String>(){
+        {
+            put(1,"sun");
+            put(2,"mon");
+            put(3,"tue");
+            put(4,"wed");
+            put(5,"thu");
+            put(6,"fri");
+            put(7,"sat");
+        }
+    };
     /**
      * 获取某一天的开始时间
      * @param startTime
@@ -923,7 +933,67 @@ public class DateUtil {
         }
         return time;
     }
+    /**
+    *
+     * @author Sunny
+     * @description 根据日期获取星期几
+     * @date 2019/12/24 16:16
+     * @param  * @param date
+     * @return java.lang.String
+     * @version 1.0
+    */
+    public static String getWeekByDate(Date date){
+        Calendar c=Calendar.getInstance();
+        c.setTime(date);
+        int weekday=c.get(Calendar.DAY_OF_WEEK);
+        return weekMap.get(weekday);
+    }
+    /**
+    *
+     * @author Sunny
+     * @description 判断两个时间是否相差几分钟
+     * @date 2019/12/24 17:00
+     * @param  nowTime  当前时间
+     * @param time  定时要发送的时间
+     * @return long
+     * @version 1.0
+    */
+    public static long checkMinute(String nowTime,String time) {
+      if(nowTime.equals("23:59")&&time.equals("00:00")){
+          return 1;
+      }
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        Date parse = null;
+        Date now = null;
+        try {
+            parse = sdf.parse(time);
+             now=sdf.parse(nowTime);
+        } catch (ParseException e) {
 
+        }
+        long diff = now.getTime() - parse.getTime();
+        long minute = diff/60/1000;
+        return minute;
+    }
+    /**
+    *
+     * @author Sunny
+     * @description 判断thisday中是否包含today
+     * @date 2019/12/24 17:05
+     * @param  today
+     * @param thisDay
+     * @return java.lang.Boolean
+     * @version 1.0
+    */
+    public static Boolean checkWeek(String today,String thisDay){
+        if(thisDay.equals("once")&&thisDay.length()==4){
+            return true;
+        }
+         if(thisDay.indexOf(today)>0){
+             return true;
+         }
+         return false;
+    }
     public static void main(String args[]) {
 //        System.out.println(getTimestampString(null));
 //        System.out.println(StringTimeToDate("12:30:00",0,new Date()));
@@ -969,8 +1039,11 @@ public class DateUtil {
 //        System.out.println(DateUtil.getDayStartTime(new Date()));
 //
 //        System.out.println(DateUtil.getDayEndTime(new Date()));
-        System.out.println(dateToString(new Date(),"yyyy-MM-dd"));
+//        System.out.println(dateToString(new Date(),"HH:mm"));
+//        System.out.println(getWeekByDate(new Date()));
+//        System.out.println(checkMinute("23:59","00:00"));
 
+        System.out.println(checkWeek("sun","once"));
     }
 
 }

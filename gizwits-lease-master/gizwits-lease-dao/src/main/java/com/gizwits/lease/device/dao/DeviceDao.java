@@ -3,6 +3,7 @@ package com.gizwits.lease.device.dao;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.gizwits.lease.device.entity.Device;
 
+import com.gizwits.lease.device.entity.DevicePlan;
 import com.gizwits.lease.device.entity.dto.DeviceQueryDto;
 import com.gizwits.lease.stat.vo.StatAlarmWidgetVo;
 import com.gizwits.lease.stat.vo.StatDeviceStatisticsVo;
@@ -127,5 +128,8 @@ public interface DeviceDao extends BaseMapper<Device> {
      */
     List<Device> selectDevices(DeviceQueryDto deviceQueryDto);
     Integer selectDevicesCount(DeviceQueryDto deviceQueryDto);
+
+    List<Device> getUserRoomDevice(@Param("roomId") Integer roomId);
+
     //==================END=============================//
 }

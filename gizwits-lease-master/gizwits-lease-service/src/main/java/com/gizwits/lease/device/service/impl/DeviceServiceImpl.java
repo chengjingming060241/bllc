@@ -24,6 +24,7 @@ import com.gizwits.lease.benefit.entity.ShareBenefitRuleDetailDevice;
 import com.gizwits.lease.config.CommonSystemConfig;
 import com.gizwits.lease.constant.*;
 import com.gizwits.lease.device.dao.DeviceDao;
+import com.gizwits.lease.device.dao.DevicePlanDao;
 import com.gizwits.lease.device.entity.*;
 import com.gizwits.lease.device.entity.dto.*;
 import com.gizwits.lease.device.service.*;
@@ -67,6 +68,7 @@ import com.gizwits.lease.user.service.UserService;
 import com.gizwits.lease.user.service.UserWeixinService;
 import com.gizwits.lease.util.*;
 
+import com.google.gson.JsonElement;
 import groovy.util.IFileNameFinder;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.collections.CollectionUtils;
@@ -98,10 +100,6 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceDao, Device> implements
 
     @Autowired
     private DeviceDao deviceDao;
-
-
-    @Autowired
-    private OperatorExtService operatorExtService;
 
     @Autowired
     private ManufacturerService manufacturerService;
@@ -166,6 +164,8 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceDao, Device> implements
     private UserBindDeviceService userBindDeviceService;
 
 
+    @Autowired
+    private DevicePlanDao devicePlanDao;
 
 
     @Override
@@ -433,7 +433,17 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceDao, Device> implements
             LeaseException.throwSystemException(LeaseExceEnums.DEVICE_OFFLINE);
         }
         Product product = productService.getProductByProductId(device.getProductId());
-        return DeviceControlAPI.remoteControl(product.getGizwitsProductKey(), device.getGizDid(), attrs);
+
+//        return DeviceControlAPI.remoteControl(product.getGizwitsProductKey(), device.getGizDid(), attrs);
+
+        //snoti 控制方式
+        ControlDto controlDto = new ControlDto()
+                .setProductKey(product.getGizwitsProductKey())
+                .setDid(device.getGizDid())
+                .setMac(device.getMac())
+                .setAttrs(attrs);
+        redisService.cacheSnotiControlDevice(CommandType.CONTROL.getCode(),controlDto);
+        return true;
     }
 
     /**
@@ -2047,6 +2057,61 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceDao, Device> implements
          device.setUtime(new Date());
          device.setName(dto.getName());
         return update(device,new EntityWrapper<Device>().in("mac",macs).eq("is_deleted",0));
+    }
+
+    @Override
+    public List<Device> getUserRoomDevices(Integer roomId) {
+         List<Device> devices=deviceDao.getUserRoomDevice(roomId);
+        return devices;
+    }
+
+    @Override
+    public void sendPlanToDevices() {
+        //获取所有在线的设备的正在开启的计划,
+         List<DevicePlan> list=devicePlanDao.getAllDevicePlanByUsed();
+         logger.info("获取到可能要执行计划数：{}",list.size());
+         if(ParamUtil.isNullOrEmptyOrZero(list)){
+             return ;
+         }
+         Date now=new Date();
+         //获取当前时分，
+        String nowTime=DateUtil.dateToString(now,"HH:mm");
+         //获取当前周几,1周日，2周一，3周二 .。。以此类推
+         String weekDay=DateUtil.getWeekByDate(now);
+         Integer sendCount=0;
+         //去掉不符合要求的计划
+           for(DevicePlan item:list){
+              JSONObject json=JSONObject.parseObject(item.getContent());
+             String time=json.getString("time");
+             String repeat=json.getString("repeat");
+
+             //判断当前时间和计划时间是否相差1分钟
+             if(DateUtil.checkWeek(weekDay,repeat)&&DateUtil.checkMinute(nowTime,time)==1){
+                 Boolean status=json.getBoolean("status");
+                 //todo： 发送控制
+                 if(sendControl(item.getMac(),status)) sendCount++;
+             }
+         }
+         logger.info("实际发送定时计划：{}",sendCount);
+    }
+    private Boolean sendControl(String mac,Boolean status){
+        Device device=getDeviceByMac(mac);
+        if(ParamUtil.isNullOrEmptyOrZero(device)){
+            return false;
+        }
+        Product product=productService.getProductByProductId(device.getProductId());
+        if(ParamUtil.isNullOrEmptyOrZero(product)){
+            return false;
+        }
+        JSONObject attr=new JSONObject();
+        attr.put("switch",status);
+        ControlDto controlDto=new ControlDto()
+                                .setMac(mac)
+                                .setDid(device.getGizDid())
+                                .setProductKey(product.getGizwitsProductKey())
+                                .setAttrs(attr);
+        redisService.cacheSnotiControlDevice(CommandType.CONTROL.getCode(),controlDto);
+        return true;
     }
 //===============================END==============================================//
 }

@@ -1,9 +1,6 @@
 package com.gizwits.lease.redis;
 
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
@@ -17,6 +14,7 @@ import com.gizwits.boot.enums.DeleteStatus;
 import com.gizwits.boot.exceptions.SystemException;
 import com.gizwits.boot.sys.entity.SysUserExt;
 import com.gizwits.boot.sys.service.SysUserExtService;
+import com.gizwits.lease.device.entity.dto.ControlDto;
 import com.gizwits.lease.exceptions.LeaseExceEnums;
 import com.gizwits.lease.exceptions.LeaseException;
 import com.gizwits.lease.order.entity.OrderBase;
@@ -803,6 +801,74 @@ public class RedisService {
         }
 
     }
+    /*********************************************************************/
+    /************************ 控制设备指令的缓存    *********************/
+    /*********************************************************************/
+    private static final String SNOTI_CONTROL_DEVICE = "netty:snoti:control:device";
+    private final String SPLIT = ":";
+
+    /**
+     * 缓存snoti控制设备信息
+     *
+     * @param controlDto
+     */
+    public void cacheSnotiControlDevice(String controlType, ControlDto controlDto) {
+        if (null == controlDto || StringUtils.isEmpty(controlType)) {
+            return;
+        }
+        Map<String, Object> attrs = controlDto.getAttrs();
+        if (null == attrs || attrs.size() == 0) {
+            logger.info("控制指令为空，不做处理,device_mac = {}", controlDto.getMac());
+            return;
+        }
+
+        // 先移除缓存中的值再存入新值，防止重复
+        String key = SNOTI_CONTROL_DEVICE + SPLIT + controlType;
+        resolveValue(controlDto);
+        String value = JSONObject.toJSONString(controlDto);
+        logger.info("添加缓存控制指令数据，key = {},values = {}", key, value);
+        redisTemplate.opsForList().remove(key, 0, value);
+        redisTemplate.opsForList().leftPush(key, value);
+    }
+
+    private void resolveValue(ControlDto controlDto) {
+        Map<String, Object> map = controlDto.getAttrs();
+        Map<String, Object> attrs = sortMapByKey(map);
+        controlDto.setAttrs(attrs);
+    }
+
+    public static Map<String, Object> sortMapByKey(Map<String, Object> map) {
+        if (map == null || map.isEmpty()) {
+            return null;
+        }
+
+        Map<String, Object> sortMap = new TreeMap<String, Object>(
+                new MapKeyComparator());
+
+        sortMap.putAll(map);
+
+        return sortMap;
+    }
+
+
+    /**
+     * 获取设备控制指令信息
+     *
+     * @param controlType
+     * @return
+     */
+    public ControlDto getSnotiControlInfo(String controlType) {
+        if (StringUtils.isEmpty(controlType)) {
+            return null;
+        }
+        String key = SNOTI_CONTROL_DEVICE + SPLIT + controlType;
+
+        Object o = redisTemplate.opsForList().rightPop(key, 1, TimeUnit.SECONDS);
+        if (o == null) {
+            return null;
+        }
+        return JSONObject.parseObject(o.toString(), ControlDto.class);
+    }
 
     /***********************************************************/
     /******************Order 订单相关****************************/
@@ -1089,5 +1155,14 @@ public class RedisService {
 
     private String generateLockId(String key1, String key2) {
         return "lock_" + key1 + "_" + key2;
+    }
+
+}
+class MapKeyComparator implements Comparator<String> {
+
+    @Override
+    public int compare(String str1, String str2) {
+
+        return str1.compareTo(str2);
     }
 }

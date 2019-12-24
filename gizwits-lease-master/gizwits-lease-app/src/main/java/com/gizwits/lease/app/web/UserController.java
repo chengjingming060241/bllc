@@ -15,6 +15,7 @@ import com.gizwits.lease.exceptions.LeaseException;
 import com.gizwits.lease.redis.RedisService;
 import com.gizwits.lease.user.dto.*;
 import com.gizwits.lease.user.entity.User;
+import com.gizwits.lease.user.service.UserRoomService;
 import com.gizwits.lease.user.service.UserService;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
@@ -55,6 +56,9 @@ public class UserController extends BaseController {
 
 	@Autowired
 	private DefaultKaptcha defaultKaptcha;
+
+	@Autowired
+	private UserRoomService userRoomService;
 
 	@Autowired
 	private RedisService redisService;
@@ -129,7 +133,20 @@ public class UserController extends BaseController {
         return success(userService.updateUserMobile(requestObject.getData()));
     }
 
+    @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
+    @ApiOperation(value = "获取当前用户的家庭信息", notes = "获取当前用户的家庭信息", consumes = "application/json")
+    @RequestMapping(value = "/getUserFamily", method = RequestMethod.GET)
+    public ResponseObject getUserFamily() {
 
+        return success(userService.getUserFamily());
+    }
+    @ApiImplicitParam(paramType = "header", name = Constants.TOKEN_HEADER_NAME)
+    @ApiOperation(value = "修改当前用户的家庭信息", notes = "获取当前用户的家庭信息", consumes = "application/json")
+    @RequestMapping(value = "/updateUserFamily", method = RequestMethod.POST)
+    public ResponseObject updateUserFamily(@RequestBody  RequestObject<UserFamilyUpdateDto> requestObject) {
+
+        return success(userService.updateUserFamily(requestObject.getData()));
+    }
 
 
 }

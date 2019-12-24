@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gizwits.lease.device.dao.DevicePlanDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.gizwits.lease.device.entity.DevicePlan">
+		<id column="id" property="id" />
+		<result column="ctime" property="ctime" />
+		<result column="utime" property="utime" />
+		<result column="content" property="content" />
+        <result column="mac" property="mac" />
+		<result column="user_id" property="userId" />
+		<result column="is_deleted" property="isDeleted"/>
+	</resultMap>
+
+    <select id="getAllDevicePlanByUsed" resultType="com.gizwits.lease.device.entity.DevicePlan">
+        select dp.* from device_plan dp left join device d on dp.mac=d.mac where d.is_deleted=0 and dp.is_used=1 and d.online_status=1
+    </select>
+</mapper>
